@@ -223,12 +223,13 @@ var cacheApi = {
 
             case 6:
               record = _context.sent;
-              return _context.abrupt("return", this.setRecord(record, {
+              console.log(record, record || {});
+              return _context.abrupt("return", this.setRecord(record || {}, {
                 model: model,
                 id: id
               }));
 
-            case 8:
+            case 9:
             case "end":
               return _context.stop();
           }

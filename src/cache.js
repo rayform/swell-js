@@ -125,7 +125,7 @@ const cacheApi = {
       return value;
     }
     const record = await fetch();
-    return this.setRecord(record, { model, id });
+    return this.setRecord(record || {}, { model, id });
   },
 
   clear(model = undefined, id = undefined) {
