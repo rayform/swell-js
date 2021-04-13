@@ -309,7 +309,7 @@ function getFilters(products) {
 
   if (options.filterableAttributes) {
     attributes = attributes.filter(function (productAttr) {
-      return filterableAttributes.find(function (filterableAttr) {
+      return options.filterableAttributes.find(function (filterableAttr) {
         return productAttr.id === filterableAttr.id;
       });
     });

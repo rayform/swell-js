@@ -179,7 +179,7 @@ function getFilters(products, options = {}) {
 
   if (options.filterableAttributes) {
     attributes = attributes.filter((productAttr) =>
-      filterableAttributes.find((filterableAttr) => productAttr.id === filterableAttr.id),
+      options.filterableAttributes.find((filterableAttr) => productAttr.id === filterableAttr.id),
     );
   }
 
