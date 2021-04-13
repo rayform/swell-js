@@ -22,7 +22,10 @@ function methods(request, opt) {
 
     priceRange: getPriceRange,
 
-    filters: (products, options) => getFilters(request, products, options),
+    filters: getFilters,
+
+    filterableAttributeFilters: (products, options) =>
+      getFilterableAttributeFilters(request, products, options),
   };
 }
 
@@ -162,16 +165,23 @@ function calculateVariation(input, options) {
   return OPTIONS.useCamelCase ? toCamel(variation) : variation;
 }
 
-async function getFilters(request, products, options = {}) {
+async function getFilterableAttributeFilters(request, products, options) {
   const { results: filterableAttributes } = await attributesApi.methods(request, OPTIONS).list({
     filterable: true,
   });
 
-  const attributes =
-    (options.attributes || options.attributes === undefined) &&
-    getAttributes(products).filter((productAttr) =>
+  return getFilters(products, { ...options, filterableAttributes });
+}
+
+function getFilters(products, options = {}) {
+  let attributes =
+    (options.attributes || options.attributes === undefined) && getAttributes(products);
+
+  if (options.filterableAttributes) {
+    attributes = attributes.filter((productAttr) =>
       filterableAttributes.find((filterableAttr) => productAttr.id === filterableAttr.id),
     );
+  }
 
   const categories =
     (options.categories || options.categories === undefined) && getCategories(products);

@@ -58,8 +58,9 @@ function methods(request, opt) {
     categories: getCategories,
     attributes: getAttributes,
     priceRange: getPriceRange,
-    filters: function filters(products, options) {
-      return getFilters(request, products, options);
+    filters: getFilters,
+    filterableAttributeFilters: function filterableAttributeFilters(products, options) {
+      return getFilterableAttributeFilters(request, products, options);
     }
   };
 }
@@ -268,101 +269,105 @@ function calculateVariation(input, options) {
   return OPTIONS.useCamelCase ? toCamel(variation) : variation;
 }
 
-function getFilters(_x, _x2) {
-  return _getFilters.apply(this, arguments);
+function getFilterableAttributeFilters(_x, _x2, _x3) {
+  return _getFilterableAttributeFilters.apply(this, arguments);
 }
 
-function _getFilters() {
-  _getFilters = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(request, products) {
-    var options,
-        _yield$attributesApi$,
-        filterableAttributes,
-        attributes,
-        categories,
-        priceRange,
-        filters,
-        _args = arguments;
+function _getFilterableAttributeFilters() {
+  _getFilterableAttributeFilters = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(request, products, options) {
+    var _yield$attributesApi$, filterableAttributes;
 
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
-            options = _args.length > 2 && _args[2] !== undefined ? _args[2] : {};
-            _context.next = 3;
+            _context.next = 2;
             return attributesApi.methods(request, OPTIONS).list({
               filterable: true
             });
 
-          case 3:
+          case 2:
             _yield$attributesApi$ = _context.sent;
             filterableAttributes = _yield$attributesApi$.results;
-            attributes = (options.attributes || options.attributes === undefined) && getAttributes(products).filter(function (productAttr) {
-              return filterableAttributes.find(function (filterableAttr) {
-                return productAttr.id === filterableAttr.id;
-              });
-            });
-            categories = (options.categories || options.categories === undefined) && getCategories(products);
-            priceRange = (options.price || options.price === undefined) && getPriceRange(products);
-            filters = [];
+            return _context.abrupt("return", getFilters(products, _objectSpread(_objectSpread({}, options), {}, {
+              filterableAttributes: filterableAttributes
+            })));
 
-            if (priceRange) {
-              filters.push({
-                id: 'price',
-                label: 'Price',
-                type: 'range',
-                options: [{
-                  value: priceRange.min,
-                  label: priceRange.min // TODO: formatting
-
-                }, {
-                  value: priceRange.max,
-                  label: priceRange.max // TODO: formatting
-
-                }],
-                interval: priceRange.interval
-              });
-            }
-
-            if (categories && categories.length > 0) {
-              filters.push({
-                id: 'category',
-                label: 'Category',
-                type: 'select',
-                options: categories.map(function (category) {
-                  return {
-                    value: category.slug,
-                    label: category.name
-                  };
-                })
-              });
-            }
-
-            if (attributes && attributes.length > 0) {
-              filters = [].concat((0, _toConsumableArray2["default"])(filters), (0, _toConsumableArray2["default"])(reduce(attributes, function (acc, attr) {
-                return [].concat((0, _toConsumableArray2["default"])(acc), (0, _toConsumableArray2["default"])(attr.id !== 'category' && attr.id !== 'price' && attr.values instanceof Array && attr.values.length > 0 ? [{
-                  id: attr.id,
-                  label: attr.name,
-                  type: 'select',
-                  options: attr.values.map(function (value) {
-                    return {
-                      value: value,
-                      label: value
-                    };
-                  })
-                }] : []));
-              }, [])));
-            }
-
-            return _context.abrupt("return", filters);
-
-          case 13:
+          case 5:
           case "end":
             return _context.stop();
         }
       }
     }, _callee);
   }));
-  return _getFilters.apply(this, arguments);
+  return _getFilterableAttributeFilters.apply(this, arguments);
+}
+
+function getFilters(products) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var attributes = (options.attributes || options.attributes === undefined) && getAttributes(products);
+
+  if (options.filterableAttributes) {
+    attributes = attributes.filter(function (productAttr) {
+      return filterableAttributes.find(function (filterableAttr) {
+        return productAttr.id === filterableAttr.id;
+      });
+    });
+  }
+
+  var categories = (options.categories || options.categories === undefined) && getCategories(products);
+  var priceRange = (options.price || options.price === undefined) && getPriceRange(products);
+  var filters = [];
+
+  if (priceRange) {
+    filters.push({
+      id: 'price',
+      label: 'Price',
+      type: 'range',
+      options: [{
+        value: priceRange.min,
+        label: priceRange.min // TODO: formatting
+
+      }, {
+        value: priceRange.max,
+        label: priceRange.max // TODO: formatting
+
+      }],
+      interval: priceRange.interval
+    });
+  }
+
+  if (categories && categories.length > 0) {
+    filters.push({
+      id: 'category',
+      label: 'Category',
+      type: 'select',
+      options: categories.map(function (category) {
+        return {
+          value: category.slug,
+          label: category.name
+        };
+      })
+    });
+  }
+
+  if (attributes && attributes.length > 0) {
+    filters = [].concat((0, _toConsumableArray2["default"])(filters), (0, _toConsumableArray2["default"])(reduce(attributes, function (acc, attr) {
+      return [].concat((0, _toConsumableArray2["default"])(acc), (0, _toConsumableArray2["default"])(attr.id !== 'category' && attr.id !== 'price' && attr.values instanceof Array && attr.values.length > 0 ? [{
+        id: attr.id,
+        label: attr.name,
+        type: 'select',
+        options: attr.values.map(function (value) {
+          return {
+            value: value,
+            label: value
+          };
+        })
+      }] : []));
+    }, [])));
+  }
+
+  return filters;
 }
 
 function getCategories(products) {
