@@ -19,21 +19,25 @@ function methods(request, opt) {
       return this.get();
     },
 
-    getState(uri, stateName, { id = undefined, def = undefined, refresh = false } = {}) {
+    getState(
+      uri,
+      stateName,
+      { id = undefined, def = undefined, refresh = false, locale = undefined } = {},
+    ) {
       if (!this[stateName] || refresh) {
         this[stateName] = request('get', uri);
       }
       if (this[stateName] && typeof this[stateName].then === 'function') {
         return this[stateName].then((state) => {
           this[stateName] = state;
-          return this.getLocalizedState(stateName, id, def);
+          return this.getLocalizedState(stateName, id, def, locale);
         });
       }
-      return this.getLocalizedState(stateName, id, def);
+      return this.getLocalizedState(stateName, id, def, locale);
     },
 
-    getLocalizedState(stateName, id, def) {
-      const locale = this.getCurrentLocale();
+    getLocalizedState(stateName, id, def, loc) {
+      const locale = loc || this.getCurrentLocale();
 
       const ls = this.localizedState;
       if (ls.code !== locale) {
@@ -44,21 +48,21 @@ function methods(request, opt) {
         ls[locale] = {};
       }
       if (!ls[locale][stateName]) {
-        ls[locale][stateName] = this.decodeLocale(this[stateName]);
+        ls[locale][stateName] = this.decodeLocale(this[stateName], loc);
       }
       return id ? get(ls[locale][stateName], id, def) : ls[locale][stateName];
     },
 
-    findState(uri, stateName, { where = undefined, def = undefined } = {}) {
-      const state = this.getState(uri, stateName);
+    findState(uri, stateName, { where = undefined, def = undefined, locale = undefined } = {}) {
+      const state = this.getState(uri, stateName, { locale });
       if (state && typeof state.then === 'function') {
         return state.then((state) => find(state, where) || def);
       }
       return find(state, where) || def;
     },
 
-    get(id = undefined, def = undefined) {
-      return this.getState('/settings', 'state', { id, def });
+    get(id = undefined, def = undefined, locale = undefined) {
+      return this.getState('/settings', 'state', { id, def, locale });
     },
 
     getCurrentLocale() {
@@ -73,8 +77,8 @@ function methods(request, opt) {
       return get(this.state, 'store.locales');
     },
 
-    set({ model, path, value }) {
-      const locale = this.getCurrentLocale();
+    set({ model, path, value, loc }) {
+      const locale = loc || this.getCurrentLocale();
       const stateName = model ? `${model.replace(/s$/, '')}State` : 'state';
       const { useCamelCase } = opt;
 
@@ -90,28 +94,28 @@ function methods(request, opt) {
       this[stateName] = merge(this[stateName] || {}, mergeData);
 
       if (this.localizedState[locale]) {
-        this.localizedState[locale][stateName] = this.decodeLocale(this[stateName]);
+        this.localizedState[locale][stateName] = this.decodeLocale(this[stateName], locale);
       }
     },
 
-    menus(id = undefined, def = undefined) {
-      return this.findState('/settings/menus', 'menuState', { where: { id }, def });
+    menus(id = undefined, def = undefined, locale = undefined) {
+      return this.findState('/settings/menus', 'menuState', { where: { id }, def, locale });
     },
 
-    payments(id = undefined, def = undefined) {
-      return this.getState('/settings/payments', 'paymentState', { id, def });
+    payments(id = undefined, def = undefined, locale = undefined) {
+      return this.getState('/settings/payments', 'paymentState', { id, def, locale });
     },
 
-    subscriptions(id = undefined, def = undefined) {
-      return this.getState('/settings/subscriptions', 'subscriptionState', { id, def });
+    subscriptions(id = undefined, def = undefined, locale = undefined) {
+      return this.getState('/settings/subscriptions', 'subscriptionState', { id, def, locale });
     },
 
-    session(id = undefined, def = undefined) {
-      return this.getState('/session', 'sessionState', { id, def });
+    session(id = undefined, def = undefined, locale = undefined) {
+      return this.getState('/session', 'sessionState', { id, def, locale });
     },
 
-    decodeLocale(values) {
-      const locale = this.getCurrentLocale();
+    decodeLocale(values, loc) {
+      const locale = loc || this.getCurrentLocale();
 
       if (!values || typeof values !== 'object') {
         return values;

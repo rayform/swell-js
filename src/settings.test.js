@@ -114,6 +114,13 @@ describe('settings', () => {
       expect(test).toEqual('hola');
       menu = await api.settings.menus('footer');
       expect(menu.test).toEqual('hola2');
+
+      // test overrides
+      api.locale.select('en');
+      test = await api.settings.get('test', null, 'es');
+      expect(test).toEqual('hola');
+      menu = await api.settings.menus('footer', null, 'es');
+      expect(menu.test).toEqual('hola2');
     });
 
     it('should update localized state when calling set()', async () => {

@@ -10,13 +10,13 @@ var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/de
 
 var _typeof2 = _interopRequireDefault(require("@babel/runtime/helpers/typeof"));
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
@@ -56,7 +56,9 @@ function methods(request, opt) {
           _ref$def = _ref.def,
           def = _ref$def === void 0 ? undefined : _ref$def,
           _ref$refresh = _ref.refresh,
-          refresh = _ref$refresh === void 0 ? false : _ref$refresh;
+          refresh = _ref$refresh === void 0 ? false : _ref$refresh,
+          _ref$locale = _ref.locale,
+          locale = _ref$locale === void 0 ? undefined : _ref$locale;
 
       if (!this[stateName] || refresh) {
         this[stateName] = request('get', uri);
@@ -65,14 +67,14 @@ function methods(request, opt) {
       if (this[stateName] && typeof this[stateName].then === 'function') {
         return this[stateName].then(function (state) {
           _this[stateName] = state;
-          return _this.getLocalizedState(stateName, id, def);
+          return _this.getLocalizedState(stateName, id, def, locale);
         });
       }
 
-      return this.getLocalizedState(stateName, id, def);
+      return this.getLocalizedState(stateName, id, def, locale);
     },
-    getLocalizedState: function getLocalizedState(stateName, id, def) {
-      var locale = this.getCurrentLocale();
+    getLocalizedState: function getLocalizedState(stateName, id, def, loc) {
+      var locale = loc || this.getCurrentLocale();
       var ls = this.localizedState;
 
       if (ls.code !== locale) {
@@ -85,7 +87,7 @@ function methods(request, opt) {
       }
 
       if (!ls[locale][stateName]) {
-        ls[locale][stateName] = this.decodeLocale(this[stateName]);
+        ls[locale][stateName] = this.decodeLocale(this[stateName], loc);
       }
 
       return id ? get(ls[locale][stateName], id, def) : ls[locale][stateName];
@@ -95,9 +97,13 @@ function methods(request, opt) {
           _ref2$where = _ref2.where,
           where = _ref2$where === void 0 ? undefined : _ref2$where,
           _ref2$def = _ref2.def,
-          def = _ref2$def === void 0 ? undefined : _ref2$def;
+          def = _ref2$def === void 0 ? undefined : _ref2$def,
+          _ref2$locale = _ref2.locale,
+          locale = _ref2$locale === void 0 ? undefined : _ref2$locale;
 
-      var state = this.getState(uri, stateName);
+      var state = this.getState(uri, stateName, {
+        locale: locale
+      });
 
       if (state && typeof state.then === 'function') {
         return state.then(function (state) {
@@ -110,9 +116,11 @@ function methods(request, opt) {
     get: function get() {
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
       var def = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+      var locale = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
       return this.getState('/settings', 'state', {
         id: id,
-        def: def
+        def: def,
+        locale: locale
       });
     },
     getCurrentLocale: function getCurrentLocale() {
@@ -127,8 +135,9 @@ function methods(request, opt) {
     set: function set(_ref3) {
       var model = _ref3.model,
           path = _ref3.path,
-          value = _ref3.value;
-      var locale = this.getCurrentLocale();
+          value = _ref3.value,
+          loc = _ref3.loc;
+      var locale = loc || this.getCurrentLocale();
       var stateName = model ? "".concat(model.replace(/s$/, ''), "State") : 'state';
       var useCamelCase = opt.useCamelCase;
       var mergeData = {};
@@ -141,45 +150,53 @@ function methods(request, opt) {
       this[stateName] = merge(this[stateName] || {}, mergeData);
 
       if (this.localizedState[locale]) {
-        this.localizedState[locale][stateName] = this.decodeLocale(this[stateName]);
+        this.localizedState[locale][stateName] = this.decodeLocale(this[stateName], locale);
       }
     },
     menus: function menus() {
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
       var def = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+      var locale = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
       return this.findState('/settings/menus', 'menuState', {
         where: {
           id: id
         },
-        def: def
+        def: def,
+        locale: locale
       });
     },
     payments: function payments() {
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
       var def = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+      var locale = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
       return this.getState('/settings/payments', 'paymentState', {
         id: id,
-        def: def
+        def: def,
+        locale: locale
       });
     },
     subscriptions: function subscriptions() {
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
       var def = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+      var locale = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
       return this.getState('/settings/subscriptions', 'subscriptionState', {
         id: id,
-        def: def
+        def: def,
+        locale: locale
       });
     },
     session: function session() {
       var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
       var def = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+      var locale = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : undefined;
       return this.getState('/session', 'sessionState', {
         id: id,
-        def: def
+        def: def,
+        locale: locale
       });
     },
-    decodeLocale: function decodeLocale(values) {
-      var locale = this.getCurrentLocale();
+    decodeLocale: function decodeLocale(values, loc) {
+      var locale = loc || this.getCurrentLocale();
 
       if (!values || (0, _typeof2["default"])(values) !== 'object') {
         return values;
