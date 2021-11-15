@@ -9,8 +9,8 @@ function methods(request, opt) {
     state: null,
     locale: null,
 
-    list() {
-      return opt.api.settings.get('store.currencies', []);
+    list(locale) {
+      return opt.api.settings.get('store.currencies', [], locale);
     },
 
     async select(currency) {

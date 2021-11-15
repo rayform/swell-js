@@ -23,8 +23,8 @@ function methods(request, opt) {
     code: null,
     state: null,
     locale: null,
-    list: function list() {
-      return opt.api.settings.get('store.currencies', []);
+    list: function list(locale) {
+      return opt.api.settings.get('store.currencies', [], locale);
     },
     select: function () {
       var _select = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(currency) {
