@@ -269,7 +269,7 @@ function calculateVariation(input, options, purchaseOption) {
 function findPriceRule(prices) {
   var quantity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
   var group = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  if (!prices?.length) return;
+  if (!prices || !prices.length) return;
   var match = prices.filter(function (price) {
     var quantity_min = price.quantity_min,
         quantity_max = price.quantity_max;
@@ -281,7 +281,7 @@ function findPriceRule(prices) {
   match = group ? match.filter(function (price) {
     return price.group === group || !price.group;
   }) : match;
-  if (!match?.length) return;
+  if (!match || !match.length) return;
 
   if (match.length > 1) {
     var lowestMatched = match.reduce(function (prevPrice, price) {
@@ -323,7 +323,8 @@ function findPurchaseOption(product, purchaseOption, quantity, customer) {
         price = option.price;
       }
     } else {
-      var priceRule = findPriceRule(product.prices, quantity, customer?.group);
+      var group = customer ? customer.group : null;
+      var priceRule = findPriceRule(product.prices, quantity, group);
 
       if (priceRule) {
         price = priceRule;
