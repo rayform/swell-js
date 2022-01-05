@@ -147,7 +147,7 @@ function calculateVariation(input, options, purchaseOption, quantity = 1, custom
     if (variant) {
       let variantPurchaseOp = purchaseOp;
       try {
-        variantPurchaseOp = findPurchaseOption(product, purchaseOption, quantity, customer);
+        variantPurchaseOp = findPurchaseOption(variant, purchaseOption, quantity, customer);
       } catch (err) {
         // noop
       }
@@ -180,7 +180,7 @@ function calculateVariation(input, options, purchaseOption, quantity = 1, custom
 }
 
 function findPriceRule(prices, quantity = 1, group = null) {
-  if (!prices || !prices.length) return;
+  if (!prices || !prices.length || typeof quantity !== 'number') return;
 
   let match = prices.filter((price) => {
     const { quantity_min, quantity_max } = price;
@@ -198,7 +198,7 @@ function findPriceRule(prices, quantity = 1, group = null) {
     const lowestMatched = match.reduce((prevPrice, price) =>
       prevPrice.price > price.price ? price : prevPrice,
     );
-
+    
     return lowestMatched.price;
   } else if (match.length === 1) {
     return match[0].price;
@@ -243,14 +243,14 @@ function findPurchaseOption(product, purchaseOption, quantity, customer) {
 
       if (priceRule) {
         price = priceRule;
-        orig_price = product.orig_price;
-        sale_price = undefined;
       } else {
-        price = option.price;
-        orig_price = option.orig_price;
-        sale_price = option.sale_price;
+        price = option.price || product.price;
       }
     }
+
+    orig_price = option.orig_price || product.orig_price;
+    sale_price = option.sale_price || product.orig_price;
+
     return {
       ...option,
       price,

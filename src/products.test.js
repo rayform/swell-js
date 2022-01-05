@@ -3,6 +3,11 @@ const products = require('./products');
 const mockRequest = jest.fn();
 const mockProductWithOptions = {
   price: 10,
+  prices: [
+    { price: 4, account_group: null, quantity_min: 2, quantity_max: null },
+    { price: 3, account_group: 'vip', quantity_min: 3, quantity_max: null },
+    { price: 2, account_group: null, quantity_min: 5, quantity_max: null },
+  ],
   stock_status: 'in_stock',
   stock_level: 0,
   images: [],
@@ -322,7 +327,9 @@ describe('products', () => {
       });
 
       it('should return pricing from standard purchase option type', () => {
-        const variation = methods.variation(mockProductWithPurchaseOptions, [], { type: 'standard' });
+        const variation = methods.variation(mockProductWithPurchaseOptions, [], {
+          type: 'standard',
+        });
 
         expect(variation).toEqual({
           ...mockProductWithPurchaseOptions,
@@ -353,7 +360,11 @@ describe('products', () => {
           { id: 'y', value: '2' },
           { id: 'z', value: 'stuff' },
         ];
-        const variation = methods.variation(mockProductWithPurchaseOptions, options, 'subscription');
+        const variation = methods.variation(
+          mockProductWithPurchaseOptions,
+          options,
+          'subscription',
+        );
 
         expect(variation).toEqual({
           ...mockProductWithPurchaseOptions,
@@ -361,6 +372,53 @@ describe('products', () => {
           sale_price: 10,
           orig_price: 12,
           stock_status: 'out_of_stock',
+        });
+      });
+
+      describe('with price rules', () => {
+        it('should return default price if no eligible price rule', () => {
+          const variation = methods.variation(mockProductWithPurchaseOptions, [], 'standard', 1);
+
+          expect(variation).toEqual({
+            ...mockProductWithPurchaseOptions,
+            price: 9,
+            sale_price: 8,
+            orig_price: 10,
+          });
+        });
+
+        it('should return eligible price rule', () => {
+          const variation = methods.variation(mockProductWithPurchaseOptions, [], 'standard', 2);
+
+          expect(variation).toEqual({
+            ...mockProductWithPurchaseOptions,
+            price: 4,
+            sale_price: 8,
+            orig_price: 10,
+          });
+        });
+
+        it('should return eligible price rule matching customer group', () => {
+          const customer = { group: 'vip' };
+          const variation = methods.variation(mockProductWithPurchaseOptions, [], 'standard', 3, customer);
+
+          expect(variation).toEqual({
+            ...mockProductWithPurchaseOptions,
+            price: 3,
+            sale_price: 8,
+            orig_price: 10,
+          });
+        });
+
+        it('should return lowest eligible price rule', () => {
+          const variation = methods.variation(mockProductWithPurchaseOptions, [], 'standard', 5);
+
+          expect(variation).toEqual({
+            ...mockProductWithPurchaseOptions,
+            price: 2,
+            sale_price: 8,
+            orig_price: 10,
+          });
         });
       });
     });
