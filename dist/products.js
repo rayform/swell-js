@@ -229,7 +229,7 @@ function calculateVariation(input, options, purchaseOption) {
       var variantPurchaseOp = purchaseOp;
 
       try {
-        variantPurchaseOp = findPurchaseOption(product, purchaseOption, quantity, customer);
+        variantPurchaseOp = findPurchaseOption(variant, purchaseOption, quantity, customer);
       } catch (err) {// noop
       }
 
@@ -269,7 +269,7 @@ function calculateVariation(input, options, purchaseOption) {
 function findPriceRule(prices) {
   var quantity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
   var group = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  if (!prices || !prices.length) return;
+  if (!prices || !prices.length || typeof quantity !== 'number') return;
   var match = prices.filter(function (price) {
     var quantity_min = price.quantity_min,
         quantity_max = price.quantity_max;
@@ -322,21 +322,22 @@ function findPurchaseOption(product, purchaseOption, quantity, customer) {
         option = option.plans[0];
         price = option.price;
       }
+
+      orig_price = option.orig_price || option.price;
     } else {
       var group = customer ? customer.group : null;
       var priceRule = findPriceRule(product.prices, quantity, group);
 
       if (priceRule) {
         price = priceRule;
-        orig_price = product.orig_price;
-        sale_price = undefined;
+        orig_price = option.orig_price || product.price;
       } else {
-        price = option.price;
-        orig_price = option.orig_price;
-        sale_price = option.sale_price;
+        price = option.price || product.price;
+        orig_price = option.orig_price || product.orig_price;
       }
     }
 
+    sale_price = option.sale_price || product.orig_price;
     return _objectSpread(_objectSpread({}, option), {}, {
       price: price,
       sale_price: sale_price,

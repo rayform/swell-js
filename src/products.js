@@ -237,18 +237,20 @@ function findPurchaseOption(product, purchaseOption, quantity, customer) {
         option = option.plans[0];
         price = option.price;
       }
+      orig_price = option.orig_price || option.price;
     } else {
       const group = customer ? customer.group : null;
       const priceRule = findPriceRule(product.prices, quantity, group);
 
       if (priceRule) {
         price = priceRule;
+        orig_price = option.orig_price || product.price;
       } else {
         price = option.price || product.price;
+        orig_price = option.orig_price || product.orig_price;
       }
     }
 
-    orig_price = option.orig_price || product.orig_price;
     sale_price = option.sale_price || product.orig_price;
 
     return {
