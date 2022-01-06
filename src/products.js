@@ -237,7 +237,7 @@ function findPurchaseOption(product, purchaseOption, quantity, customer) {
         option = option.plans[0];
         price = option.price;
       }
-      orig_price = option.orig_price || option.price;
+      orig_price = option.orig_price;
     } else {
       const group = customer ? customer.group : null;
       const priceRule = findPriceRule(product.prices, quantity, group);

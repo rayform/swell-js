@@ -323,7 +323,7 @@ function findPurchaseOption(product, purchaseOption, quantity, customer) {
         price = option.price;
       }
 
-      orig_price = option.orig_price || option.price;
+      orig_price = option.orig_price;
     } else {
       var group = customer ? customer.group : null;
       var priceRule = findPriceRule(product.prices, quantity, group);
