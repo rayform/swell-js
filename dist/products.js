@@ -18,9 +18,9 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2["default"])(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 var _require = require('./utils'),
     get = _require.get,
@@ -184,8 +184,10 @@ function findVariantWithOptions(product, options) {
 }
 
 function calculateVariation(input, options, purchaseOption) {
+  var quantity = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1;
+  var customer = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
   var product = OPTIONS.useCamelCase ? toSnake(input) : input;
-  var purchaseOp = findPurchaseOption(product, purchaseOption);
+  var purchaseOp = findPurchaseOption(product, purchaseOption, quantity, customer);
 
   var variation = _objectSpread(_objectSpread({}, product), {}, {
     price: purchaseOp.price || 0,
@@ -227,7 +229,7 @@ function calculateVariation(input, options, purchaseOption) {
       var variantPurchaseOp = purchaseOp;
 
       try {
-        variantPurchaseOp = findPurchaseOption(variant, purchaseOption);
+        variantPurchaseOp = findPurchaseOption(variant, purchaseOption, quantity, customer);
       } catch (err) {// noop
       }
 
@@ -264,7 +266,34 @@ function calculateVariation(input, options, purchaseOption) {
   return OPTIONS.useCamelCase ? toCamel(variation) : variation;
 }
 
-function findPurchaseOption(product, purchaseOption) {
+function findPriceRule(prices) {
+  var quantity = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  var group = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  if (!prices || !prices.length || typeof quantity !== 'number') return;
+  var match = prices.filter(function (price) {
+    var quantity_min = price.quantity_min,
+        quantity_max = price.quantity_max;
+    if (quantity_min && !quantity_max) return quantity >= quantity_min;
+    if (quantity_max && !quantity_min) return quantity <= quantity_max;
+    if (quantity_max && quantity_min) return quantity <= quantity_max && quantity >= quantity_min;
+    return false;
+  });
+  match = group ? match.filter(function (price) {
+    return price.group === group || !price.group;
+  }) : match;
+  if (!match || !match.length) return;
+
+  if (match.length > 1) {
+    var lowestMatched = match.reduce(function (prevPrice, price) {
+      return prevPrice.price > price.price ? price : prevPrice;
+    });
+    return lowestMatched.price;
+  } else if (match.length === 1) {
+    return match[0].price;
+  }
+}
+
+function findPurchaseOption(product, purchaseOption, quantity, customer) {
   var plan = get(purchaseOption, 'plan_id', get(purchaseOption, 'plan'));
   var type = get(purchaseOption, 'type', typeof purchaseOption === 'string' ? purchaseOption : plan !== undefined ? 'subscription' : 'standard');
   var option = get(product, "purchase_options.".concat(type));
@@ -272,6 +301,10 @@ function findPurchaseOption(product, purchaseOption) {
   if (!option && type !== 'standard') {
     throw new Error("Product purchase option '".concat(type, "' not found or not active"));
   }
+
+  var price = product.price;
+  var sale_price = product.sale_price;
+  var orig_price = product.orig_price;
 
   if (option) {
     if (option.plans) {
@@ -283,23 +316,40 @@ function findPurchaseOption(product, purchaseOption) {
         if (!option) {
           throw new Error("Subscription purchase plan '".concat(plan, "' not found or not active"));
         }
+
+        price = option.price;
       } else {
         option = option.plans[0];
+        price = option.price;
+      }
+
+      orig_price = option.orig_price;
+    } else {
+      var group = customer ? customer.group : null;
+      var priceRule = findPriceRule(product.prices, quantity, group);
+
+      if (priceRule) {
+        price = priceRule;
+        orig_price = option.orig_price || product.price;
+      } else {
+        price = option.price || product.price;
+        orig_price = option.orig_price || product.orig_price;
       }
     }
 
+    sale_price = option.sale_price || product.orig_price;
     return _objectSpread(_objectSpread({}, option), {}, {
-      price: typeof option.price === 'number' ? option.price : product.price,
-      sale_price: typeof option.sale_price === 'number' ? option.sale_price : product.sale_price,
-      orig_price: typeof option.orig_price === 'number' ? option.orig_price : product.orig_price
+      price: price,
+      sale_price: sale_price,
+      orig_price: orig_price
     });
   }
 
   return {
     type: 'standard',
-    price: product.price,
-    sale_price: product.sale_price,
-    orig_price: product.orig_price
+    price: price,
+    sale_price: sale_price,
+    orig_price: orig_price
   };
 }
 

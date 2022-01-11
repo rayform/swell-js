@@ -119,9 +119,9 @@ function findVariantWithOptions(product, options) {
   return findVariantWithOptionValueIds(product, optionValueIds);
 }
 
-function calculateVariation(input, options, purchaseOption) {
+function calculateVariation(input, options, purchaseOption, quantity = 1, customer = null) {
   const product = OPTIONS.useCamelCase ? toSnake(input) : input;
-  const purchaseOp = findPurchaseOption(product, purchaseOption);
+  const purchaseOp = findPurchaseOption(product, purchaseOption, quantity, customer);
   const variation = {
     ...product,
     price: purchaseOp.price || 0,
@@ -147,7 +147,7 @@ function calculateVariation(input, options, purchaseOption) {
     if (variant) {
       let variantPurchaseOp = purchaseOp;
       try {
-        variantPurchaseOp = findPurchaseOption(variant, purchaseOption);
+        variantPurchaseOp = findPurchaseOption(variant, purchaseOption, quantity, customer);
       } catch (err) {
         // noop
       }
@@ -179,7 +179,33 @@ function calculateVariation(input, options, purchaseOption) {
   return OPTIONS.useCamelCase ? toCamel(variation) : variation;
 }
 
-function findPurchaseOption(product, purchaseOption) {
+function findPriceRule(prices, quantity = 1, group = null) {
+  if (!prices || !prices.length || typeof quantity !== 'number') return;
+
+  let match = prices.filter((price) => {
+    const { quantity_min, quantity_max } = price;
+    if (quantity_min && !quantity_max) return quantity >= quantity_min;
+    if (quantity_max && !quantity_min) return quantity <= quantity_max;
+    if (quantity_max && quantity_min) return quantity <= quantity_max && quantity >= quantity_min;
+    return false;
+  });
+
+  match = group ? match.filter((price) => price.group === group || !price.group) : match;
+
+  if (!match || !match.length) return;
+
+  if (match.length > 1) {
+    const lowestMatched = match.reduce((prevPrice, price) =>
+      prevPrice.price > price.price ? price : prevPrice,
+    );
+    
+    return lowestMatched.price;
+  } else if (match.length === 1) {
+    return match[0].price;
+  }
+}
+
+function findPurchaseOption(product, purchaseOption, quantity, customer) {
   const plan = get(purchaseOption, 'plan_id', get(purchaseOption, 'plan'));
   const type = get(
     purchaseOption,
@@ -194,6 +220,11 @@ function findPurchaseOption(product, purchaseOption) {
   if (!option && type !== 'standard') {
     throw new Error(`Product purchase option '${type}' not found or not active`);
   }
+
+  let price = product.price;
+  let sale_price = product.sale_price;
+  let orig_price = product.orig_price;
+
   if (option) {
     if (option.plans) {
       if (plan !== undefined) {
@@ -201,22 +232,39 @@ function findPurchaseOption(product, purchaseOption) {
         if (!option) {
           throw new Error(`Subscription purchase plan '${plan}' not found or not active`);
         }
+        price = option.price;
       } else {
         option = option.plans[0];
+        price = option.price;
+      }
+      orig_price = option.orig_price;
+    } else {
+      const group = customer ? customer.group : null;
+      const priceRule = findPriceRule(product.prices, quantity, group);
+
+      if (priceRule) {
+        price = priceRule;
+        orig_price = option.orig_price || product.price;
+      } else {
+        price = option.price || product.price;
+        orig_price = option.orig_price || product.orig_price;
       }
     }
+
+    sale_price = option.sale_price || product.orig_price;
+
     return {
       ...option,
-      price: typeof option.price === 'number' ? option.price : product.price,
-      sale_price: typeof option.sale_price === 'number' ? option.sale_price : product.sale_price,
-      orig_price: typeof option.orig_price === 'number' ? option.orig_price : product.orig_price,
+      price,
+      sale_price,
+      orig_price,
     };
   }
   return {
     type: 'standard',
-    price: product.price,
-    sale_price: product.sale_price,
-    orig_price: product.orig_price,
+    price,
+    sale_price,
+    orig_price,
   };
 }
 
