@@ -22,6 +22,7 @@ const {
   getQuickpayCardDetais,
 } = require('./utils/quickpay');
 const { createPaysafecardPayment } = require('./utils/paysafecard');
+const { createKlarnaSession } = require('./utils/klarna');
 
 const LOADING_SCRIPTS = {};
 const CARD_ELEMENTS = {};
@@ -310,9 +311,11 @@ async function payPalButton(request, cart, payMethods, params) {
                 'purchase_units[0].payments.authorizations[0].id',
               );
               return cartApi.methods(request).update({
-                account: {
-                  email: payer.email_address,
-                },
+                ...(!cart.account_logged_in && {
+                  account: {
+                    email: payer.email_address,
+                  },
+                }),
                 billing: { method: 'paypal', paypal: { authorization_id: authorizationID } },
                 shipping: {
                   name: shipping.name.full_name,
@@ -532,7 +535,12 @@ async function paymentTokenize(request, params, payMethods, cart) {
       }
     }
   } else if (params.klarna && payMethods.klarna) {
-    if (payMethods.card && payMethods.card.gateway === 'stripe') {
+    if (payMethods.klarna.gateway === 'klarna') {
+      const session = await createKlarnaSession(cart, methods(request).createIntent).catch((err) =>
+        onError(err),
+      );
+      return session && window.location.replace(session.redirect_url);
+    } else if (payMethods.card && payMethods.card.gateway === 'stripe') {
       if (!window.Stripe) {
         await loadScript('stripe-js', 'https://js.stripe.com/v3/');
       }
@@ -604,14 +612,20 @@ async function paymentTokenize(request, params, payMethods, cart) {
 
 async function handleRedirect(request, params, cart) {
   const onError = (error) => {
-    const errorHandler = get(params, 'card.onError') || get(params, 'paysafecard.onError');
+    const errorHandler =
+      get(params, 'card.onError') ||
+      get(params, 'paysafecard.onError') ||
+      get(params, 'klarna.onError');
     if (isFunction(errorHandler)) {
       return errorHandler(error);
     }
     throw new Error(error.message);
   };
   const onSuccess = (result) => {
-    const successHandler = get(params, 'card.onSuccess') || get(params, 'paysafecard.onSuccess');
+    const successHandler =
+      get(params, 'card.onSuccess') ||
+      get(params, 'paysafecard.onSuccess') ||
+      get(params, 'klarna.onSuccess');
     if (isFunction(successHandler)) {
       return successHandler(result);
     }
@@ -626,6 +640,8 @@ async function handleRedirect(request, params, cart) {
     result = await handleQuickpayRedirectAction(request, cart, params, queryParams);
   } else if (gateway === 'paysafecard') {
     result = await handlePaysafecardRedirectAction(request, cart, params, queryParams);
+  } else if (gateway === 'klarna_direct') {
+    result = await handleDirectKlarnaRedirectAction(request, cart, params, queryParams);
   }
 
   if (!result) {
@@ -699,6 +715,29 @@ async function handlePaysafecardRedirectAction(request, cart) {
     default:
       return { error: { message: `Unknown redirect status: ${intent.status}.` } };
   }
+}
+
+async function handleDirectKlarnaRedirectAction(request, cart, params, queryParams) {
+  const { authorization_token } = queryParams;
+
+  if (!authorization_token) {
+    return {
+      error: {
+        message:
+          'We are unable to authenticate your payment method. Please choose a different payment method and try again.',
+      },
+    };
+  }
+
+  await cartApi.methods(request, options).update({
+    billing: {
+      method: 'klarna',
+      klarna: {
+        token: authorization_token,
+      },
+    },
+  });
+  return { success: true };
 }
 
 function getTotalsDueRemaining(cart) {
