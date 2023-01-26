@@ -1,9 +1,11 @@
-const reduce = require('lodash/reduce');
-const isEmpty = require('lodash/isEmpty');
-const get = require('lodash/get');
-const toLower = require('lodash/toLower');
-const map = require('lodash/map');
-const toNumber = require('lodash/toNumber');
+import reduce from 'lodash-es/reduce';
+import isEmpty from 'lodash-es/isEmpty';
+import get from 'lodash-es/get';
+import toLower from 'lodash-es/toLower';
+import map from 'lodash-es/map';
+import toNumber from 'lodash-es/toNumber';
+
+import { toSnake } from './';
 
 const addressFieldsMap = {
   city: 'city',
@@ -19,38 +21,32 @@ const billingFieldsMap = {
   phone: 'phone',
 };
 
-function getBillingDetails(data) {
-  const { account = {}, billing, shipping } = data;
-  const accountShipping = get(account, 'shipping', {});
-  const accountBilling = get(account, 'billing', {});
-
-  const billingData = {
-    ...accountShipping,
-    ...accountBilling,
-    ...shipping,
-    ...billing,
-  };
-  const fillValues = (fieldsMap) =>
-    reduce(
-      fieldsMap,
-      (acc, value, key) => {
-        const billingValue = billingData[value];
-        if (billingValue) {
-          acc[key] = billingValue;
-        }
-        return acc;
-      },
-      {},
-    );
-
-  const billingDetails = fillValues(billingFieldsMap);
-  if (!isEmpty(billingDetails)) {
-    const address = fillValues(addressFieldsMap);
-    return {
-      ...billingDetails,
-      ...(!isEmpty(address) ? { address } : {}),
-    };
+function mapValues(fieldsMap, data) {
+  const result = {};
+  for (const [destinationKey, sourceKey] of Object.entries(fieldsMap)) {
+    const value = data[sourceKey];
+    if (value) {
+      result[destinationKey] = value;
+    }
   }
+  return result;
+}
+
+function getBillingDetails(cart) {
+  const details = {
+    ...mapValues(billingFieldsMap, cart.billing),
+  };
+
+  if (cart.account && cart.account.email) {
+    details.email = cart.account.email;
+  }
+
+  const address = mapValues(addressFieldsMap, cart.billing);
+  if (!isEmpty(address)) {
+    details.address = address;
+  }
+
+  return details;
 }
 
 function getKlarnaItems(cart) {
@@ -116,7 +112,10 @@ function setKlarnaBillingShipping(source, data) {
       {},
     );
 
-  source.klarna = { ...source.klarna, ...fillValues(shippingNameFieldsMap, data.shipping) };
+  source.klarna = {
+    ...source.klarna,
+    ...fillValues(shippingNameFieldsMap, data.shipping),
+  };
   const shipping = fillValues(shippingFieldsMap, data.shipping);
   const shippingAddress = fillValues(addressFieldsMap, data.shipping);
   if (shipping || shippingAddress) {
@@ -182,11 +181,12 @@ function setBancontactOwner(source, data) {
 
 async function createPaymentMethod(stripe, cardElement, cart) {
   const billingDetails = getBillingDetails(cart);
-  const { error, paymentMethod } = await stripe.createPaymentMethod({
+  const { paymentMethod, error } = await stripe.createPaymentMethod({
     type: 'card',
     card: cardElement,
-    ...(billingDetails ? { billing_details: billingDetails } : {}),
+    billing_details: billingDetails,
   });
+
   return error
     ? { error }
     : {
@@ -201,8 +201,8 @@ async function createPaymentMethod(stripe, cardElement, cart) {
       };
 }
 
-async function createIDealPaymentMethod(stripe, element, billing = {}) {
-  const billingDetails = getBillingDetails(billing);
+async function createIDealPaymentMethod(stripe, element, cart) {
+  const billingDetails = getBillingDetails(cart);
   return await stripe.createPaymentMethod({
     type: 'ideal',
     ideal: element,
@@ -262,7 +262,7 @@ function stripeAmountByCurrency(currency, amount) {
     'MGA', // Malagasy Ariary
     'RWF', // Rwandan Franc
     'VUV', // Vanuatu Vatu
-    'XOF' // West African Cfa Franc
+    'XOF', // West African Cfa Franc
   ];
   if (zeroDecimalCurrencies.includes(currency.toUpperCase())) {
     return amount;
@@ -271,7 +271,7 @@ function stripeAmountByCurrency(currency, amount) {
   }
 }
 
-module.exports = {
+export {
   createPaymentMethod,
   createIDealPaymentMethod,
   createKlarnaSource,

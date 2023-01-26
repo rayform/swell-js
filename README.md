@@ -17,4 +17,4 @@ Universal JavaScript client for Swell's Frontend API, providing client-safe acce
 
 ## Documentation
 
-📖  [**View Swell.js Documentation**](https://developers.swell.is/frontend-api/)
+📖 [**View Swell.js Documentation**](https://developers.swell.is/frontend-api/)

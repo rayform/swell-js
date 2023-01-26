@@ -1,4 +1,13 @@
-const { get, find, set, merge, toCamel, isObject, cloneDeep, camelCase } = require('./utils');
+import {
+  get,
+  find,
+  set,
+  merge,
+  toCamel,
+  isObject,
+  cloneDeep,
+  camelCase,
+} from './utils';
 
 function methods(request, opt) {
   return {
@@ -22,7 +31,12 @@ function methods(request, opt) {
     getState(
       uri,
       stateName,
-      { id = undefined, def = undefined, refresh = false, locale = undefined } = {},
+      {
+        id = undefined,
+        def = undefined,
+        refresh = false,
+        locale = undefined,
+      } = {},
     ) {
       if (!this[stateName] || refresh) {
         this[stateName] = request('get', uri);
@@ -53,7 +67,11 @@ function methods(request, opt) {
       return id ? get(ls[locale][stateName], id, def) : ls[locale][stateName];
     },
 
-    findState(uri, stateName, { where = undefined, def = undefined, locale = undefined } = {}) {
+    findState(
+      uri,
+      stateName,
+      { where = undefined, def = undefined, locale = undefined } = {},
+    ) {
       const state = this.getState(uri, stateName, { locale });
       if (state && typeof state.then === 'function') {
         return state.then((state) => find(state, where) || def);
@@ -94,20 +112,35 @@ function methods(request, opt) {
       this[stateName] = merge(this[stateName] || {}, mergeData);
 
       if (this.localizedState[locale]) {
-        this.localizedState[locale][stateName] = this.decodeLocale(this[stateName], locale);
+        this.localizedState[locale][stateName] = this.decodeLocale(
+          this[stateName],
+          locale,
+        );
       }
     },
 
     menus(id = undefined, def = undefined, locale = undefined) {
-      return this.findState('/settings/menus', 'menuState', { where: { id }, def, locale });
+      return this.findState('/settings/menus', 'menuState', {
+        where: { id },
+        def,
+        locale,
+      });
     },
 
     payments(id = undefined, def = undefined, locale = undefined) {
-      return this.getState('/settings/payments', 'paymentState', { id, def, locale });
+      return this.getState('/settings/payments', 'paymentState', {
+        id,
+        def,
+        locale,
+      });
     },
 
     subscriptions(id = undefined, def = undefined, locale = undefined) {
-      return this.getState('/settings/subscriptions', 'subscriptionState', { id, def, locale });
+      return this.getState('/settings/subscriptions', 'subscriptionState', {
+        id,
+        def,
+        locale,
+      });
     },
 
     session(id = undefined, def = undefined, locale = undefined) {
@@ -139,10 +172,8 @@ function methods(request, opt) {
 
     async load() {
       try {
-        const { settings, menus, payments, subscriptions, session } = await request(
-          'get',
-          '/settings/all',
-        );
+        const { settings, menus, payments, subscriptions, session } =
+          await request('get', '/settings/all');
 
         this.localizedState = {};
 
@@ -208,7 +239,11 @@ function decodeLocaleValue(locale, values, key, configs, opt) {
     const shortKey = localeKey.replace(/\-.+$/, '');
     const transformedLocale = opt.useCamelCase ? camelCase(locale) : locale;
 
-    if (localeKey === locale || localeKey === transformedLocale || shortKey === transformedLocale) {
+    if (
+      localeKey === locale ||
+      localeKey === transformedLocale ||
+      shortKey === transformedLocale
+    ) {
       returnLocaleKey = locale;
       returnLocaleConfig = configs[locale];
     }
@@ -235,7 +270,10 @@ function decodeLocaleValue(locale, values, key, configs, opt) {
     while (fallbackKey) {
       fallbackKeys = fallbackKeys || [];
       fallbackKeys.push(fallbackKey);
-      fallbackValues = { ...(values[key][fallbackKey] || {}), ...fallbackValues };
+      fallbackValues = {
+        ...(values[key][fallbackKey] || {}),
+        ...fallbackValues,
+      };
       fallbackKey = configs[fallbackKey] && configs[fallbackKey].fallback;
       if (origFallbackKey === fallbackKey) {
         break;
@@ -244,10 +282,14 @@ function decodeLocaleValue(locale, values, key, configs, opt) {
   }
 
   // Merge locale value with fallbacks
-  let localeValues = { ...fallbackValues, ...(values[key][returnLocaleKey] || {}) };
+  let localeValues = {
+    ...fallbackValues,
+    ...(values[key][returnLocaleKey] || {}),
+  };
   const valueKeys = Object.keys(localeValues);
   for (let valueKey of valueKeys) {
-    const hasValue = localeValues[valueKey] !== null && localeValues[valueKey] !== '';
+    const hasValue =
+      localeValues[valueKey] !== null && localeValues[valueKey] !== '';
     let shouldFallback = fallbackKeys && !hasValue;
     if (shouldFallback) {
       for (let fallbackKey of fallbackKeys) {
@@ -274,6 +316,4 @@ function decodeLocaleValue(locale, values, key, configs, opt) {
   }
 }
 
-module.exports = {
-  methods,
-};
+export default methods;

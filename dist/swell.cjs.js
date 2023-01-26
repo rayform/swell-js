@@ -1,1 +1,7828 @@
-"use strict";require("isomorphic-fetch");var t=require("qs"),e=require("object-merge-advanced"),r=require("object-keys-normalizer"),n="undefined"!=typeof global?global:"undefined"!=typeof self?self:"undefined"!=typeof window?window:{},o=[],i=[],a="undefined"!=typeof Uint8Array?Uint8Array:Array,s=!1;function u(){s=!0;for(var t="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",e=0,r=t.length;e<r;++e)o[e]=t[e],i[t.charCodeAt(e)]=e;i["-".charCodeAt(0)]=62,i["_".charCodeAt(0)]=63}function c(t,e,r){for(var n,i,a=[],s=e;s<r;s+=3)n=(t[s]<<16)+(t[s+1]<<8)+t[s+2],a.push(o[(i=n)>>18&63]+o[i>>12&63]+o[i>>6&63]+o[63&i]);return a.join("")}function l(t){var e;s||u();for(var r=t.length,n=r%3,i="",a=[],l=16383,f=0,h=r-n;f<h;f+=l)a.push(c(t,f,f+l>h?h:f+l));return 1===n?(e=t[r-1],i+=o[e>>2],i+=o[e<<4&63],i+="=="):2===n&&(e=(t[r-2]<<8)+t[r-1],i+=o[e>>10],i+=o[e>>4&63],i+=o[e<<2&63],i+="="),a.push(i),a.join("")}function f(t,e,r,n,o){var i,a,s=8*o-n-1,u=(1<<s)-1,c=u>>1,l=-7,f=r?o-1:0,h=r?-1:1,p=t[e+f];for(f+=h,i=p&(1<<-l)-1,p>>=-l,l+=s;l>0;i=256*i+t[e+f],f+=h,l-=8);for(a=i&(1<<-l)-1,i>>=-l,l+=n;l>0;a=256*a+t[e+f],f+=h,l-=8);if(0===i)i=1-c;else{if(i===u)return a?NaN:1/0*(p?-1:1);a+=Math.pow(2,n),i-=c}return(p?-1:1)*a*Math.pow(2,i-n)}function h(t,e,r,n,o,i){var a,s,u,c=8*i-o-1,l=(1<<c)-1,f=l>>1,h=23===o?Math.pow(2,-24)-Math.pow(2,-77):0,p=n?0:i-1,d=n?1:-1,g=e<0||0===e&&1/e<0?1:0;for(e=Math.abs(e),isNaN(e)||e===1/0?(s=isNaN(e)?1:0,a=l):(a=Math.floor(Math.log(e)/Math.LN2),e*(u=Math.pow(2,-a))<1&&(a--,u*=2),(e+=a+f>=1?h/u:h*Math.pow(2,1-f))*u>=2&&(a++,u/=2),a+f>=l?(s=0,a=l):a+f>=1?(s=(e*u-1)*Math.pow(2,o),a+=f):(s=e*Math.pow(2,f-1)*Math.pow(2,o),a=0));o>=8;t[r+p]=255&s,p+=d,s/=256,o-=8);for(a=a<<o|s,c+=o;c>0;t[r+p]=255&a,p+=d,a/=256,c-=8);t[r+p-d]|=128*g}var p={}.toString,d=Array.isArray||function(t){return"[object Array]"==p.call(t)};function g(){return b.TYPED_ARRAY_SUPPORT?2147483647:1073741823}function y(t,e){if(g()<e)throw new RangeError("Invalid typed array length");return b.TYPED_ARRAY_SUPPORT?(t=new Uint8Array(e)).__proto__=b.prototype:(null===t&&(t=new b(e)),t.length=e),t}function b(t,e,r){if(!(b.TYPED_ARRAY_SUPPORT||this instanceof b))return new b(t,e,r);if("number"==typeof t){if("string"==typeof e)throw new Error("If encoding is specified then the first argument must be a string");return _(this,t)}return m(this,t,e,r)}function m(t,e,r,n){if("number"==typeof e)throw new TypeError('"value" argument must not be a number');return"undefined"!=typeof ArrayBuffer&&e instanceof ArrayBuffer?function(t,e,r,n){if(e.byteLength,r<0||e.byteLength<r)throw new RangeError("'offset' is out of bounds");if(e.byteLength<r+(n||0))throw new RangeError("'length' is out of bounds");e=void 0===r&&void 0===n?new Uint8Array(e):void 0===n?new Uint8Array(e,r):new Uint8Array(e,r,n);b.TYPED_ARRAY_SUPPORT?(t=e).__proto__=b.prototype:t=j(t,e);return t}(t,e,r,n):"string"==typeof e?function(t,e,r){"string"==typeof r&&""!==r||(r="utf8");if(!b.isEncoding(r))throw new TypeError('"encoding" must be a valid string encoding');var n=0|E(e,r),o=(t=y(t,n)).write(e,r);o!==n&&(t=t.slice(0,o));return t}(t,e,r):function(t,e){if(S(e)){var r=0|A(e.length);return 0===(t=y(t,r)).length||e.copy(t,0,0,r),t}if(e){if("undefined"!=typeof ArrayBuffer&&e.buffer instanceof ArrayBuffer||"length"in e)return"number"!=typeof e.length||(n=e.length)!=n?y(t,0):j(t,e);if("Buffer"===e.type&&d(e.data))return j(t,e.data)}var n;throw new TypeError("First argument must be a string, Buffer, ArrayBuffer, Array, or array-like object.")}(t,e)}function w(t){if("number"!=typeof t)throw new TypeError('"size" argument must be a number');if(t<0)throw new RangeError('"size" argument must not be negative')}function _(t,e){if(w(e),t=y(t,e<0?0:0|A(e)),!b.TYPED_ARRAY_SUPPORT)for(var r=0;r<e;++r)t[r]=0;return t}function j(t,e){var r=e.length<0?0:0|A(e.length);t=y(t,r);for(var n=0;n<r;n+=1)t[n]=255&e[n];return t}function A(t){if(t>=g())throw new RangeError("Attempt to allocate Buffer larger than maximum size: 0x"+g().toString(16)+" bytes");return 0|t}function S(t){return!(null==t||!t._isBuffer)}function E(t,e){if(S(t))return t.length;if("undefined"!=typeof ArrayBuffer&&"function"==typeof ArrayBuffer.isView&&(ArrayBuffer.isView(t)||t instanceof ArrayBuffer))return t.byteLength;"string"!=typeof t&&(t=""+t);var r=t.length;if(0===r)return 0;for(var n=!1;;)switch(e){case"ascii":case"latin1":case"binary":return r;case"utf8":case"utf-8":case void 0:return K(t).length;case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return 2*r;case"hex":return r>>>1;case"base64":return H(t).length;default:if(n)return K(t).length;e=(""+e).toLowerCase(),n=!0}}function C(t,e,r){var n=!1;if((void 0===e||e<0)&&(e=0),e>this.length)return"";if((void 0===r||r>this.length)&&(r=this.length),r<=0)return"";if((r>>>=0)<=(e>>>=0))return"";for(t||(t="utf8");;)switch(t){case"hex":return L(this,e,r);case"utf8":case"utf-8":return B(this,e,r);case"ascii":return M(this,e,r);case"latin1":case"binary":return z(this,e,r);case"base64":return D(this,e,r);case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return q(this,e,r);default:if(n)throw new TypeError("Unknown encoding: "+t);t=(t+"").toLowerCase(),n=!0}}function O(t,e,r){var n=t[e];t[e]=t[r],t[r]=n}function x(t,e,r,n,o){if(0===t.length)return-1;if("string"==typeof r?(n=r,r=0):r>2147483647?r=2147483647:r<-2147483648&&(r=-2147483648),r=+r,isNaN(r)&&(r=o?0:t.length-1),r<0&&(r=t.length+r),r>=t.length){if(o)return-1;r=t.length-1}else if(r<0){if(!o)return-1;r=0}if("string"==typeof e&&(e=b.from(e,n)),S(e))return 0===e.length?-1:P(t,e,r,n,o);if("number"==typeof e)return e&=255,b.TYPED_ARRAY_SUPPORT&&"function"==typeof Uint8Array.prototype.indexOf?o?Uint8Array.prototype.indexOf.call(t,e,r):Uint8Array.prototype.lastIndexOf.call(t,e,r):P(t,[e],r,n,o);throw new TypeError("val must be string, number or Buffer")}function P(t,e,r,n,o){var i,a=1,s=t.length,u=e.length;if(void 0!==n&&("ucs2"===(n=String(n).toLowerCase())||"ucs-2"===n||"utf16le"===n||"utf-16le"===n)){if(t.length<2||e.length<2)return-1;a=2,s/=2,u/=2,r/=2}function c(t,e){return 1===a?t[e]:t.readUInt16BE(e*a)}if(o){var l=-1;for(i=r;i<s;i++)if(c(t,i)===c(e,-1===l?0:i-l)){if(-1===l&&(l=i),i-l+1===u)return l*a}else-1!==l&&(i-=i-l),l=-1}else for(r+u>s&&(r=s-u),i=r;i>=0;i--){for(var f=!0,h=0;h<u;h++)if(c(t,i+h)!==c(e,h)){f=!1;break}if(f)return i}return-1}function R(t,e,r,n){r=Number(r)||0;var o=t.length-r;n?(n=Number(n))>o&&(n=o):n=o;var i=e.length;if(i%2!=0)throw new TypeError("Invalid hex string");n>i/2&&(n=i/2);for(var a=0;a<n;++a){var s=parseInt(e.substr(2*a,2),16);if(isNaN(s))return a;t[r+a]=s}return a}function k(t,e,r,n){return Q(K(e,t.length-r),t,r,n)}function U(t,e,r,n){return Q(function(t){for(var e=[],r=0;r<t.length;++r)e.push(255&t.charCodeAt(r));return e}(e),t,r,n)}function I(t,e,r,n){return U(t,e,r,n)}function T(t,e,r,n){return Q(H(e),t,r,n)}function $(t,e,r,n){return Q(function(t,e){for(var r,n,o,i=[],a=0;a<t.length&&!((e-=2)<0);++a)n=(r=t.charCodeAt(a))>>8,o=r%256,i.push(o),i.push(n);return i}(e,t.length-r),t,r,n)}function D(t,e,r){return 0===e&&r===t.length?l(t):l(t.slice(e,r))}function B(t,e,r){r=Math.min(t.length,r);for(var n=[],o=e;o<r;){var i,a,s,u,c=t[o],l=null,f=c>239?4:c>223?3:c>191?2:1;if(o+f<=r)switch(f){case 1:c<128&&(l=c);break;case 2:128==(192&(i=t[o+1]))&&(u=(31&c)<<6|63&i)>127&&(l=u);break;case 3:i=t[o+1],a=t[o+2],128==(192&i)&&128==(192&a)&&(u=(15&c)<<12|(63&i)<<6|63&a)>2047&&(u<55296||u>57343)&&(l=u);break;case 4:i=t[o+1],a=t[o+2],s=t[o+3],128==(192&i)&&128==(192&a)&&128==(192&s)&&(u=(15&c)<<18|(63&i)<<12|(63&a)<<6|63&s)>65535&&u<1114112&&(l=u)}null===l?(l=65533,f=1):l>65535&&(l-=65536,n.push(l>>>10&1023|55296),l=56320|1023&l),n.push(l),o+=f}return function(t){var e=t.length;if(e<=4096)return String.fromCharCode.apply(String,t);var r="",n=0;for(;n<e;)r+=String.fromCharCode.apply(String,t.slice(n,n+=4096));return r}(n)}b.TYPED_ARRAY_SUPPORT=void 0===n.TYPED_ARRAY_SUPPORT||n.TYPED_ARRAY_SUPPORT,b.poolSize=8192,b._augment=function(t){return t.__proto__=b.prototype,t},b.from=function(t,e,r){return m(null,t,e,r)},b.TYPED_ARRAY_SUPPORT&&(b.prototype.__proto__=Uint8Array.prototype,b.__proto__=Uint8Array),b.alloc=function(t,e,r){return function(t,e,r,n){return w(e),e<=0?y(t,e):void 0!==r?"string"==typeof n?y(t,e).fill(r,n):y(t,e).fill(r):y(t,e)}(null,t,e,r)},b.allocUnsafe=function(t){return _(null,t)},b.allocUnsafeSlow=function(t){return _(null,t)},b.isBuffer=function(t){return null!=t&&(!!t._isBuffer||tt(t)||function(t){return"function"==typeof t.readFloatLE&&"function"==typeof t.slice&&tt(t.slice(0,0))}(t))},b.compare=function(t,e){if(!S(t)||!S(e))throw new TypeError("Arguments must be Buffers");if(t===e)return 0;for(var r=t.length,n=e.length,o=0,i=Math.min(r,n);o<i;++o)if(t[o]!==e[o]){r=t[o],n=e[o];break}return r<n?-1:n<r?1:0},b.isEncoding=function(t){switch(String(t).toLowerCase()){case"hex":case"utf8":case"utf-8":case"ascii":case"latin1":case"binary":case"base64":case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return!0;default:return!1}},b.concat=function(t,e){if(!d(t))throw new TypeError('"list" argument must be an Array of Buffers');if(0===t.length)return b.alloc(0);var r;if(void 0===e)for(e=0,r=0;r<t.length;++r)e+=t[r].length;var n=b.allocUnsafe(e),o=0;for(r=0;r<t.length;++r){var i=t[r];if(!S(i))throw new TypeError('"list" argument must be an Array of Buffers');i.copy(n,o),o+=i.length}return n},b.byteLength=E,b.prototype._isBuffer=!0,b.prototype.swap16=function(){var t=this.length;if(t%2!=0)throw new RangeError("Buffer size must be a multiple of 16-bits");for(var e=0;e<t;e+=2)O(this,e,e+1);return this},b.prototype.swap32=function(){var t=this.length;if(t%4!=0)throw new RangeError("Buffer size must be a multiple of 32-bits");for(var e=0;e<t;e+=4)O(this,e,e+3),O(this,e+1,e+2);return this},b.prototype.swap64=function(){var t=this.length;if(t%8!=0)throw new RangeError("Buffer size must be a multiple of 64-bits");for(var e=0;e<t;e+=8)O(this,e,e+7),O(this,e+1,e+6),O(this,e+2,e+5),O(this,e+3,e+4);return this},b.prototype.toString=function(){var t=0|this.length;return 0===t?"":0===arguments.length?B(this,0,t):C.apply(this,arguments)},b.prototype.equals=function(t){if(!S(t))throw new TypeError("Argument must be a Buffer");return this===t||0===b.compare(this,t)},b.prototype.inspect=function(){var t="";return this.length>0&&(t=this.toString("hex",0,50).match(/.{2}/g).join(" "),this.length>50&&(t+=" ... ")),"<Buffer "+t+">"},b.prototype.compare=function(t,e,r,n,o){if(!S(t))throw new TypeError("Argument must be a Buffer");if(void 0===e&&(e=0),void 0===r&&(r=t?t.length:0),void 0===n&&(n=0),void 0===o&&(o=this.length),e<0||r>t.length||n<0||o>this.length)throw new RangeError("out of range index");if(n>=o&&e>=r)return 0;if(n>=o)return-1;if(e>=r)return 1;if(this===t)return 0;for(var i=(o>>>=0)-(n>>>=0),a=(r>>>=0)-(e>>>=0),s=Math.min(i,a),u=this.slice(n,o),c=t.slice(e,r),l=0;l<s;++l)if(u[l]!==c[l]){i=u[l],a=c[l];break}return i<a?-1:a<i?1:0},b.prototype.includes=function(t,e,r){return-1!==this.indexOf(t,e,r)},b.prototype.indexOf=function(t,e,r){return x(this,t,e,r,!0)},b.prototype.lastIndexOf=function(t,e,r){return x(this,t,e,r,!1)},b.prototype.write=function(t,e,r,n){if(void 0===e)n="utf8",r=this.length,e=0;else if(void 0===r&&"string"==typeof e)n=e,r=this.length,e=0;else{if(!isFinite(e))throw new Error("Buffer.write(string, encoding, offset[, length]) is no longer supported");e|=0,isFinite(r)?(r|=0,void 0===n&&(n="utf8")):(n=r,r=void 0)}var o=this.length-e;if((void 0===r||r>o)&&(r=o),t.length>0&&(r<0||e<0)||e>this.length)throw new RangeError("Attempt to write outside buffer bounds");n||(n="utf8");for(var i=!1;;)switch(n){case"hex":return R(this,t,e,r);case"utf8":case"utf-8":return k(this,t,e,r);case"ascii":return U(this,t,e,r);case"latin1":case"binary":return I(this,t,e,r);case"base64":return T(this,t,e,r);case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return $(this,t,e,r);default:if(i)throw new TypeError("Unknown encoding: "+n);n=(""+n).toLowerCase(),i=!0}},b.prototype.toJSON=function(){return{type:"Buffer",data:Array.prototype.slice.call(this._arr||this,0)}};function M(t,e,r){var n="";r=Math.min(t.length,r);for(var o=e;o<r;++o)n+=String.fromCharCode(127&t[o]);return n}function z(t,e,r){var n="";r=Math.min(t.length,r);for(var o=e;o<r;++o)n+=String.fromCharCode(t[o]);return n}function L(t,e,r){var n=t.length;(!e||e<0)&&(e=0),(!r||r<0||r>n)&&(r=n);for(var o="",i=e;i<r;++i)o+=X(t[i]);return o}function q(t,e,r){for(var n=t.slice(e,r),o="",i=0;i<n.length;i+=2)o+=String.fromCharCode(n[i]+256*n[i+1]);return o}function Y(t,e,r){if(t%1!=0||t<0)throw new RangeError("offset is not uint");if(t+e>r)throw new RangeError("Trying to access beyond buffer length")}function N(t,e,r,n,o,i){if(!S(t))throw new TypeError('"buffer" argument must be a Buffer instance');if(e>o||e<i)throw new RangeError('"value" argument is out of bounds');if(r+n>t.length)throw new RangeError("Index out of range")}function F(t,e,r,n){e<0&&(e=65535+e+1);for(var o=0,i=Math.min(t.length-r,2);o<i;++o)t[r+o]=(e&255<<8*(n?o:1-o))>>>8*(n?o:1-o)}function V(t,e,r,n){e<0&&(e=4294967295+e+1);for(var o=0,i=Math.min(t.length-r,4);o<i;++o)t[r+o]=e>>>8*(n?o:3-o)&255}function J(t,e,r,n,o,i){if(r+n>t.length)throw new RangeError("Index out of range");if(r<0)throw new RangeError("Index out of range")}function Z(t,e,r,n,o){return o||J(t,0,r,4),h(t,e,r,n,23,4),r+4}function G(t,e,r,n,o){return o||J(t,0,r,8),h(t,e,r,n,52,8),r+8}b.prototype.slice=function(t,e){var r,n=this.length;if((t=~~t)<0?(t+=n)<0&&(t=0):t>n&&(t=n),(e=void 0===e?n:~~e)<0?(e+=n)<0&&(e=0):e>n&&(e=n),e<t&&(e=t),b.TYPED_ARRAY_SUPPORT)(r=this.subarray(t,e)).__proto__=b.prototype;else{var o=e-t;r=new b(o,void 0);for(var i=0;i<o;++i)r[i]=this[i+t]}return r},b.prototype.readUIntLE=function(t,e,r){t|=0,e|=0,r||Y(t,e,this.length);for(var n=this[t],o=1,i=0;++i<e&&(o*=256);)n+=this[t+i]*o;return n},b.prototype.readUIntBE=function(t,e,r){t|=0,e|=0,r||Y(t,e,this.length);for(var n=this[t+--e],o=1;e>0&&(o*=256);)n+=this[t+--e]*o;return n},b.prototype.readUInt8=function(t,e){return e||Y(t,1,this.length),this[t]},b.prototype.readUInt16LE=function(t,e){return e||Y(t,2,this.length),this[t]|this[t+1]<<8},b.prototype.readUInt16BE=function(t,e){return e||Y(t,2,this.length),this[t]<<8|this[t+1]},b.prototype.readUInt32LE=function(t,e){return e||Y(t,4,this.length),(this[t]|this[t+1]<<8|this[t+2]<<16)+16777216*this[t+3]},b.prototype.readUInt32BE=function(t,e){return e||Y(t,4,this.length),16777216*this[t]+(this[t+1]<<16|this[t+2]<<8|this[t+3])},b.prototype.readIntLE=function(t,e,r){t|=0,e|=0,r||Y(t,e,this.length);for(var n=this[t],o=1,i=0;++i<e&&(o*=256);)n+=this[t+i]*o;return n>=(o*=128)&&(n-=Math.pow(2,8*e)),n},b.prototype.readIntBE=function(t,e,r){t|=0,e|=0,r||Y(t,e,this.length);for(var n=e,o=1,i=this[t+--n];n>0&&(o*=256);)i+=this[t+--n]*o;return i>=(o*=128)&&(i-=Math.pow(2,8*e)),i},b.prototype.readInt8=function(t,e){return e||Y(t,1,this.length),128&this[t]?-1*(255-this[t]+1):this[t]},b.prototype.readInt16LE=function(t,e){e||Y(t,2,this.length);var r=this[t]|this[t+1]<<8;return 32768&r?4294901760|r:r},b.prototype.readInt16BE=function(t,e){e||Y(t,2,this.length);var r=this[t+1]|this[t]<<8;return 32768&r?4294901760|r:r},b.prototype.readInt32LE=function(t,e){return e||Y(t,4,this.length),this[t]|this[t+1]<<8|this[t+2]<<16|this[t+3]<<24},b.prototype.readInt32BE=function(t,e){return e||Y(t,4,this.length),this[t]<<24|this[t+1]<<16|this[t+2]<<8|this[t+3]},b.prototype.readFloatLE=function(t,e){return e||Y(t,4,this.length),f(this,t,!0,23,4)},b.prototype.readFloatBE=function(t,e){return e||Y(t,4,this.length),f(this,t,!1,23,4)},b.prototype.readDoubleLE=function(t,e){return e||Y(t,8,this.length),f(this,t,!0,52,8)},b.prototype.readDoubleBE=function(t,e){return e||Y(t,8,this.length),f(this,t,!1,52,8)},b.prototype.writeUIntLE=function(t,e,r,n){(t=+t,e|=0,r|=0,n)||N(this,t,e,r,Math.pow(2,8*r)-1,0);var o=1,i=0;for(this[e]=255&t;++i<r&&(o*=256);)this[e+i]=t/o&255;return e+r},b.prototype.writeUIntBE=function(t,e,r,n){(t=+t,e|=0,r|=0,n)||N(this,t,e,r,Math.pow(2,8*r)-1,0);var o=r-1,i=1;for(this[e+o]=255&t;--o>=0&&(i*=256);)this[e+o]=t/i&255;return e+r},b.prototype.writeUInt8=function(t,e,r){return t=+t,e|=0,r||N(this,t,e,1,255,0),b.TYPED_ARRAY_SUPPORT||(t=Math.floor(t)),this[e]=255&t,e+1},b.prototype.writeUInt16LE=function(t,e,r){return t=+t,e|=0,r||N(this,t,e,2,65535,0),b.TYPED_ARRAY_SUPPORT?(this[e]=255&t,this[e+1]=t>>>8):F(this,t,e,!0),e+2},b.prototype.writeUInt16BE=function(t,e,r){return t=+t,e|=0,r||N(this,t,e,2,65535,0),b.TYPED_ARRAY_SUPPORT?(this[e]=t>>>8,this[e+1]=255&t):F(this,t,e,!1),e+2},b.prototype.writeUInt32LE=function(t,e,r){return t=+t,e|=0,r||N(this,t,e,4,4294967295,0),b.TYPED_ARRAY_SUPPORT?(this[e+3]=t>>>24,this[e+2]=t>>>16,this[e+1]=t>>>8,this[e]=255&t):V(this,t,e,!0),e+4},b.prototype.writeUInt32BE=function(t,e,r){return t=+t,e|=0,r||N(this,t,e,4,4294967295,0),b.TYPED_ARRAY_SUPPORT?(this[e]=t>>>24,this[e+1]=t>>>16,this[e+2]=t>>>8,this[e+3]=255&t):V(this,t,e,!1),e+4},b.prototype.writeIntLE=function(t,e,r,n){if(t=+t,e|=0,!n){var o=Math.pow(2,8*r-1);N(this,t,e,r,o-1,-o)}var i=0,a=1,s=0;for(this[e]=255&t;++i<r&&(a*=256);)t<0&&0===s&&0!==this[e+i-1]&&(s=1),this[e+i]=(t/a>>0)-s&255;return e+r},b.prototype.writeIntBE=function(t,e,r,n){if(t=+t,e|=0,!n){var o=Math.pow(2,8*r-1);N(this,t,e,r,o-1,-o)}var i=r-1,a=1,s=0;for(this[e+i]=255&t;--i>=0&&(a*=256);)t<0&&0===s&&0!==this[e+i+1]&&(s=1),this[e+i]=(t/a>>0)-s&255;return e+r},b.prototype.writeInt8=function(t,e,r){return t=+t,e|=0,r||N(this,t,e,1,127,-128),b.TYPED_ARRAY_SUPPORT||(t=Math.floor(t)),t<0&&(t=255+t+1),this[e]=255&t,e+1},b.prototype.writeInt16LE=function(t,e,r){return t=+t,e|=0,r||N(this,t,e,2,32767,-32768),b.TYPED_ARRAY_SUPPORT?(this[e]=255&t,this[e+1]=t>>>8):F(this,t,e,!0),e+2},b.prototype.writeInt16BE=function(t,e,r){return t=+t,e|=0,r||N(this,t,e,2,32767,-32768),b.TYPED_ARRAY_SUPPORT?(this[e]=t>>>8,this[e+1]=255&t):F(this,t,e,!1),e+2},b.prototype.writeInt32LE=function(t,e,r){return t=+t,e|=0,r||N(this,t,e,4,2147483647,-2147483648),b.TYPED_ARRAY_SUPPORT?(this[e]=255&t,this[e+1]=t>>>8,this[e+2]=t>>>16,this[e+3]=t>>>24):V(this,t,e,!0),e+4},b.prototype.writeInt32BE=function(t,e,r){return t=+t,e|=0,r||N(this,t,e,4,2147483647,-2147483648),t<0&&(t=4294967295+t+1),b.TYPED_ARRAY_SUPPORT?(this[e]=t>>>24,this[e+1]=t>>>16,this[e+2]=t>>>8,this[e+3]=255&t):V(this,t,e,!1),e+4},b.prototype.writeFloatLE=function(t,e,r){return Z(this,t,e,!0,r)},b.prototype.writeFloatBE=function(t,e,r){return Z(this,t,e,!1,r)},b.prototype.writeDoubleLE=function(t,e,r){return G(this,t,e,!0,r)},b.prototype.writeDoubleBE=function(t,e,r){return G(this,t,e,!1,r)},b.prototype.copy=function(t,e,r,n){if(r||(r=0),n||0===n||(n=this.length),e>=t.length&&(e=t.length),e||(e=0),n>0&&n<r&&(n=r),n===r)return 0;if(0===t.length||0===this.length)return 0;if(e<0)throw new RangeError("targetStart out of bounds");if(r<0||r>=this.length)throw new RangeError("sourceStart out of bounds");if(n<0)throw new RangeError("sourceEnd out of bounds");n>this.length&&(n=this.length),t.length-e<n-r&&(n=t.length-e+r);var o,i=n-r;if(this===t&&r<e&&e<n)for(o=i-1;o>=0;--o)t[o+e]=this[o+r];else if(i<1e3||!b.TYPED_ARRAY_SUPPORT)for(o=0;o<i;++o)t[o+e]=this[o+r];else Uint8Array.prototype.set.call(t,this.subarray(r,r+i),e);return i},b.prototype.fill=function(t,e,r,n){if("string"==typeof t){if("string"==typeof e?(n=e,e=0,r=this.length):"string"==typeof r&&(n=r,r=this.length),1===t.length){var o=t.charCodeAt(0);o<256&&(t=o)}if(void 0!==n&&"string"!=typeof n)throw new TypeError("encoding must be a string");if("string"==typeof n&&!b.isEncoding(n))throw new TypeError("Unknown encoding: "+n)}else"number"==typeof t&&(t&=255);if(e<0||this.length<e||this.length<r)throw new RangeError("Out of range index");if(r<=e)return this;var i;if(e>>>=0,r=void 0===r?this.length:r>>>0,t||(t=0),"number"==typeof t)for(i=e;i<r;++i)this[i]=t;else{var a=S(t)?t:K(new b(t,n).toString()),s=a.length;for(i=0;i<r-e;++i)this[i+e]=a[i%s]}return this};var W=/[^+\/0-9A-Za-z-_]/g;function X(t){return t<16?"0"+t.toString(16):t.toString(16)}function K(t,e){var r;e=e||1/0;for(var n=t.length,o=null,i=[],a=0;a<n;++a){if((r=t.charCodeAt(a))>55295&&r<57344){if(!o){if(r>56319){(e-=3)>-1&&i.push(239,191,189);continue}if(a+1===n){(e-=3)>-1&&i.push(239,191,189);continue}o=r;continue}if(r<56320){(e-=3)>-1&&i.push(239,191,189),o=r;continue}r=65536+(o-55296<<10|r-56320)}else o&&(e-=3)>-1&&i.push(239,191,189);if(o=null,r<128){if((e-=1)<0)break;i.push(r)}else if(r<2048){if((e-=2)<0)break;i.push(r>>6|192,63&r|128)}else if(r<65536){if((e-=3)<0)break;i.push(r>>12|224,r>>6&63|128,63&r|128)}else{if(!(r<1114112))throw new Error("Invalid code point");if((e-=4)<0)break;i.push(r>>18|240,r>>12&63|128,r>>6&63|128,63&r|128)}}return i}function H(t){return function(t){var e,r,n,o,c,l;s||u();var f=t.length;if(f%4>0)throw new Error("Invalid string. Length must be a multiple of 4");c="="===t[f-2]?2:"="===t[f-1]?1:0,l=new a(3*f/4-c),n=c>0?f-4:f;var h=0;for(e=0,r=0;e<n;e+=4,r+=3)o=i[t.charCodeAt(e)]<<18|i[t.charCodeAt(e+1)]<<12|i[t.charCodeAt(e+2)]<<6|i[t.charCodeAt(e+3)],l[h++]=o>>16&255,l[h++]=o>>8&255,l[h++]=255&o;return 2===c?(o=i[t.charCodeAt(e)]<<2|i[t.charCodeAt(e+1)]>>4,l[h++]=255&o):1===c&&(o=i[t.charCodeAt(e)]<<10|i[t.charCodeAt(e+1)]<<4|i[t.charCodeAt(e+2)]>>2,l[h++]=o>>8&255,l[h++]=255&o),l}(function(t){if((t=function(t){return t.trim?t.trim():t.replace(/^\s+|\s+$/g,"")}(t).replace(W,"")).length<2)return"";for(;t.length%4!=0;)t+="=";return t}(t))}function Q(t,e,r,n){for(var o=0;o<n&&!(o+r>=e.length||o>=t.length);++o)e[o+r]=t[o];return o}function tt(t){return!!t.constructor&&"function"==typeof t.constructor.isBuffer&&t.constructor.isBuffer(t)}var et="object"==typeof n&&n&&n.Object===Object&&n;function rt(t){if(t.__esModule)return t;var e=Object.defineProperty({},"__esModule",{value:!0});return Object.keys(t).forEach((function(r){var n=Object.getOwnPropertyDescriptor(t,r);Object.defineProperty(e,r,n.get?n:{enumerable:!0,get:function(){return t[r]}})})),e}function nt(t){var e={exports:{}};return t(e,e.exports),e.exports}module.exports=et;var ot=rt(Object.freeze({__proto__:null})),it="object"==typeof self&&self&&self.Object===Object&&self,at=ot||it||Function("return this")(),st=at.Symbol,ut=Object.prototype,ct=ut.hasOwnProperty,lt=ut.toString,ft=st?st.toStringTag:void 0;var ht=function(t){var e=ct.call(t,ft),r=t[ft];try{t[ft]=void 0;var n=!0}catch(t){}var o=lt.call(t);return n&&(e?t[ft]=r:delete t[ft]),o},pt=Object.prototype.toString;var dt=function(t){return pt.call(t)},gt=st?st.toStringTag:void 0;var yt=function(t){return null==t?void 0===t?"[object Undefined]":"[object Null]":gt&&gt in Object(t)?ht(t):dt(t)};var vt=function(t){var e=typeof t;return null!=t&&("object"==e||"function"==e)};var bt,mt=function(t){if(!vt(t))return!1;var e=yt(t);return"[object Function]"==e||"[object GeneratorFunction]"==e||"[object AsyncFunction]"==e||"[object Proxy]"==e},wt=at["__core-js_shared__"],_t=(bt=/[^.]+$/.exec(wt&&wt.keys&&wt.keys.IE_PROTO||""))?"Symbol(src)_1."+bt:"";var jt=function(t){return!!_t&&_t in t},At=Function.prototype.toString;var St=function(t){if(null!=t){try{return At.call(t)}catch(t){}try{return t+""}catch(t){}}return""},Et=/^\[object .+?Constructor\]$/,Ct=Function.prototype,Ot=Object.prototype,xt=Ct.toString,Pt=Ot.hasOwnProperty,Rt=RegExp("^"+xt.call(Pt).replace(/[\\^$.*+?()[\]{}|]/g,"\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g,"$1.*?")+"$");var kt=function(t){return!(!vt(t)||jt(t))&&(mt(t)?Rt:Et).test(St(t))};var Ut=function(t,e){return null==t?void 0:t[e]};var It=function(t,e){var r=Ut(t,e);return kt(r)?r:void 0},Tt=function(){try{var t=It(Object,"defineProperty");return t({},"",{}),t}catch(t){}}();var $t=function(t,e,r){"__proto__"==e&&Tt?Tt(t,e,{configurable:!0,enumerable:!0,value:r,writable:!0}):t[e]=r};var Dt=function(t,e){return t===e||t!=t&&e!=e},Bt=Object.prototype.hasOwnProperty;var Mt=function(t,e,r){var n=t[e];Bt.call(t,e)&&Dt(n,r)&&(void 0!==r||e in t)||$t(t,e,r)},zt=Array.isArray;var Lt=function(t){return null!=t&&"object"==typeof t};var qt=function(t){return"symbol"==typeof t||Lt(t)&&"[object Symbol]"==yt(t)},Yt=/\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,Nt=/^\w*$/;var Ft=function(t,e){if(zt(t))return!1;var r=typeof t;return!("number"!=r&&"symbol"!=r&&"boolean"!=r&&null!=t&&!qt(t))||(Nt.test(t)||!Yt.test(t)||null!=e&&t in Object(e))},Vt=It(Object,"create");var Jt=function(){this.__data__=Vt?Vt(null):{},this.size=0};var Zt=function(t){var e=this.has(t)&&delete this.__data__[t];return this.size-=e?1:0,e},Gt=Object.prototype.hasOwnProperty;var Wt=function(t){var e=this.__data__;if(Vt){var r=e[t];return"__lodash_hash_undefined__"===r?void 0:r}return Gt.call(e,t)?e[t]:void 0},Xt=Object.prototype.hasOwnProperty;var Kt=function(t){var e=this.__data__;return Vt?void 0!==e[t]:Xt.call(e,t)};var Ht=function(t,e){var r=this.__data__;return this.size+=this.has(t)?0:1,r[t]=Vt&&void 0===e?"__lodash_hash_undefined__":e,this};function Qt(t){var e=-1,r=null==t?0:t.length;for(this.clear();++e<r;){var n=t[e];this.set(n[0],n[1])}}Qt.prototype.clear=Jt,Qt.prototype.delete=Zt,Qt.prototype.get=Wt,Qt.prototype.has=Kt,Qt.prototype.set=Ht;var te=Qt;var ee=function(){this.__data__=[],this.size=0};var re=function(t,e){for(var r=t.length;r--;)if(Dt(t[r][0],e))return r;return-1},ne=Array.prototype.splice;var oe=function(t){var e=this.__data__,r=re(e,t);return!(r<0)&&(r==e.length-1?e.pop():ne.call(e,r,1),--this.size,!0)};var ie=function(t){var e=this.__data__,r=re(e,t);return r<0?void 0:e[r][1]};var ae=function(t){return re(this.__data__,t)>-1};var se=function(t,e){var r=this.__data__,n=re(r,t);return n<0?(++this.size,r.push([t,e])):r[n][1]=e,this};function ue(t){var e=-1,r=null==t?0:t.length;for(this.clear();++e<r;){var n=t[e];this.set(n[0],n[1])}}ue.prototype.clear=ee,ue.prototype.delete=oe,ue.prototype.get=ie,ue.prototype.has=ae,ue.prototype.set=se;var ce=ue,le=It(at,"Map");var fe=function(){this.size=0,this.__data__={hash:new te,map:new(le||ce),string:new te}};var he=function(t){var e=typeof t;return"string"==e||"number"==e||"symbol"==e||"boolean"==e?"__proto__"!==t:null===t};var pe=function(t,e){var r=t.__data__;return he(e)?r["string"==typeof e?"string":"hash"]:r.map};var de=function(t){var e=pe(this,t).delete(t);return this.size-=e?1:0,e};var ge=function(t){return pe(this,t).get(t)};var ye=function(t){return pe(this,t).has(t)};var ve=function(t,e){var r=pe(this,t),n=r.size;return r.set(t,e),this.size+=r.size==n?0:1,this};function be(t){var e=-1,r=null==t?0:t.length;for(this.clear();++e<r;){var n=t[e];this.set(n[0],n[1])}}be.prototype.clear=fe,be.prototype.delete=de,be.prototype.get=ge,be.prototype.has=ye,be.prototype.set=ve;var me=be;function we(t,e){if("function"!=typeof t||null!=e&&"function"!=typeof e)throw new TypeError("Expected a function");var r=function(){var n=arguments,o=e?e.apply(this,n):n[0],i=r.cache;if(i.has(o))return i.get(o);var a=t.apply(this,n);return r.cache=i.set(o,a)||i,a};return r.cache=new(we.Cache||me),r}we.Cache=me;var _e=we;var je=/[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g,Ae=/\\(\\)?/g,Se=function(t){var e=_e(t,(function(t){return 500===r.size&&r.clear(),t})),r=e.cache;return e}((function(t){var e=[];return 46===t.charCodeAt(0)&&e.push(""),t.replace(je,(function(t,r,n,o){e.push(n?o.replace(Ae,"$1"):r||t)})),e}));var Ee=function(t,e){for(var r=-1,n=null==t?0:t.length,o=Array(n);++r<n;)o[r]=e(t[r],r,t);return o},Ce=st?st.prototype:void 0,Oe=Ce?Ce.toString:void 0;var xe=function t(e){if("string"==typeof e)return e;if(zt(e))return Ee(e,t)+"";if(qt(e))return Oe?Oe.call(e):"";var r=e+"";return"0"==r&&1/e==-Infinity?"-0":r};var Pe=function(t){return null==t?"":xe(t)};var Re=function(t,e){return zt(t)?t:Ft(t,e)?[t]:Se(Pe(t))},ke=/^(?:0|[1-9]\d*)$/;var Ue=function(t,e){var r=typeof t;return!!(e=null==e?9007199254740991:e)&&("number"==r||"symbol"!=r&&ke.test(t))&&t>-1&&t%1==0&&t<e};var Ie=function(t){if("string"==typeof t||qt(t))return t;var e=t+"";return"0"==e&&1/t==-Infinity?"-0":e};var Te=function(t,e,r,n){if(!vt(t))return t;for(var o=-1,i=(e=Re(e,t)).length,a=i-1,s=t;null!=s&&++o<i;){var u=Ie(e[o]),c=r;if("__proto__"===u||"constructor"===u||"prototype"===u)return t;if(o!=a){var l=s[u];void 0===(c=n?n(l,u,s):void 0)&&(c=vt(l)?l:Ue(e[o+1])?[]:{})}Mt(s,u,c),s=s[u]}return t};var $e=function(t,e,r){return null==t?t:Te(t,e,r)};var De=function(t,e){for(var r=0,n=(e=Re(e,t)).length;null!=t&&r<n;)t=t[Ie(e[r++])];return r&&r==n?t:void 0};var Be=function(t,e,r){var n=null==t?void 0:De(t,e);return void 0===n?r:n};var Me=function(t){return this.__data__.set(t,"__lodash_hash_undefined__"),this};var ze=function(t){return this.__data__.has(t)};function Le(t){var e=-1,r=null==t?0:t.length;for(this.__data__=new me;++e<r;)this.add(t[e])}Le.prototype.add=Le.prototype.push=Me,Le.prototype.has=ze;var qe=Le;var Ye=function(t,e,r,n){for(var o=t.length,i=r+(n?1:-1);n?i--:++i<o;)if(e(t[i],i,t))return i;return-1};var Ne=function(t){return t!=t};var Fe=function(t,e,r){for(var n=r-1,o=t.length;++n<o;)if(t[n]===e)return n;return-1};var Ve=function(t,e,r){return e==e?Fe(t,e,r):Ye(t,Ne,r)};var Je=function(t,e){return!!(null==t?0:t.length)&&Ve(t,e,0)>-1};var Ze=function(t,e,r){for(var n=-1,o=null==t?0:t.length;++n<o;)if(r(e,t[n]))return!0;return!1};var Ge=function(t,e){return t.has(e)},We=It(at,"Set");var Xe=function(){};var Ke=function(t){var e=-1,r=Array(t.size);return t.forEach((function(t){r[++e]=t})),r},He=We&&1/Ke(new We([,-0]))[1]==1/0?function(t){return new We(t)}:Xe;var Qe=function(t,e,r){var n=-1,o=Je,i=t.length,a=!0,s=[],u=s;if(r)a=!1,o=Ze;else if(i>=200){var c=e?null:He(t);if(c)return Ke(c);a=!1,o=Ge,u=new qe}else u=e?[]:s;t:for(;++n<i;){var l=t[n],f=e?e(l):l;if(l=r||0!==l?l:0,a&&f==f){for(var h=u.length;h--;)if(u[h]===f)continue t;e&&u.push(f),s.push(l)}else o(u,f,r)||(u!==s&&u.push(f),s.push(l))}return s};var tr=function(t){return t&&t.length?Qe(t):[]};var er=function(){this.__data__=new ce,this.size=0};var rr=function(t){var e=this.__data__,r=e.delete(t);return this.size=e.size,r};var nr=function(t){return this.__data__.get(t)};var or=function(t){return this.__data__.has(t)};var ir=function(t,e){var r=this.__data__;if(r instanceof ce){var n=r.__data__;if(!le||n.length<199)return n.push([t,e]),this.size=++r.size,this;r=this.__data__=new me(n)}return r.set(t,e),this.size=r.size,this};function ar(t){var e=this.__data__=new ce(t);this.size=e.size}ar.prototype.clear=er,ar.prototype.delete=rr,ar.prototype.get=nr,ar.prototype.has=or,ar.prototype.set=ir;var sr=ar;var ur=function(t,e){for(var r=-1,n=null==t?0:t.length;++r<n;)if(e(t[r],r,t))return!0;return!1};var cr=function(t,e,r,n,o,i){var a=1&r,s=t.length,u=e.length;if(s!=u&&!(a&&u>s))return!1;var c=i.get(t),l=i.get(e);if(c&&l)return c==e&&l==t;var f=-1,h=!0,p=2&r?new qe:void 0;for(i.set(t,e),i.set(e,t);++f<s;){var d=t[f],g=e[f];if(n)var y=a?n(g,d,f,e,t,i):n(d,g,f,t,e,i);if(void 0!==y){if(y)continue;h=!1;break}if(p){if(!ur(e,(function(t,e){if(!Ge(p,e)&&(d===t||o(d,t,r,n,i)))return p.push(e)}))){h=!1;break}}else if(d!==g&&!o(d,g,r,n,i)){h=!1;break}}return i.delete(t),i.delete(e),h},lr=at.Uint8Array;var fr=function(t){var e=-1,r=Array(t.size);return t.forEach((function(t,n){r[++e]=[n,t]})),r},hr=st?st.prototype:void 0,pr=hr?hr.valueOf:void 0;var dr=function(t,e,r,n,o,i,a){switch(r){case"[object DataView]":if(t.byteLength!=e.byteLength||t.byteOffset!=e.byteOffset)return!1;t=t.buffer,e=e.buffer;case"[object ArrayBuffer]":return!(t.byteLength!=e.byteLength||!i(new lr(t),new lr(e)));case"[object Boolean]":case"[object Date]":case"[object Number]":return Dt(+t,+e);case"[object Error]":return t.name==e.name&&t.message==e.message;case"[object RegExp]":case"[object String]":return t==e+"";case"[object Map]":var s=fr;case"[object Set]":var u=1&n;if(s||(s=Ke),t.size!=e.size&&!u)return!1;var c=a.get(t);if(c)return c==e;n|=2,a.set(t,e);var l=cr(s(t),s(e),n,o,i,a);return a.delete(t),l;case"[object Symbol]":if(pr)return pr.call(t)==pr.call(e)}return!1};var gr=function(t,e){for(var r=-1,n=e.length,o=t.length;++r<n;)t[o+r]=e[r];return t};var yr=function(t,e,r){var n=e(t);return zt(t)?n:gr(n,r(t))};var vr=function(t,e){for(var r=-1,n=null==t?0:t.length,o=0,i=[];++r<n;){var a=t[r];e(a,r,t)&&(i[o++]=a)}return i};var br=function(){return[]},mr=Object.prototype.propertyIsEnumerable,wr=Object.getOwnPropertySymbols,_r=wr?function(t){return null==t?[]:(t=Object(t),vr(wr(t),(function(e){return mr.call(t,e)})))}:br;var jr=function(t,e){for(var r=-1,n=Array(t);++r<t;)n[r]=e(r);return n};var Ar=function(t){return Lt(t)&&"[object Arguments]"==yt(t)},Sr=Object.prototype,Er=Sr.hasOwnProperty,Cr=Sr.propertyIsEnumerable,Or=Ar(function(){return arguments}())?Ar:function(t){return Lt(t)&&Er.call(t,"callee")&&!Cr.call(t,"callee")};var xr=function(){return!1},Pr=nt((function(t,e){var r=e&&!e.nodeType&&e,n=r&&t&&!t.nodeType&&t,o=n&&n.exports===r?at.Buffer:void 0,i=(o?o.isBuffer:void 0)||xr;t.exports=i}));var Rr=function(t){return"number"==typeof t&&t>-1&&t%1==0&&t<=9007199254740991},kr={};kr["[object Float32Array]"]=kr["[object Float64Array]"]=kr["[object Int8Array]"]=kr["[object Int16Array]"]=kr["[object Int32Array]"]=kr["[object Uint8Array]"]=kr["[object Uint8ClampedArray]"]=kr["[object Uint16Array]"]=kr["[object Uint32Array]"]=!0,kr["[object Arguments]"]=kr["[object Array]"]=kr["[object ArrayBuffer]"]=kr["[object Boolean]"]=kr["[object DataView]"]=kr["[object Date]"]=kr["[object Error]"]=kr["[object Function]"]=kr["[object Map]"]=kr["[object Number]"]=kr["[object Object]"]=kr["[object RegExp]"]=kr["[object Set]"]=kr["[object String]"]=kr["[object WeakMap]"]=!1;var Ur=function(t){return Lt(t)&&Rr(t.length)&&!!kr[yt(t)]};var Ir=function(t){return function(e){return t(e)}},Tr=nt((function(t,e){var r=e&&!e.nodeType&&e,n=r&&t&&!t.nodeType&&t,o=n&&n.exports===r&&ot.process,i=function(){try{var t=n&&n.require&&n.require("util").types;return t||o&&o.binding&&o.binding("util")}catch(t){}}();t.exports=i})),$r=Tr&&Tr.isTypedArray,Dr=$r?Ir($r):Ur,Br=Object.prototype.hasOwnProperty;var Mr=function(t,e){var r=zt(t),n=!r&&Or(t),o=!r&&!n&&Pr(t),i=!r&&!n&&!o&&Dr(t),a=r||n||o||i,s=a?jr(t.length,String):[],u=s.length;for(var c in t)!e&&!Br.call(t,c)||a&&("length"==c||o&&("offset"==c||"parent"==c)||i&&("buffer"==c||"byteLength"==c||"byteOffset"==c)||Ue(c,u))||s.push(c);return s},zr=Object.prototype;var Lr=function(t){var e=t&&t.constructor;return t===("function"==typeof e&&e.prototype||zr)};var qr=function(t,e){return function(r){return t(e(r))}},Yr=qr(Object.keys,Object),Nr=Object.prototype.hasOwnProperty;var Fr=function(t){if(!Lr(t))return Yr(t);var e=[];for(var r in Object(t))Nr.call(t,r)&&"constructor"!=r&&e.push(r);return e};var Vr=function(t){return null!=t&&Rr(t.length)&&!mt(t)};var Jr=function(t){return Vr(t)?Mr(t):Fr(t)};var Zr=function(t){return yr(t,Jr,_r)},Gr=Object.prototype.hasOwnProperty;var Wr=function(t,e,r,n,o,i){var a=1&r,s=Zr(t),u=s.length;if(u!=Zr(e).length&&!a)return!1;for(var c=u;c--;){var l=s[c];if(!(a?l in e:Gr.call(e,l)))return!1}var f=i.get(t),h=i.get(e);if(f&&h)return f==e&&h==t;var p=!0;i.set(t,e),i.set(e,t);for(var d=a;++c<u;){var g=t[l=s[c]],y=e[l];if(n)var v=a?n(y,g,l,e,t,i):n(g,y,l,t,e,i);if(!(void 0===v?g===y||o(g,y,r,n,i):v)){p=!1;break}d||(d="constructor"==l)}if(p&&!d){var b=t.constructor,m=e.constructor;b==m||!("constructor"in t)||!("constructor"in e)||"function"==typeof b&&b instanceof b&&"function"==typeof m&&m instanceof m||(p=!1)}return i.delete(t),i.delete(e),p},Xr=It(at,"DataView"),Kr=It(at,"Promise"),Hr=It(at,"WeakMap"),Qr=St(Xr),tn=St(le),en=St(Kr),rn=St(We),nn=St(Hr),on=yt;(Xr&&"[object DataView]"!=on(new Xr(new ArrayBuffer(1)))||le&&"[object Map]"!=on(new le)||Kr&&"[object Promise]"!=on(Kr.resolve())||We&&"[object Set]"!=on(new We)||Hr&&"[object WeakMap]"!=on(new Hr))&&(on=function(t){var e=yt(t),r="[object Object]"==e?t.constructor:void 0,n=r?St(r):"";if(n)switch(n){case Qr:return"[object DataView]";case tn:return"[object Map]";case en:return"[object Promise]";case rn:return"[object Set]";case nn:return"[object WeakMap]"}return e});var an=on,sn=Object.prototype.hasOwnProperty;var un=function(t,e,r,n,o,i){var a=zt(t),s=zt(e),u=a?"[object Array]":an(t),c=s?"[object Array]":an(e),l="[object Object]"==(u="[object Arguments]"==u?"[object Object]":u),f="[object Object]"==(c="[object Arguments]"==c?"[object Object]":c),h=u==c;if(h&&Pr(t)){if(!Pr(e))return!1;a=!0,l=!1}if(h&&!l)return i||(i=new sr),a||Dr(t)?cr(t,e,r,n,o,i):dr(t,e,u,r,n,o,i);if(!(1&r)){var p=l&&sn.call(t,"__wrapped__"),d=f&&sn.call(e,"__wrapped__");if(p||d){var g=p?t.value():t,y=d?e.value():e;return i||(i=new sr),o(g,y,r,n,i)}}return!!h&&(i||(i=new sr),Wr(t,e,r,n,o,i))};var cn=function t(e,r,n,o,i){return e===r||(null==e||null==r||!Lt(e)&&!Lt(r)?e!=e&&r!=r:un(e,r,n,o,t,i))};var ln=function(t,e,r,n){var o=r.length,i=o,a=!n;if(null==t)return!i;for(t=Object(t);o--;){var s=r[o];if(a&&s[2]?s[1]!==t[s[0]]:!(s[0]in t))return!1}for(;++o<i;){var u=(s=r[o])[0],c=t[u],l=s[1];if(a&&s[2]){if(void 0===c&&!(u in t))return!1}else{var f=new sr;if(n)var h=n(c,l,u,t,e,f);if(!(void 0===h?cn(l,c,3,n,f):h))return!1}}return!0};var fn=function(t){return t==t&&!vt(t)};var hn=function(t){for(var e=Jr(t),r=e.length;r--;){var n=e[r],o=t[n];e[r]=[n,o,fn(o)]}return e};var pn=function(t,e){return function(r){return null!=r&&(r[t]===e&&(void 0!==e||t in Object(r)))}};var dn=function(t){var e=hn(t);return 1==e.length&&e[0][2]?pn(e[0][0],e[0][1]):function(r){return r===t||ln(r,t,e)}};var gn=function(t,e){return null!=t&&e in Object(t)};var yn=function(t,e,r){for(var n=-1,o=(e=Re(e,t)).length,i=!1;++n<o;){var a=Ie(e[n]);if(!(i=null!=t&&r(t,a)))break;t=t[a]}return i||++n!=o?i:!!(o=null==t?0:t.length)&&Rr(o)&&Ue(a,o)&&(zt(t)||Or(t))};var vn=function(t,e){return null!=t&&yn(t,e,gn)};var bn=function(t,e){return Ft(t)&&fn(e)?pn(Ie(t),e):function(r){var n=Be(r,t);return void 0===n&&n===e?vn(r,t):cn(e,n,3)}};var mn=function(t){return t};var wn=function(t){return function(e){return null==e?void 0:e[t]}};var _n=function(t){return function(e){return De(e,t)}};var jn=function(t){return Ft(t)?wn(Ie(t)):_n(t)};var An=function(t){return"function"==typeof t?t:null==t?mn:"object"==typeof t?zt(t)?bn(t[0],t[1]):dn(t):jn(t)};var Sn=function(t){return function(e,r,n){var o=Object(e);if(!Vr(e)){var i=An(r);e=Jr(e),r=function(t){return i(o[t],t,o)}}var a=t(e,r,n);return a>-1?o[i?e[a]:a]:void 0}},En=/\s/;var Cn=function(t){for(var e=t.length;e--&&En.test(t.charAt(e)););return e},On=/^\s+/;var xn=function(t){return t?t.slice(0,Cn(t)+1).replace(On,""):t},Pn=/^[-+]0x[0-9a-f]+$/i,Rn=/^0b[01]+$/i,kn=/^0o[0-7]+$/i,Un=parseInt;var In=function(t){if("number"==typeof t)return t;if(qt(t))return NaN;if(vt(t)){var e="function"==typeof t.valueOf?t.valueOf():t;t=vt(e)?e+"":e}if("string"!=typeof t)return 0===t?t:+t;t=xn(t);var r=Rn.test(t);return r||kn.test(t)?Un(t.slice(2),r?2:8):Pn.test(t)?NaN:+t};var Tn=function(t){return t?Infinity===(t=In(t))||-Infinity===t?17976931348623157e292*(t<0?-1:1):t==t?t:0:0===t?t:0};var $n=function(t){var e=Tn(t),r=e%1;return e==e?r?e-r:e:0},Dn=Math.max;var Bn=Sn((function(t,e,r){var n=null==t?0:t.length;if(!n)return-1;var o=null==r?0:$n(r);return o<0&&(o=Dn(n+o,0)),Ye(t,An(e),o)}));var Mn=function(t,e,r){var n=-1,o=t.length;e<0&&(e=-e>o?0:o+e),(r=r>o?o:r)<0&&(r+=o),o=e>r?0:r-e>>>0,e>>>=0;for(var i=Array(o);++n<o;)i[n]=t[n+e];return i};var zn=function(t,e,r){var n=t.length;return r=void 0===r?n:r,!e&&r>=n?t:Mn(t,e,r)},Ln=RegExp("[\\u200d\\ud800-\\udfff\\u0300-\\u036f\\ufe20-\\ufe2f\\u20d0-\\u20ff\\ufe0e\\ufe0f]");var qn=function(t){return Ln.test(t)};var Yn=function(t){return t.split("")},Nn="[\\ud800-\\udfff]",Fn="[\\u0300-\\u036f\\ufe20-\\ufe2f\\u20d0-\\u20ff]",Vn="\\ud83c[\\udffb-\\udfff]",Jn="[^\\ud800-\\udfff]",Zn="(?:\\ud83c[\\udde6-\\uddff]){2}",Gn="[\\ud800-\\udbff][\\udc00-\\udfff]",Wn="(?:"+Fn+"|"+Vn+")"+"?",Xn="[\\ufe0e\\ufe0f]?"+Wn+("(?:\\u200d(?:"+[Jn,Zn,Gn].join("|")+")[\\ufe0e\\ufe0f]?"+Wn+")*"),Kn="(?:"+[Jn+Fn+"?",Fn,Zn,Gn,Nn].join("|")+")",Hn=RegExp(Vn+"(?="+Vn+")|"+Kn+Xn,"g");var Qn=function(t){return t.match(Hn)||[]};var to=function(t){return qn(t)?Qn(t):Yn(t)};var eo=function(t){return function(e){e=Pe(e);var r=qn(e)?to(e):void 0,n=r?r[0]:e.charAt(0),o=r?zn(r,1).join(""):e.slice(1);return n[t]()+o}}("toUpperCase");var ro=function(t){return eo(Pe(t).toLowerCase())};var no=function(t,e,r,n){var o=-1,i=null==t?0:t.length;for(n&&i&&(r=t[++o]);++o<i;)r=e(r,t[o],o,t);return r};var oo=function(t){return function(e){return null==t?void 0:t[e]}}({"À":"A","Á":"A","Â":"A","Ã":"A","Ä":"A","Å":"A","à":"a","á":"a","â":"a","ã":"a","ä":"a","å":"a","Ç":"C","ç":"c","Ð":"D","ð":"d","È":"E","É":"E","Ê":"E","Ë":"E","è":"e","é":"e","ê":"e","ë":"e","Ì":"I","Í":"I","Î":"I","Ï":"I","ì":"i","í":"i","î":"i","ï":"i","Ñ":"N","ñ":"n","Ò":"O","Ó":"O","Ô":"O","Õ":"O","Ö":"O","Ø":"O","ò":"o","ó":"o","ô":"o","õ":"o","ö":"o","ø":"o","Ù":"U","Ú":"U","Û":"U","Ü":"U","ù":"u","ú":"u","û":"u","ü":"u","Ý":"Y","ý":"y","ÿ":"y","Æ":"Ae","æ":"ae","Þ":"Th","þ":"th","ß":"ss","Ā":"A","Ă":"A","Ą":"A","ā":"a","ă":"a","ą":"a","Ć":"C","Ĉ":"C","Ċ":"C","Č":"C","ć":"c","ĉ":"c","ċ":"c","č":"c","Ď":"D","Đ":"D","ď":"d","đ":"d","Ē":"E","Ĕ":"E","Ė":"E","Ę":"E","Ě":"E","ē":"e","ĕ":"e","ė":"e","ę":"e","ě":"e","Ĝ":"G","Ğ":"G","Ġ":"G","Ģ":"G","ĝ":"g","ğ":"g","ġ":"g","ģ":"g","Ĥ":"H","Ħ":"H","ĥ":"h","ħ":"h","Ĩ":"I","Ī":"I","Ĭ":"I","Į":"I","İ":"I","ĩ":"i","ī":"i","ĭ":"i","į":"i","ı":"i","Ĵ":"J","ĵ":"j","Ķ":"K","ķ":"k","ĸ":"k","Ĺ":"L","Ļ":"L","Ľ":"L","Ŀ":"L","Ł":"L","ĺ":"l","ļ":"l","ľ":"l","ŀ":"l","ł":"l","Ń":"N","Ņ":"N","Ň":"N","Ŋ":"N","ń":"n","ņ":"n","ň":"n","ŋ":"n","Ō":"O","Ŏ":"O","Ő":"O","ō":"o","ŏ":"o","ő":"o","Ŕ":"R","Ŗ":"R","Ř":"R","ŕ":"r","ŗ":"r","ř":"r","Ś":"S","Ŝ":"S","Ş":"S","Š":"S","ś":"s","ŝ":"s","ş":"s","š":"s","Ţ":"T","Ť":"T","Ŧ":"T","ţ":"t","ť":"t","ŧ":"t","Ũ":"U","Ū":"U","Ŭ":"U","Ů":"U","Ű":"U","Ų":"U","ũ":"u","ū":"u","ŭ":"u","ů":"u","ű":"u","ų":"u","Ŵ":"W","ŵ":"w","Ŷ":"Y","ŷ":"y","Ÿ":"Y","Ź":"Z","Ż":"Z","Ž":"Z","ź":"z","ż":"z","ž":"z","Ĳ":"IJ","ĳ":"ij","Œ":"Oe","œ":"oe","ŉ":"'n","ſ":"s"}),io=/[\xc0-\xd6\xd8-\xf6\xf8-\xff\u0100-\u017f]/g,ao=RegExp("[\\u0300-\\u036f\\ufe20-\\ufe2f\\u20d0-\\u20ff]","g");var so=function(t){return(t=Pe(t))&&t.replace(io,oo).replace(ao,"")},uo=/[^\x00-\x2f\x3a-\x40\x5b-\x60\x7b-\x7f]+/g;var co=function(t){return t.match(uo)||[]},lo=/[a-z][A-Z]|[A-Z]{2}[a-z]|[0-9][a-zA-Z]|[a-zA-Z][0-9]|[^a-zA-Z0-9 ]/;var fo=function(t){return lo.test(t)},ho="\\xac\\xb1\\xd7\\xf7\\x00-\\x2f\\x3a-\\x40\\x5b-\\x60\\x7b-\\xbf\\u2000-\\u206f \\t\\x0b\\f\\xa0\\ufeff\\n\\r\\u2028\\u2029\\u1680\\u180e\\u2000\\u2001\\u2002\\u2003\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200a\\u202f\\u205f\\u3000",po="["+ho+"]",go="\\d+",yo="[\\u2700-\\u27bf]",vo="[a-z\\xdf-\\xf6\\xf8-\\xff]",bo="[^\\ud800-\\udfff"+ho+go+"\\u2700-\\u27bfa-z\\xdf-\\xf6\\xf8-\\xffA-Z\\xc0-\\xd6\\xd8-\\xde]",mo="(?:\\ud83c[\\udde6-\\uddff]){2}",wo="[\\ud800-\\udbff][\\udc00-\\udfff]",_o="[A-Z\\xc0-\\xd6\\xd8-\\xde]",jo="(?:"+vo+"|"+bo+")",Ao="(?:"+_o+"|"+bo+")",So="(?:[\\u0300-\\u036f\\ufe20-\\ufe2f\\u20d0-\\u20ff]|\\ud83c[\\udffb-\\udfff])?",Eo="[\\ufe0e\\ufe0f]?"+So+("(?:\\u200d(?:"+["[^\\ud800-\\udfff]",mo,wo].join("|")+")[\\ufe0e\\ufe0f]?"+So+")*"),Co="(?:"+[yo,mo,wo].join("|")+")"+Eo,Oo=RegExp([_o+"?"+vo+"+(?:['’](?:d|ll|m|re|s|t|ve))?(?="+[po,_o,"$"].join("|")+")",Ao+"+(?:['’](?:D|LL|M|RE|S|T|VE))?(?="+[po,_o+jo,"$"].join("|")+")",_o+"?"+jo+"+(?:['’](?:d|ll|m|re|s|t|ve))?",_o+"+(?:['’](?:D|LL|M|RE|S|T|VE))?","\\d*(?:1ST|2ND|3RD|(?![123])\\dTH)(?=\\b|[a-z_])","\\d*(?:1st|2nd|3rd|(?![123])\\dth)(?=\\b|[A-Z_])",go,Co].join("|"),"g");var xo=function(t){return t.match(Oo)||[]};var Po=function(t,e,r){return t=Pe(t),void 0===(e=r?void 0:e)?fo(t)?xo(t):co(t):t.match(e)||[]},Ro=RegExp("['’]","g");var ko=function(t){return function(e){return no(Po(so(e).replace(Ro,"")),t,"")}},Uo=ko((function(t,e,r){return e=e.toLowerCase(),t+(r?ro(e):e)})),Io=ko((function(t,e,r){return t+(r?"_":"")+e.toLowerCase()}));var To=function(t,e){for(var r=-1,n=null==t?0:t.length;++r<n&&!1!==e(t[r],r,t););return t};var $o=function(t,e,r,n){var o=!r;r||(r={});for(var i=-1,a=e.length;++i<a;){var s=e[i],u=n?n(r[s],t[s],s,r,t):void 0;void 0===u&&(u=t[s]),o?$t(r,s,u):Mt(r,s,u)}return r};var Do=function(t,e){return t&&$o(e,Jr(e),t)};var Bo=function(t){var e=[];if(null!=t)for(var r in Object(t))e.push(r);return e},Mo=Object.prototype.hasOwnProperty;var zo=function(t){if(!vt(t))return Bo(t);var e=Lr(t),r=[];for(var n in t)("constructor"!=n||!e&&Mo.call(t,n))&&r.push(n);return r};var Lo=function(t){return Vr(t)?Mr(t,!0):zo(t)};var qo=function(t,e){return t&&$o(e,Lo(e),t)},Yo=nt((function(t,e){var r=e&&!e.nodeType&&e,n=r&&t&&!t.nodeType&&t,o=n&&n.exports===r?at.Buffer:void 0,i=o?o.allocUnsafe:void 0;t.exports=function(t,e){if(e)return t.slice();var r=t.length,n=i?i(r):new t.constructor(r);return t.copy(n),n}}));var No=function(t,e){var r=-1,n=t.length;for(e||(e=Array(n));++r<n;)e[r]=t[r];return e};var Fo=function(t,e){return $o(t,_r(t),e)},Vo=qr(Object.getPrototypeOf,Object),Jo=Object.getOwnPropertySymbols?function(t){for(var e=[];t;)gr(e,_r(t)),t=Vo(t);return e}:br;var Zo=function(t,e){return $o(t,Jo(t),e)};var Go=function(t){return yr(t,Lo,Jo)},Wo=Object.prototype.hasOwnProperty;var Xo=function(t){var e=t.length,r=new t.constructor(e);return e&&"string"==typeof t[0]&&Wo.call(t,"index")&&(r.index=t.index,r.input=t.input),r};var Ko=function(t){var e=new t.constructor(t.byteLength);return new lr(e).set(new lr(t)),e};var Ho=function(t,e){var r=e?Ko(t.buffer):t.buffer;return new t.constructor(r,t.byteOffset,t.byteLength)},Qo=/\w*$/;var ti=function(t){var e=new t.constructor(t.source,Qo.exec(t));return e.lastIndex=t.lastIndex,e},ei=st?st.prototype:void 0,ri=ei?ei.valueOf:void 0;var ni=function(t){return ri?Object(ri.call(t)):{}};var oi=function(t,e){var r=e?Ko(t.buffer):t.buffer;return new t.constructor(r,t.byteOffset,t.length)};var ii=function(t,e,r){var n=t.constructor;switch(e){case"[object ArrayBuffer]":return Ko(t);case"[object Boolean]":case"[object Date]":return new n(+t);case"[object DataView]":return Ho(t,r);case"[object Float32Array]":case"[object Float64Array]":case"[object Int8Array]":case"[object Int16Array]":case"[object Int32Array]":case"[object Uint8Array]":case"[object Uint8ClampedArray]":case"[object Uint16Array]":case"[object Uint32Array]":return oi(t,r);case"[object Map]":return new n;case"[object Number]":case"[object String]":return new n(t);case"[object RegExp]":return ti(t);case"[object Set]":return new n;case"[object Symbol]":return ni(t)}},ai=Object.create,si=function(){function t(){}return function(e){if(!vt(e))return{};if(ai)return ai(e);t.prototype=e;var r=new t;return t.prototype=void 0,r}}();var ui=function(t){return"function"!=typeof t.constructor||Lr(t)?{}:si(Vo(t))};var ci=function(t){return Lt(t)&&"[object Map]"==an(t)},li=Tr&&Tr.isMap,fi=li?Ir(li):ci;var hi=function(t){return Lt(t)&&"[object Set]"==an(t)},pi=Tr&&Tr.isSet,di=pi?Ir(pi):hi,gi={};gi["[object Arguments]"]=gi["[object Array]"]=gi["[object ArrayBuffer]"]=gi["[object DataView]"]=gi["[object Boolean]"]=gi["[object Date]"]=gi["[object Float32Array]"]=gi["[object Float64Array]"]=gi["[object Int8Array]"]=gi["[object Int16Array]"]=gi["[object Int32Array]"]=gi["[object Map]"]=gi["[object Number]"]=gi["[object Object]"]=gi["[object RegExp]"]=gi["[object Set]"]=gi["[object String]"]=gi["[object Symbol]"]=gi["[object Uint8Array]"]=gi["[object Uint8ClampedArray]"]=gi["[object Uint16Array]"]=gi["[object Uint32Array]"]=!0,gi["[object Error]"]=gi["[object Function]"]=gi["[object WeakMap]"]=!1;var yi=function t(e,r,n,o,i,a){var s,u=1&r,c=2&r,l=4&r;if(n&&(s=i?n(e,o,i,a):n(e)),void 0!==s)return s;if(!vt(e))return e;var f=zt(e);if(f){if(s=Xo(e),!u)return No(e,s)}else{var h=an(e),p="[object Function]"==h||"[object GeneratorFunction]"==h;if(Pr(e))return Yo(e,u);if("[object Object]"==h||"[object Arguments]"==h||p&&!i){if(s=c||p?{}:ui(e),!u)return c?Zo(e,qo(s,e)):Fo(e,Do(s,e))}else{if(!gi[h])return i?e:{};s=ii(e,h,u)}}a||(a=new sr);var d=a.get(e);if(d)return d;a.set(e,s),di(e)?e.forEach((function(o){s.add(t(o,r,n,o,e,a))})):fi(e)&&e.forEach((function(o,i){s.set(i,t(o,r,n,i,e,a))}));var g=f?void 0:(l?c?Go:Zr:c?Lo:Jr)(e);return To(g||e,(function(o,i){g&&(o=e[i=o]),Mt(s,i,t(o,r,n,i,e,a))})),s};var vi=function(t){return yi(t,5)};let bi={};function mi(t,r,n={}){if(!r||"object"!=typeof r)return t;if(!t||"object"!=typeof t)return t;return e.mergeAdvanced(t,r,{arrayMerge:function(t,e,r){const n=t.slice();return e.forEach(((e,o)=>{void 0===n[o]?n[o]=r.cloneUnlessOtherwiseSpecified(e,r):r.isMergeableObject(e)?n[o]=mi(t[o],e,r):-1===t.indexOf(e)&&n.push(e)})),n}})}function wi(t){return t&&"object"==typeof t&&!(t instanceof Array)}function _i(t){if(!t)return;const e=JSON.parse(JSON.stringify(t));return r.normalizeKeys(e,Si)}function ji(t){if(!t)return;const e=JSON.parse(JSON.stringify(t));return r.normalizeKeys(e,Ai)}function Ai(t){return("$"===t[0]?"$":"")+Io(t).replace(/\_([0-9])/g,"$1")}function Si(t){return("$"===t[0]?"$":"")+Uo(t).replace(/\_([0-9])/g,"$1")}function Ei(t){return"string"==typeof t?t.replace(/^[/]+/,""):""}function Ci(t){return"string"==typeof t?t.replace(/[/]+$/,""):""}function Oi(e){return t.stringify(e,{depth:10,encode:!1})}function xi(t,e,r){return t instanceof Array?t.reduce(e,r):r}function Pi(){return!("undefined"!=typeof window&&window&&window.document)}function Ri(t){return"function"==typeof t}function ki(t,e,r){return{list:r.indexOf("list")>=0?function(r){return t("get",e,void 0,r)}:void 0,get:r.indexOf("get")>=0?function(r,n){return t("get",e,r,n)}:void 0}}async function Ui(t,e,r,n){const o=bi.vaultUrl,i=bi.timeout,a=`swell_vault_response_${window.__swell_vault_request_id=window.__swell_vault_request_id||0,window.__swell_vault_request_id++,window.__swell_vault_request_id}`;return r={$jsonp:{method:t,callback:a},$data:r,$key:bi.key},new Promise(((t,n)=>{const s=document.createElement("script");s.type="text/javascript",s.src=`${Ci(o)}/${Ei(e)}?${function(t){const e=[],r=function(t,r){"function"==typeof r?r=r():null==r&&(r=""),e[e.length]=encodeURIComponent(t)+"="+encodeURIComponent(r)};for(const e in t)Ti(e,t[e],r);return e.join("&").replace(" ","+")}(r)}`;const u=setTimeout((()=>{window[a]({$error:`Request timed out after ${i/1e3} seconds`,$status:500})}),i);window[a]=e=>{if(clearTimeout(u),e&&e.$error){const t=new Error(e.$error);t.code="request_error",t.status=e.$status,n(t)}else if(!e||e.$status>=300){const t=new Error("A connection error occurred while making the request");t.code="connection_error",t.status=e.$status,n(t)}else t(bi.useCamelCase?_i(e.$data):e.$data);delete window[a],s.parentNode.removeChild(s)},document.getElementsByTagName("head")[0].appendChild(s)}))}const Ii=/\[\]$/;function Ti(t,e,r){let n;if(e instanceof Array)for(let n=0;n<e.length;n++)Ii.test(t)?r(t,v):Ti(t+"["+("object"==typeof v&&null!=v?n:"")+"]",v,r);else if(e&&"object"==typeof e)for(n in e)Ti(t+"["+n+"]",e[n],r);else r(t,e)}const $i={async createToken(t){let e=null,r=null,n=null;t||(e="Card details are missing in `swell.card.createToken(card)`",n="");const o=ji(t);if(!o.nonce){if(this.validateNumber(o.number)||(e="Card number appears to be invalid",r="invalid_card_number",n="number"),o.exp){const t=this.expiry(o.exp);o.exp_month=t.month,o.exp_year=t.year}this.validateExpiry(o.exp_month,o.exp_year)||(e="Card expiry appears to be invalid",r="invalid_card_expiry",n="exp_month"),this.validateCVC(o.cvc)||(e="Card CVC code appears to be invalid",r="invalid_card_cvc",n="exp_cvc")}if(e){const t=new Error(e);throw t.code=r||"invalid_card",t.status=402,t.param=n,t}const i=await Ui("post","/tokens",o);if(i.errors){const t=Object.keys(i.errors)[0],e=new Error(i.errors[t].message||"Unknown error");throw e.code="vault_error",e.status=402,e.param=t,e}return i},expiry(t){if(t&&t.month&&t.year)return t;const e=new String(t).split(/[\s\/\-]+/,2),r=e[0];let n=e[1];if(n&&2===n.length&&/^\d+$/.test(n)){n=(new Date).getFullYear().toString().substring(0,2)+n}return{month:~~r,year:~~n}},types(){let t,e,r,n;for(e={},t=r=40;r<=49;t=++r)e[t]="Visa";for(t=n=50;n<=59;t=++n)e[t]="MasterCard";return e[34]=e[37]="American Express",e[60]=e[62]=e[64]=e[65]="Discover",e[35]="JCB",e[30]=e[36]=e[38]=e[39]="Diners Club",e},type(t){return this.types()[t.slice(0,2)]||"Unknown"},luhnCheck(t){let e,r,n,o,i,a;for(n=!0,o=0,r=(t+"").split("").reverse(),i=0,a=r.length;i<a;i++)e=r[i],e=parseInt(e,10),(n=!n)&&(e*=2),e>9&&(e-=9),o+=e;return o%10==0},validateNumber(t){return(t=(t+"").replace(/\s+|-/g,"")).length>=10&&t.length<=16&&this.luhnCheck(t)},validateExpiry(t,e){let r,n;return t=String(t).trim(),e=String(e).trim(),!!/^\d+$/.test(t)&&(!!/^\d+$/.test(e)&&(parseInt(t,10)<=12&&(n=new Date(e,t),r=new Date,n.setMonth(n.getMonth()-1),n.setMonth(n.getMonth()+1,1),n>r)))},validateCVC:t=>(t=String(t).trim(),/^\d+$/.test(t)&&t.length>=3&&t.length<=4)};function Di(t){if(Pi())return;const e=document.cookie.match(new RegExp("(?:^|; )"+t.replace(/([.$?*|{}()[]\\\/\+^])/g,"\\$1")+"=([^;]*)"));return e?decodeURIComponent(e[1]):void 0}function Bi(t,e,r={}){if(Pi())return;const n=new Date;n.setDate(n.getDate()+7),(r={path:"/",expires:n.toUTCString(),...r}).expires&&r.expires.toUTCString&&(r.expires=r.expires.toUTCString());let o=encodeURIComponent(t)+"="+encodeURIComponent(e);for(const t in r){o+="; "+t;const e=r[t];!0!==e&&(o+="="+e)}document.cookie=o}let Mi={};const zi={values({model:t,id:e},r){if(void 0===r)return Be(Mi,`${t}.${e}`,{});for(let n in r)$e(Mi,`${t}.${e}.${n}`,r[n])},preset(t){const{presets:e=[]}=this.values(t);e.push(t),this.values(t,{presets:e})},set(t){let{model:e,id:r,path:n,value:o}=t,{data:i={},record:a,presets:s}=this.values(t);if(null===r)return;if(void 0===a)return this.preset(t);i=mi(a||{},i);const{useCamelCase:u}=bi;if(u&&o&&"object"==typeof o&&(o=_i(o)),n||o instanceof Array){let t={...i||{}},e=u?"string"==typeof(c=n)?c.split(".").map(Uo).join("."):c:n;$e(t,e||"",o),i=t}else o&&"object"==typeof o?(i=i||{},i=mi(i,o)):i=o;var c;this.values(t,{data:i}),void 0!==Mi[e][r]&&(Mi[e][r]=JSON.parse(JSON.stringify(Mi[e][r])))},get(t,e){const{data:r,recordTimer:n}=this.values({model:t,id:e});if(n)return r},setRecord(t,e){let{recordTimer:r,presets:n}=this.values(e);if(r&&clearTimeout(r),r=setTimeout((()=>{this.values(e,{record:void 0,recordTimer:void 0})}),5e3),this.values(e,{record:t,recordTimer:r}),n){for(let t of n)this.set(t);this.values(e,{presets:void 0})}const o=this.get(e.model,e.id);return void 0!==o?o:t},async getFetch(t,e,r){const n=this.get(t,e);if(void 0!==n)return n;const o=await r();return this.setRecord(o,{model:t,id:e})},clear(t,e){t?$e(Mi,e?`${t}.${e}`:t,void 0):Mi={}}};let Li;function qi(t){let e=t||[];if(t&&"object"==typeof t&&!(t instanceof Array)){e=[];for(const r in t)e.push({id:r,value:t[r]})}return e instanceof Array?e.map((t=>({id:t.id||t.name,value:t.value}))):e}function Yi(t,e){const r=Li.useCamelCase?ji(t):t,n={...r,price:r.price||0,sale_price:r.sale_price,orig_price:r.orig_price,stock_status:r.stock_status};let o=0;const i=[],a=qi(e),s=function(t,e){return t.options?xi(e?t.options.filter(e):t.options,((t,e)=>{const r=xi(e.values,((t,e)=>({...t,[e.id]:{...e,id:e.id},[e.name]:{...e,id:e.id}})),{});return{...t,[e.id]:{...e,values:r},[e.name]:{...e,values:r}}}),{}):{}}(r);for(const t of a)s[t.id]&&s[t.id].values[t.value]&&(s[t.id].variant?i.push(s[t.id].values[t.value].id):o+=s[t.id].values[t.value].price||0);if(i.length>0){const t=function(t,e){if(e.length>0){const r=t.variants&&t.variants.results;if(r.length>0)for(const t of r){let r=!0;for(const n of e){const e=ji(t);if(e.option_value_ids&&-1===e.option_value_ids.indexOf(n)){r=!1;break}}if(r)return t}}return null}(r,i);t&&(n.price=t.price||0,n.sale_price=t.sale_price||r.sale_price,n.orig_price=t.orig_price||r.orig_price,n.stock_status=t.stock_status||r.stock_status,n.images=t.images&&t.images.length?t.images:r.images)}return o>0&&(n.price+=o,n.sale_price&&(n.sale_price+=o),n.orig_price&&(n.orig_price+=o)),void 0===n.sale_price&&delete n.sale_price,void 0===n.orig_price&&delete n.orig_price,Li.useCamelCase?_i(n):n}function Ni(t,e={}){const r=(e.attributes||void 0===e.attributes)&&Vi(t),n=(e.categories||void 0===e.categories)&&Fi(t),o=(e.price||void 0===e.price)&&Ji(t);let i=[];return o&&i.push({id:"price",label:"Price",type:"range",options:[{value:o.min,label:o.min},{value:o.max,label:o.max}],interval:o.interval}),n&&n.length>0&&i.push({id:"category",label:"Category",type:"select",options:n.map((t=>({value:t.slug,label:t.name})))}),r&&r.length>0&&(i=[...i,...xi(r,((t,e)=>[...t,..."category"!==e.id&&"price"!==e.id&&e.values instanceof Array&&e.values.length>0?[{id:e.id,label:e.name,type:"select",options:e.values.map((t=>({value:t,label:t})))}]:[]]),[])]),i}function Fi(t){const e=[],r=t&&t.results||(t.id?[t]:t);if(r instanceof Array)for(let t of r)if(t.categories)for(let r of t.categories){if(!r)continue;Bn(e,{id:r.id})||e.push(r)}return e}function Vi(t){const e=[],r=t&&t.results||(t.id?[t]:t);if(r instanceof Array)for(let t of r)if(t.attributes)for(let r in t.attributes){if(!t.attributes[r])continue;const n=t.attributes[r].value;let o=Bn(e,{id:r});o?o.values=tr([...o.values,...n instanceof Array?n:[n]]):e.push({...t.attributes[r],value:void 0,values:[...n instanceof Array?n:[n]]})}return e}function Ji(t){let e,r,n;const o=t&&t.results||(t.id?[t]:t);if(o instanceof Array)for(let t of o)(void 0===r||t.price>r)&&(r=Math.ceil(t.price)),(void 0===e||t.price<e)&&(e=Math.floor(t.price));if(e===r)return null;for(n=Math.ceil((r-e)/10)||1,n>1e3?n=1e3:n>100?n=100:n>10&&(n=10),r%n>0&&(r=n+r-r%n),e%n>0&&(e-=e%n);(r-e)/n%1>0;)r++;return{min:e,max:r,interval:n}}function Zi(t,e){return{state:null,order:null,settings:null,requested:!1,pendingRequests:[],cacheClear:null,async requestStateChange(e,r,n,o){return this.requestStateSync((async()=>{const i=await t(e,r,n,o);return i&&i.errors||(this.state=i),i}))},async requestStateSync(t){if(this.state)return await t();if(this.requested)return new Promise((e=>{this.pendingRequests.push({handler:t,resolve:e})}));this.requested=!0;const e=await t();for(this.requested=!1;this.pendingRequests.length>0;){const{handler:t,resolve:e}=this.pendingRequests.shift();e(t())}return e},get(){let t;return this.cacheClear&&(this.cacheClear=null,t={$cache:!1}),this.requestStateChange("get","/cart",void 0,t)},clearCache(){this.cacheClear=!0},getItemData(t,e={}){let r=vi(t);return"string"==typeof t&&(r={...e||{},product_id:t}),r&&r.options&&(r.options=qi(r.options)),r},addItem(t,e){return this.requestStateChange("post","/cart/items",this.getItemData(t,e))},updateItem(t,e){return this.requestStateChange("put",`/cart/items/${t}`,this.getItemData(e))},setItems(t){let e=t;return e&&e.map&&(e=e.map(this.getItemData)),this.requestStateChange("put","/cart/items",e)},removeItem(t){return this.requestStateChange("delete",`/cart/items/${t}`)},recover(t){return this.requestStateChange("put",`/cart/recover/${t}`)},update(t){let e=t;return e.items&&e.items.map&&(e={...e,items:e.items.map(this.getItemData)}),this.requestStateChange("put","/cart",e)},applyCoupon(t){return this.requestStateChange("put","/cart/coupon",{code:t})},removeCoupon(){return this.requestStateChange("delete","/cart/coupon")},applyGiftcard(t){return this.requestStateChange("post","/cart/giftcards",{code:t})},removeGiftcard(t){return this.requestStateChange("delete",`/cart/giftcards/${t}`)},async getShippingRates(){return await this.requestStateChange("get","/cart/shipment-rating"),this.state[e.useCamelCase?"shipmentRating":"shipment_rating"]},async submitOrder(){const e=await t("post","/cart/order");return e.errors||(this.state=null,this.order=e),e},async getOrder(e){let r;return r=e?await t("get","/cart/order",{checkout_id:e}):await t("get","/cart/order"),this.order=r,r},async getSettings(){return this.settings=await t("get","/cart/settings"),this.settings}}}function Gi(t,e){return{state:null,menuState:null,paymentState:null,sessionState:null,locale:null,localizedState:{},refresh(){return this.state=null,this.menuState=null,this.paymentState=null,this.sessionState=null,this.localizedState={},this.get()},getState(e,r,{id:n,def:o,refresh:i=!1}={}){return this[r]&&!i||(this[r]=t("get",e)),this[r]&&"function"==typeof this[r].then?this[r].then((t=>(this[r]=t,this.getLocalizedState(r,n,o)))):this.getLocalizedState(r,n,o)},getLocalizedState(t,r,n){this.locale||(this.locale=e.api.locale.selected());const o=this.localizedState;return o.code!==this.locale&&(o.code=this.locale,delete o[this.locale]),o[this.locale]||(o[this.locale]={}),o[this.locale][t]||(o[this.locale][t]=this.decodeLocale(this[t])),r?Be(o[this.locale][t],r,n):o[this.locale][t]},findState(t,e,{where:r,def:n}={}){const o=this.getState(t,e);return o&&"function"==typeof o.then?o.then((t=>Bn(t,r)||n)):Bn(o,r)||n},get(t,e){return this.getState("/settings","state",{id:t,def:e})},getStoreLocale(){return Be(this.state,"store.locale")},getStoreLocales(){return Be(this.state,"store.locales")},set({model:t,path:r,value:n}){const o=t?`${t.replace(/s$/,"")}State`:"state",{useCamelCase:i}=e;let a={};"menus"===t?void 0!==r?$e(a,r||"",n):a=n:$e(a,r||"",n),i&&(a=_i(a)),this[o]=mi(this[o],a),this.localizedState[this.locale]&&(this.localizedState[this.locale][o]=this.decodeLocale(this[o]))},menus(t,e){return this.findState("/settings/menus","menuState",{where:{id:t},def:e})},payments(t,e){return this.getState("/settings/payments","paymentState",{id:t,def:e})},session(t,e){return this.getState("/session","sessionState",{id:t,def:e})},decodeLocale(t){if(!t||"object"!=typeof t)return t;let e=this.getStoreLocales();return e=e?e.reduce(((t,e)=>({...t,[e.code]:e})),{}):{},Wi(vi(t),this.locale,e)},async load(){try{const{settings:e,menus:r,payments:n,session:o}=await t("get","/settings/all");this.state=e,this.menuState=r,this.paymentState=n,this.sessionState=o,this.localizedState={}}catch(t){console.error(`Swell: unable to loading settings (${t})`)}}}}function Wi(t,e,r){if(wi(t)){const n=Object.keys(t);for(let o of n)"$locale"==o&&(Xi(e,t,o,r),delete t.$locale),void 0!==t[o]&&(t[o]=Wi(t[o],e,r))}else if(t instanceof Array)for(var n=0;n<t.length;n++)t[n]=Wi(t[n],e,r);return t}function Xi(t,e,r,n){if(!t||!wi(e[r]))return;let o,i;const a=Object.keys(e[r]);for(let e of a){const r=e.replace(/\-.+$/,"");e!==t&&r!==t||(o=e,i=n[e])}if(!o&&wi(n)){const e=Object.keys(n);for(let r of e){const e=r.replace(/\-.+$/,"");r!==t&&e!==t||(o=r,i=n[r])}}let s,u={};if(i){let t=i.fallback;const o=t;for(;t&&(s=s||[],s.push(t),u={...e[r][t]||{},...u},t=n[t]&&n[t].fallback,o!==t););}let c={...u,...e[r][o]||{}};const l=Object.keys(c);for(let t of l){const n=null!==c[t]&&""!==c[t];let o=s&&!n;if(o)for(let n of s){if(o=!e[r][n]||null===e[r][n][t]||""===e[r][n][t],!o){e[t]=e[r][n][t];break}if("none"===n){e[t]=null;break}}else n&&(e[t]=c[t])}}var Ki=function(t){return Pe(t).toLowerCase()};var Hi=function(t){return function(e,r,n){for(var o=-1,i=Object(e),a=n(e),s=a.length;s--;){var u=a[t?s:++o];if(!1===r(i[u],u,i))break}return e}}();var Qi=function(t,e){return function(r,n){if(null==r)return r;if(!Vr(r))return t(r,n);for(var o=r.length,i=e?o:-1,a=Object(r);(e?i--:++i<o)&&!1!==n(a[i],i,a););return r}}((function(t,e){return t&&Hi(t,e,Jr)}));var ta=function(t,e,r,n,o){return o(t,(function(t,o,i){r=n?(n=!1,t):e(r,t,o,i)})),r};var ea=function(t,e,r){var n=zt(t)?no:ta,o=arguments.length<3;return n(t,An(e),r,o,Qi)},ra=Object.prototype.hasOwnProperty;var na=function(t){if(null==t)return!0;if(Vr(t)&&(zt(t)||"string"==typeof t||"function"==typeof t.splice||Pr(t)||Dr(t)||Or(t)))return!t.length;var e=an(t);if("[object Map]"==e||"[object Set]"==e)return!t.size;if(Lr(t))return!Fr(t).length;for(var r in t)if(ra.call(t,r))return!1;return!0};var oa=function(t,e){var r=-1,n=Vr(t)?Array(t.length):[];return Qi(t,(function(t,o,i){n[++r]=e(t,o,i)})),n};var ia=function(t,e){return(zt(t)?Ee:oa)(t,An(e))};const aa={city:"city",country:"country",line1:"address1",line2:"address2",postal_code:"zip",state:"state"},sa={name:"name",phone:"phone"};function ua(t){const{account:e={},billing:r,shipping:n}=t,o={...e.shipping,...e.billing,...n,...r},i=t=>ea(t,((t,e,r)=>{const n=o[e];return n&&(t[r]=n),t}),{}),a=i(sa);if(!na(a)){const t=i(aa);return{...a,...na(t)?{}:{address:t}}}}function ca(t){const e=Ki(Be(t,"currency","eur")),r=ia(t.items,(t=>({type:"sku",description:t.product.name,quantity:t.quantity,currency:e,amount:Math.round(100*In(t.price_total-t.discount_total))}))),n=Be(t,"tax_included_total");n&&r.push({type:"tax",description:"Taxes",currency:e,amount:Math.round(100*In(n))});const o=Be(t,"shipping",{}),i=Be(t,"shipment_total",{});return o.price&&r.push({type:"shipping",description:o.service_name,currency:e,amount:Math.round(100*In(i))}),r}async function la(t,e){const r={type:"klarna",flow:"redirect",amount:Math.round(100*Be(e,"grand_total",0)),currency:Ki(Be(e,"currency","eur")),klarna:{product:"payment",purchase_country:Be(e,"settings.country","DE")},source_order:{items:ca(e)},redirect:{return_url:window.location.href}};return function(t,e){const r=(t,e)=>ea(t,((t,r,n)=>{const o=e[r];return o&&(t[n]=o),t}),{});t.klarna={...t.klarna,...r({shipping_first_name:"first_name",shipping_last_name:"last_name"},e.shipping)};const n=r({phone:"phone"},e.shipping),o=r(aa,e.shipping);(n||o)&&(t.source_order.shipping={...n||{},...o?{address:o}:{}}),t.klarna={...t.klarna,...r({first_name:"first_name",last_name:"last_name"},e.billing||Be(e,"account.billing")||e.shipping)};const i=r({email:"email"},e.account),a=r(aa,e.billing||Be(e,"account.billing")||e.shipping);(i||a)&&(t.owner={...i||{},...a?{address:a}:{}})}(r,e),await t.createSource(r)}async function fa(t,e){const r={type:"bancontact",amount:Math.round(100*Be(e,"grand_total",0)),currency:Ki(Be(e,"currency","eur")),redirect:{return_url:window.location.href}};return function(t,e){const{account:r={},billing:n,shipping:o}=e,i={...r.shipping,...r.billing,...o,...n},a=((t,e)=>ea(aa,((t,r,n)=>{const o=e[r];return o&&(t[n]=o),t}),{}))(0,i);t.owner={email:r.email,name:i.name||r.name,...i.phone?{phone:i.phone}:r.phone?{phone:r.phone}:{},...na(a)?{}:{address:a}}}(r,e),await t.createSource(r)}function ha(t,e){return["BIF","DJF","JPY","KRW","PYG","VND","XAF","XPF","CLP","GNF","KMF","MGA","RWF","VUV","XOF"].includes(t.toUpperCase())?e:Math.round(100*e)}const pa={},da={},ga={};function ya(t){return{params:null,methodSettings:null,async methods(){if(this.methodSettings)return this.methodSettings;const e=await t("get","/payment/methods");return this.methodSettings=e},async createElements(e){this.params=e||{};const r=ji(await Zi.methods(t).get());if(!r)throw new Error("Cart not found");const n=ji(await Gi.methods(t).payments());if(n.error)throw new Error(n.error);await async function(t,e,r,n){n.card&&(r.card?"braintree"===r.card.gateway?window.braintree||await va("braintree-web","https://js.braintreegateway.com/web/3.57.0/js/client.min.js"):"stripe"===r.card.gateway&&(window.Stripe||await va("stripe-js","https://js.stripe.com/v3/"),await ba(t,r,n)):console.error("Payment element error: credit card payments are disabled. See Payment settings in the Swell dashboard for details."));n.ideal&&(r.card?r.ideal?"stripe"===r.card.gateway&&(window.Stripe||await va("stripe-js","https://js.stripe.com/v3/"),await ba(t,r,n)):console.error("Payment element error: iDEAL payments are disabled. See Payment settings in the Swell dashboard for details."):console.error("Payment element error: credit card payments are disabled. See Payment settings in the Swell dashboard for details."));n.paypal&&(r.paypal?(window.paypal||await va("paypal-sdk",`https://www.paypal.com/sdk/js?client-id=${r.paypal.client_id}&merchant-id=${r.paypal.merchant_id}&vault=true`),r.card&&"braintree"===r.card.gateway&&"braintree"===r.paypal.gateway&&(window.braintree||await va("braintree-web","https://js.braintreegateway.com/web/3.57.0/js/client.min.js"),window.braintree&&!window.braintree.paypalCheckout&&await va("braintree-web-paypal-checkout","https://js.braintreegateway.com/web/3.57.0/js/paypal-checkout.min.js"),await async function(t,e,r,n){const o=await Ui("post","/authorization",{gateway:"braintree"});if(o.error)throw new Error(o.error);const i=window.braintree,a=window.paypal;i.client.create({authorization:o}).then((t=>i.paypalCheckout.create({client:t}))).then((r=>a.Buttons({style:n.paypal.style||{},createBillingAgreement:()=>r.createPayment({flow:"vault",currency:e.currency,amount:e.grand_total}),onApprove:(e,o)=>r.tokenizePayment(e).then((({nonce:e})=>Zi.methods(t).update({billing:{paypal:{nonce:e}}}))).then((()=>Ri(n.paypal.onSuccess)&&n.paypal.onSuccess(e,o))).catch(Ri(n.paypal.onError)?n.paypal.onError:t=>console.error("PayPal error",t)),onCancel:Ri(n.paypal.onCancel)?()=>n.paypal.onCancel():()=>console.log("PayPal payment cancelled"),onError:Ri(n.paypal.onError)?t=>n.paypal.onError(t):t=>console.error("PayPal error",t)}).render(n.paypal.elementId||"#paypal-button"))).catch(Ri(n.paypal.onError)?n.paypal.onError:t=>console.error("PayPal error",t))}(t,e,0,n))):console.error("Payment element error: PayPal payments are disabled. See Payment settings in the Swell dashboard for details."))}(t,r,n,this.params)},async tokenize(e){const r=ji(await Zi.methods(t).get());if(!r)throw new Error("Cart not found");const n=ji(await Gi.methods(t).payments());if(n.error)throw new Error(n.error);return await async function(t,e,r,n){const o=t=>{const r=Be(e,"card.onError")||Be(e,"ideal.onError")||Be(e,"klarna.onError")||Be(e,"bancontact.onError");if(Ri(r))return r(t);throw new Error(t.message)};if(!e)return o({message:"Tokenization parameters not passed"});if(e.card&&r.card){if("stripe"===r.card.gateway&&da.stripe&&ga.stripe){const r=ga.stripe,i=await async function(t,e,r){const n=ua(r),{error:o,paymentMethod:i}=await t.createPaymentMethod({type:"card",card:e,...n?{billing_details:n}:{}});return o?{error:o}:{token:i.id,last4:i.card.last4,exp_month:i.card.exp_month,exp_year:i.card.exp_year,brand:i.card.brand,address_check:i.card.checks.address_line1_check,cvc_check:i.card.checks.cvc_check,zip_check:i.card.checks.address_zip_check}}(r,da.stripe,n);if(i.error)return o(i.error);const a=Ki(Be(n,"currency","usd")),s=ha(a,Be(n,"grand_total",0)),u=Be(n,"account.stripe_customer"),c=ji(await ya(t).createIntent({gateway:"stripe",intent:{payment_method:i.token,amount:s,currency:a,capture_method:"manual",setup_future_usage:"off_session",...u?{customer:u}:{}}}).catch((t=>o(t))));if(c&&"requires_confirmation"===c.status){const{paymentIntent:n,error:a}=await r.confirmCardPayment(c.client_secret);return a?o(a):await Zi.methods(t).update({billing:{method:"card",card:i,intent:{stripe:{id:n.id}}}}).then((()=>Ri(e.card.onSuccess)&&e.card.onSuccess())).catch((t=>o(t)))}}}else if(e.ideal&&r.ideal){if(r.card&&"stripe"===r.card.gateway&&da.stripe&&ga.stripe){const{error:e,paymentMethod:r}=await async function(t,e,r={}){const n=ua(r);return await t.createPaymentMethod({type:"ideal",ideal:e,...n?{billing_details:n}:{}})}(ga.stripe,da.stripe,n.billing);if(e)return o(e);const i=Ki(Be(n,"currency","eur")),a=ha(i,Be(n,"grand_total",0)),s=ji(await ya(t).createIntent({gateway:"stripe",intent:{payment_method:r.id,amount:a,currency:i,payment_method_types:"ideal",confirmation_method:"manual",confirm:!0,return_url:window.location.href}}).catch((t=>o(t))));if(s)return await Zi.methods(t).update({billing:{method:"ideal",ideal:{token:r.id},intent:{stripe:{id:s.id}}}}).catch((t=>o(t))),("requires_action"===s.status||"requires_source_action"===s.status)&&await ga.stripe.handleCardAction(s.client_secret)}}else if(e.klarna&&r.klarna){if(r.card&&"stripe"===r.card.gateway){window.Stripe||await va("stripe-js","https://js.stripe.com/v3/");const{publishable_key:e}=r.card,i=window.Stripe(e),a=ji(await Gi.methods(t).get()),{error:s,source:u}=await la(i,{...n,settings:a.store});return s?o(s):Zi.methods(t).update({billing:{method:"klarna"}}).then((()=>window.location.replace(u.redirect.url))).catch((t=>o(t)))}}else if(e.bancontact&&r.bancontact&&r.card&&"stripe"===r.card.gateway){window.Stripe||await va("stripe-js","https://js.stripe.com/v3/");const{publishable_key:e}=r.card,i=window.Stripe(e),{error:a,source:s}=await fa(i,n);return a?o(a):Zi.methods(t).update({billing:{method:"bancontact"}}).then((()=>window.location.replace(s.redirect.url))).catch((t=>o(t)))}}(t,e||this.params,n,r)},async createIntent(t){const e=await Ui("post","/intent",t);if(e.errors){const t=Object.keys(e.errors)[0],r=new Error(e.errors[t].message||"Unknown error");throw r.code="vault_error",r.status=402,r.param=t,r}return e},async updateIntent(t){const e=await Ui("put","/intent",t);if(e.errors){const t=Object.keys(e.errors)[0],r=new Error(e.errors[t].message||"Unknown error");throw r.code="vault_error",r.status=402,r.param=t,r}return e}}}const va=async(t,e)=>(pa[t]=pa[t]||new Promise((r=>{const n=document.createElement("script");n.id=t,n.src=e,n.async=!0,n.type="text/javascript",n.addEventListener("load",(()=>{r(),pa[t]=null}),{once:!0}),document.head.appendChild(n)})),pa[t]);async function ba(t,e,r){const{publishable_key:n}=e.card,o=window.Stripe(n),i=o.elements(),a=t=>{const e=Be(r,`card[${t}]`)||r.card||r.ideal,n=e.options||{},o=i.create(t,n);o.mount(e.elementId||`#${t}-element`),e.onChange&&o.on("change",e.onChange),e.onReady&&o.on("ready",e.onReady),e.onFocus&&o.on("focus",e.onFocus),e.onBlur&&o.on("blur",e.onBlur),e.onEscape&&o.on("escape",e.onEscape),e.onClick&&o.on("click",e.onClick),"card"!==t&&"cardNumber"!==t&&"idealBank"!==t||(da.stripe=o)};ga.stripe=o,r.ideal?a("idealBank"):r.card.separateElements?(a("cardNumber"),a("cardExpiry"),a("cardCvc")):a("card")}const ma={store:null,key:null,url:null,useCamelCase:null,previewContent:null},wa={options:ma,request:_a,init(t,e,r={}){ma.key=e,ma.store=t,ma.url=r.url?Ci(r.url):`https://${t}.swell.store`,ma.vaultUrl=r.vaultUrl?Ci(r.vaultUrl):"https://vault.schema.io",ma.timeout=r.timeout&&parseInt(r.timeout,10)||2e4,ma.useCamelCase=r.useCamelCase||!1,ma.previewContent=r.previewContent||!1,ma.session=r.session,ma.locale=r.locale,ma.currency=r.currency,ma.api=wa,bi=ma},auth(...t){return this.init(...t)},get:(t,e)=>_a("get",t,e),put:(t,e)=>_a("put",t,e),post:(t,e)=>_a("post",t,e),delete:(t,e)=>_a("delete",t,e),cache:zi,card:$i,cart:Zi(_a,ma),account:function(t){return{state:null,async requestStateChange(e,r,n,o){const i=await t(e,r,n,o);return i&&i.errors?i:this.state=i},get(t){return this.requestStateChange("get","/account",t)},create(t){return this.requestStateChange("post","/account",t)},update(t){return this.requestStateChange("put","/account",t)},login(t,e){return this.requestStateChange("post","/account/login",{email:t,password:e})},logout(){return this.state=null,t("post","/account/logout")},recover:e=>t("post","/account/recover",e),listAddresses:e=>t("get","/account/addresses",e),createAddress:e=>t("post","/account/addresses",e),updateAddress:(e,r)=>t("put",`/account/addresses/${e}`,r),deleteAddress:e=>t("delete",`/account/addresses/${e}`),listCards:e=>t("get","/account/cards",e),createCard:e=>t("post","/account/cards",e),updateCard:(e,r)=>t("put",`/account/cards/${e}`,r),deleteCard:e=>t("delete",`/account/cards/${e}`),listOrders:e=>t("get","/account/orders",e),getOrder:e=>t("get",`/account/orders/${e}`),getAddresses:e=>t("get","/account/addresses",e),getCards:e=>t("get","/account/cards",e),getOrders:e=>t("get","/account/orders",e)}}(_a),products:function(t,e){Li=e;const{get:r,list:n}=ki(t,"/products",["list","get"]);return{get:(t,...e)=>zi.getFetch("products",t,(()=>r(t,...e))),list:n,variation:Yi,categories:Fi,attributes:Vi,priceRange:Ji,filters:Ni}}(_a,ma),categories:function(t){const{get:e,list:r}=ki(t,"/categories",["list","get"]);return{get:(t,...r)=>zi.getFetch("categories",t,(()=>e(t,...r))),list:r}}(_a),attributes:function(t){const{get:e,list:r}=ki(t,"/attributes",["list","get"]);return{get:(t,...r)=>zi.getFetch("attributes",t,(()=>e(t,...r))),list:r}}(_a),subscriptions:function(t){return{get:(e,r)=>t("get","/subscriptions",e,r),getCleanData:t=>(t&&t.options&&(t.options=qi(t.options)),t.items&&t.items.map&&(t.items=t.items.map((t=>(t.options&&(t.options=qi(t.options)),t)))),t),create(e){return t("post","/subscriptions",this.getCleanData(e))},update(e,r){return t("put",`/subscriptions/${e}`,this.getCleanData(r))},addItem(e,r){return t("post",`/subscriptions/${e}/items`,this.getCleanData(r))},setItems(e,r){return r&&r.map&&(r=r.map(this.getCleanData)),t("put",`/subscriptions/${e}/items`,r)},updateItem(e,r,n){return t("put",`/subscriptions/${e}/items/${r}`,this.getCleanData(n))},removeItem:(e,r)=>t("delete",`/subscriptions/${e}/items/${r}`)}}(_a),content:function(t,e){return{get:(r,n,o)=>zi.getFetch(`content_${r}`,n,(()=>t("get",`/content/${r}`,n,{$preview:e.previewContent,...o||{}}))),list:(e,r)=>t("get",`/content/${e}`,void 0,r)}}(_a,ma),settings:Gi(_a,ma),payment:ya(_a),locale:function(t,e){return{code:null,state:null,list:()=>e.api.settings.get("store.locales",[]),async select(r){return this.set(r),Bi("swell-locale",r),e.api.settings.locale=r,await t("put","/session",{locale:r})},selected(){if(this.code)return this.code;const t=e.api.settings.getStoreLocale(),r=Di("swell-locale");return e.api.settings.locale=r||t,r||t},get(){return this.code||(this.code=this.selected()),this.state||(this.state=this.set(this.code)),this.state},set(t){return this.code=t,this.state=Bn(this.list(),{code:t})||{},this.state}}}(_a,ma),currency:function(t,e){return{code:null,state:null,locale:null,formatter:null,list:()=>e.api.settings.get("store.currencies",[]),async select(e){return this.set(e),Bi("swell-currency",e),await t("put","/session",{currency:e})},selected(){if(this.code)return this.code;const t=e.api.settings.get("store.currency");return Di("swell-currency")||t},get(){return this.code||(this.code=this.selected()),this.state||(this.state=this.set(this.code)),this.state},set(t){this.code=t,this.locale=e.api.settings.get("store.locale","object"==typeof navigator?navigator.language:"en-US"),this.state=Bn(this.list(),{code:t})||{};try{this.formatter=new Intl.NumberFormat(this.locale,{style:"currency",currency:t,currencyDisplay:"symbol",minimumFractionDigits:this.state.decimals,maximumFractionDigits:this.state.decimals})}catch(t){console.error(t)}return this.state},format(t,e={}){let r=this.get();if(e.code&&e.code!==r.code){const t=this.list();r=Bn(t,{code:e.code})||{}}const{code:n,rate:o,decimals:i,type:a}=r,s=e.code||n,u=e.rate||o,c=e.locale||this.locale,l="number"==typeof e.decimals?e.decimals:i;let f,h=t;"display"!==a&&!e.rate||"number"!=typeof u||(h=t*u);try{return f=s===this.state.code&&c===this.locale&&l===this.state.decimals?this.formatter:new Intl.NumberFormat(c,{style:"currency",currency:s,currencyDisplay:"symbol",minimumFractionDigits:l,maximumFractionDigits:l}),"number"==typeof h?f.format(h):Be(f.formatToParts(0),"0.value","$")}catch(t){console.error(t)}return String(t)}}}(_a,ma)};async function _a(t,e,r,n,o){const i=String(t).toLowerCase();let a=e,s=r;void 0===n&&"string"!=typeof r||(a=[Ci(e),Ei(r)].join("/"),s=n);const u={...ma,...o},c=`${u.url}${u.base||""}/api`;var l;let f;if(a=u.fullUrl||`${c}/${l=a,Ei(Ci(l))}`,s=u.useCamelCase?ji(s):s,"get"===i){let t;[a,t]=a.split("?");const e=[t,Oi(s)].join("&").replace(/^&/,"");a=`${a}${e?`?${e}`:""}`}else f=JSON.stringify(s);const h=u.session||Di("swell-session"),p=u.locale||Di("swell-locale"),d=u.currency||Di("swell-currency"),g={"Content-Type":"application/json",Authorization:`Basic ${y=String(u.key),"undefined"!=typeof btoa?btoa(y):b.from(y).toString("base64")}`,...h?{"X-Session":h}:{},...p?{"X-Locale":p}:{},...d?{"X-Currency":d}:{}};var y;const v=await fetch(a,{method:i,headers:g,body:f,credentials:"include",mode:"cors"}),m=v.headers.get("X-Session");"string"==typeof m&&h!==m&&Bi("swell-session",m);const w=await v.json();if(w&&w.error){const t=new Error(w.error.message);throw t.status=v.status,t.code=w.error.code,t.param=w.error.param,t}if(!v.ok){const t=new Error("A connection error occurred while making the request");throw t.code="connection_error",t}return ma.useCamelCase?_i(w):w}"undefined"!=typeof window&&(window.swell={version:"@VERSION@"}),module.exports=wa;
+'use strict';
+
+var qs = require('qs');
+var deepmerge = require('deepmerge');
+var fastCase = require('fast-case');
+
+function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
+
+var deepmerge__default = /*#__PURE__*/_interopDefaultLegacy(deepmerge);
+
+var global$1 = (typeof global !== "undefined" ? global :
+  typeof self !== "undefined" ? self :
+  typeof window !== "undefined" ? window : {});
+
+/** Detect free variable `global` from Node.js. */
+var freeGlobal = typeof global$1 == 'object' && global$1 && global$1.Object === Object && global$1;
+
+/** Detect free variable `self`. */
+var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
+
+/** Used as a reference to the global object. */
+var root = freeGlobal || freeSelf || Function('return this')();
+
+/** Built-in value references. */
+var Symbol = root.Symbol;
+
+/** Used for built-in method references. */
+var objectProto$f = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$c = objectProto$f.hasOwnProperty;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString$1 = objectProto$f.toString;
+
+/** Built-in value references. */
+var symToStringTag$1 = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * A specialized version of `baseGetTag` which ignores `Symbol.toStringTag` values.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the raw `toStringTag`.
+ */
+function getRawTag(value) {
+  var isOwn = hasOwnProperty$c.call(value, symToStringTag$1),
+      tag = value[symToStringTag$1];
+
+  try {
+    value[symToStringTag$1] = undefined;
+    var unmasked = true;
+  } catch (e) {}
+
+  var result = nativeObjectToString$1.call(value);
+  if (unmasked) {
+    if (isOwn) {
+      value[symToStringTag$1] = tag;
+    } else {
+      delete value[symToStringTag$1];
+    }
+  }
+  return result;
+}
+
+/** Used for built-in method references. */
+var objectProto$e = Object.prototype;
+
+/**
+ * Used to resolve the
+ * [`toStringTag`](http://ecma-international.org/ecma-262/7.0/#sec-object.prototype.tostring)
+ * of values.
+ */
+var nativeObjectToString = objectProto$e.toString;
+
+/**
+ * Converts `value` to a string using `Object.prototype.toString`.
+ *
+ * @private
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ */
+function objectToString(value) {
+  return nativeObjectToString.call(value);
+}
+
+/** `Object#toString` result references. */
+var nullTag = '[object Null]',
+    undefinedTag = '[object Undefined]';
+
+/** Built-in value references. */
+var symToStringTag = Symbol ? Symbol.toStringTag : undefined;
+
+/**
+ * The base implementation of `getTag` without fallbacks for buggy environments.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+function baseGetTag(value) {
+  if (value == null) {
+    return value === undefined ? undefinedTag : nullTag;
+  }
+  return (symToStringTag && symToStringTag in Object(value))
+    ? getRawTag(value)
+    : objectToString(value);
+}
+
+/**
+ * Checks if `value` is the
+ * [language type](http://www.ecma-international.org/ecma-262/7.0/#sec-ecmascript-language-types)
+ * of `Object`. (e.g. arrays, functions, objects, regexes, `new Number(0)`, and `new String('')`)
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an object, else `false`.
+ * @example
+ *
+ * _.isObject({});
+ * // => true
+ *
+ * _.isObject([1, 2, 3]);
+ * // => true
+ *
+ * _.isObject(_.noop);
+ * // => true
+ *
+ * _.isObject(null);
+ * // => false
+ */
+function isObject$1(value) {
+  var type = typeof value;
+  return value != null && (type == 'object' || type == 'function');
+}
+
+/** `Object#toString` result references. */
+var asyncTag = '[object AsyncFunction]',
+    funcTag$2 = '[object Function]',
+    genTag$1 = '[object GeneratorFunction]',
+    proxyTag = '[object Proxy]';
+
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a function, else `false`.
+ * @example
+ *
+ * _.isFunction(_);
+ * // => true
+ *
+ * _.isFunction(/abc/);
+ * // => false
+ */
+function isFunction$1(value) {
+  if (!isObject$1(value)) {
+    return false;
+  }
+  // The use of `Object#toString` avoids issues with the `typeof` operator
+  // in Safari 9 which returns 'object' for typed arrays and other constructors.
+  var tag = baseGetTag(value);
+  return tag == funcTag$2 || tag == genTag$1 || tag == asyncTag || tag == proxyTag;
+}
+
+/** Used to detect overreaching core-js shims. */
+var coreJsData = root['__core-js_shared__'];
+
+/** Used to detect methods masquerading as native. */
+var maskSrcKey = (function() {
+  var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || '');
+  return uid ? ('Symbol(src)_1.' + uid) : '';
+}());
+
+/**
+ * Checks if `func` has its source masked.
+ *
+ * @private
+ * @param {Function} func The function to check.
+ * @returns {boolean} Returns `true` if `func` is masked, else `false`.
+ */
+function isMasked(func) {
+  return !!maskSrcKey && (maskSrcKey in func);
+}
+
+/** Used for built-in method references. */
+var funcProto$1 = Function.prototype;
+
+/** Used to resolve the decompiled source of functions. */
+var funcToString$1 = funcProto$1.toString;
+
+/**
+ * Converts `func` to its source code.
+ *
+ * @private
+ * @param {Function} func The function to convert.
+ * @returns {string} Returns the source code.
+ */
+function toSource(func) {
+  if (func != null) {
+    try {
+      return funcToString$1.call(func);
+    } catch (e) {}
+    try {
+      return (func + '');
+    } catch (e) {}
+  }
+  return '';
+}
+
+/**
+ * Used to match `RegExp`
+ * [syntax characters](http://ecma-international.org/ecma-262/7.0/#sec-patterns).
+ */
+var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+
+/** Used to detect host constructors (Safari). */
+var reIsHostCtor = /^\[object .+?Constructor\]$/;
+
+/** Used for built-in method references. */
+var funcProto = Function.prototype,
+    objectProto$d = Object.prototype;
+
+/** Used to resolve the decompiled source of functions. */
+var funcToString = funcProto.toString;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$b = objectProto$d.hasOwnProperty;
+
+/** Used to detect if a method is native. */
+var reIsNative = RegExp('^' +
+  funcToString.call(hasOwnProperty$b).replace(reRegExpChar, '\\$&')
+  .replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, '$1.*?') + '$'
+);
+
+/**
+ * The base implementation of `_.isNative` without bad shim checks.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a native function,
+ *  else `false`.
+ */
+function baseIsNative(value) {
+  if (!isObject$1(value) || isMasked(value)) {
+    return false;
+  }
+  var pattern = isFunction$1(value) ? reIsNative : reIsHostCtor;
+  return pattern.test(toSource(value));
+}
+
+/**
+ * Gets the value at `key` of `object`.
+ *
+ * @private
+ * @param {Object} [object] The object to query.
+ * @param {string} key The key of the property to get.
+ * @returns {*} Returns the property value.
+ */
+function getValue(object, key) {
+  return object == null ? undefined : object[key];
+}
+
+/**
+ * Gets the native function at `key` of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {string} key The key of the method to get.
+ * @returns {*} Returns the function if it's native, else `undefined`.
+ */
+function getNative(object, key) {
+  var value = getValue(object, key);
+  return baseIsNative(value) ? value : undefined;
+}
+
+var defineProperty = (function() {
+  try {
+    var func = getNative(Object, 'defineProperty');
+    func({}, '', {});
+    return func;
+  } catch (e) {}
+}());
+
+/**
+ * The base implementation of `assignValue` and `assignMergeValue` without
+ * value checks.
+ *
+ * @private
+ * @param {Object} object The object to modify.
+ * @param {string} key The key of the property to assign.
+ * @param {*} value The value to assign.
+ */
+function baseAssignValue(object, key, value) {
+  if (key == '__proto__' && defineProperty) {
+    defineProperty(object, key, {
+      'configurable': true,
+      'enumerable': true,
+      'value': value,
+      'writable': true
+    });
+  } else {
+    object[key] = value;
+  }
+}
+
+/**
+ * Performs a
+ * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+ * comparison between two values to determine if they are equivalent.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ * var other = { 'a': 1 };
+ *
+ * _.eq(object, object);
+ * // => true
+ *
+ * _.eq(object, other);
+ * // => false
+ *
+ * _.eq('a', 'a');
+ * // => true
+ *
+ * _.eq('a', Object('a'));
+ * // => false
+ *
+ * _.eq(NaN, NaN);
+ * // => true
+ */
+function eq(value, other) {
+  return value === other || (value !== value && other !== other);
+}
+
+/** Used for built-in method references. */
+var objectProto$c = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$a = objectProto$c.hasOwnProperty;
+
+/**
+ * Assigns `value` to `key` of `object` if the existing value is not equivalent
+ * using [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+ * for equality comparisons.
+ *
+ * @private
+ * @param {Object} object The object to modify.
+ * @param {string} key The key of the property to assign.
+ * @param {*} value The value to assign.
+ */
+function assignValue(object, key, value) {
+  var objValue = object[key];
+  if (!(hasOwnProperty$a.call(object, key) && eq(objValue, value)) ||
+      (value === undefined && !(key in object))) {
+    baseAssignValue(object, key, value);
+  }
+}
+
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an array, else `false`.
+ * @example
+ *
+ * _.isArray([1, 2, 3]);
+ * // => true
+ *
+ * _.isArray(document.body.children);
+ * // => false
+ *
+ * _.isArray('abc');
+ * // => false
+ *
+ * _.isArray(_.noop);
+ * // => false
+ */
+var isArray = Array.isArray;
+
+/**
+ * Checks if `value` is object-like. A value is object-like if it's not `null`
+ * and has a `typeof` result of "object".
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is object-like, else `false`.
+ * @example
+ *
+ * _.isObjectLike({});
+ * // => true
+ *
+ * _.isObjectLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isObjectLike(_.noop);
+ * // => false
+ *
+ * _.isObjectLike(null);
+ * // => false
+ */
+function isObjectLike(value) {
+  return value != null && typeof value == 'object';
+}
+
+/** `Object#toString` result references. */
+var symbolTag$3 = '[object Symbol]';
+
+/**
+ * Checks if `value` is classified as a `Symbol` primitive or object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a symbol, else `false`.
+ * @example
+ *
+ * _.isSymbol(Symbol.iterator);
+ * // => true
+ *
+ * _.isSymbol('abc');
+ * // => false
+ */
+function isSymbol(value) {
+  return typeof value == 'symbol' ||
+    (isObjectLike(value) && baseGetTag(value) == symbolTag$3);
+}
+
+/** Used to match property names within property paths. */
+var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,
+    reIsPlainProp = /^\w*$/;
+
+/**
+ * Checks if `value` is a property name and not a property path.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @param {Object} [object] The object to query keys on.
+ * @returns {boolean} Returns `true` if `value` is a property name, else `false`.
+ */
+function isKey(value, object) {
+  if (isArray(value)) {
+    return false;
+  }
+  var type = typeof value;
+  if (type == 'number' || type == 'symbol' || type == 'boolean' ||
+      value == null || isSymbol(value)) {
+    return true;
+  }
+  return reIsPlainProp.test(value) || !reIsDeepProp.test(value) ||
+    (object != null && value in Object(object));
+}
+
+/* Built-in method references that are verified to be native. */
+var nativeCreate = getNative(Object, 'create');
+
+/**
+ * Removes all key-value entries from the hash.
+ *
+ * @private
+ * @name clear
+ * @memberOf Hash
+ */
+function hashClear() {
+  this.__data__ = nativeCreate ? nativeCreate(null) : {};
+  this.size = 0;
+}
+
+/**
+ * Removes `key` and its value from the hash.
+ *
+ * @private
+ * @name delete
+ * @memberOf Hash
+ * @param {Object} hash The hash to modify.
+ * @param {string} key The key of the value to remove.
+ * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+ */
+function hashDelete(key) {
+  var result = this.has(key) && delete this.__data__[key];
+  this.size -= result ? 1 : 0;
+  return result;
+}
+
+/** Used to stand-in for `undefined` hash values. */
+var HASH_UNDEFINED$2 = '__lodash_hash_undefined__';
+
+/** Used for built-in method references. */
+var objectProto$b = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$9 = objectProto$b.hasOwnProperty;
+
+/**
+ * Gets the hash value for `key`.
+ *
+ * @private
+ * @name get
+ * @memberOf Hash
+ * @param {string} key The key of the value to get.
+ * @returns {*} Returns the entry value.
+ */
+function hashGet(key) {
+  var data = this.__data__;
+  if (nativeCreate) {
+    var result = data[key];
+    return result === HASH_UNDEFINED$2 ? undefined : result;
+  }
+  return hasOwnProperty$9.call(data, key) ? data[key] : undefined;
+}
+
+/** Used for built-in method references. */
+var objectProto$a = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$8 = objectProto$a.hasOwnProperty;
+
+/**
+ * Checks if a hash value for `key` exists.
+ *
+ * @private
+ * @name has
+ * @memberOf Hash
+ * @param {string} key The key of the entry to check.
+ * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+ */
+function hashHas(key) {
+  var data = this.__data__;
+  return nativeCreate ? (data[key] !== undefined) : hasOwnProperty$8.call(data, key);
+}
+
+/** Used to stand-in for `undefined` hash values. */
+var HASH_UNDEFINED$1 = '__lodash_hash_undefined__';
+
+/**
+ * Sets the hash `key` to `value`.
+ *
+ * @private
+ * @name set
+ * @memberOf Hash
+ * @param {string} key The key of the value to set.
+ * @param {*} value The value to set.
+ * @returns {Object} Returns the hash instance.
+ */
+function hashSet(key, value) {
+  var data = this.__data__;
+  this.size += this.has(key) ? 0 : 1;
+  data[key] = (nativeCreate && value === undefined) ? HASH_UNDEFINED$1 : value;
+  return this;
+}
+
+/**
+ * Creates a hash object.
+ *
+ * @private
+ * @constructor
+ * @param {Array} [entries] The key-value pairs to cache.
+ */
+function Hash(entries) {
+  var index = -1,
+      length = entries == null ? 0 : entries.length;
+
+  this.clear();
+  while (++index < length) {
+    var entry = entries[index];
+    this.set(entry[0], entry[1]);
+  }
+}
+
+// Add methods to `Hash`.
+Hash.prototype.clear = hashClear;
+Hash.prototype['delete'] = hashDelete;
+Hash.prototype.get = hashGet;
+Hash.prototype.has = hashHas;
+Hash.prototype.set = hashSet;
+
+/**
+ * Removes all key-value entries from the list cache.
+ *
+ * @private
+ * @name clear
+ * @memberOf ListCache
+ */
+function listCacheClear() {
+  this.__data__ = [];
+  this.size = 0;
+}
+
+/**
+ * Gets the index at which the `key` is found in `array` of key-value pairs.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {*} key The key to search for.
+ * @returns {number} Returns the index of the matched value, else `-1`.
+ */
+function assocIndexOf(array, key) {
+  var length = array.length;
+  while (length--) {
+    if (eq(array[length][0], key)) {
+      return length;
+    }
+  }
+  return -1;
+}
+
+/** Used for built-in method references. */
+var arrayProto = Array.prototype;
+
+/** Built-in value references. */
+var splice = arrayProto.splice;
+
+/**
+ * Removes `key` and its value from the list cache.
+ *
+ * @private
+ * @name delete
+ * @memberOf ListCache
+ * @param {string} key The key of the value to remove.
+ * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+ */
+function listCacheDelete(key) {
+  var data = this.__data__,
+      index = assocIndexOf(data, key);
+
+  if (index < 0) {
+    return false;
+  }
+  var lastIndex = data.length - 1;
+  if (index == lastIndex) {
+    data.pop();
+  } else {
+    splice.call(data, index, 1);
+  }
+  --this.size;
+  return true;
+}
+
+/**
+ * Gets the list cache value for `key`.
+ *
+ * @private
+ * @name get
+ * @memberOf ListCache
+ * @param {string} key The key of the value to get.
+ * @returns {*} Returns the entry value.
+ */
+function listCacheGet(key) {
+  var data = this.__data__,
+      index = assocIndexOf(data, key);
+
+  return index < 0 ? undefined : data[index][1];
+}
+
+/**
+ * Checks if a list cache value for `key` exists.
+ *
+ * @private
+ * @name has
+ * @memberOf ListCache
+ * @param {string} key The key of the entry to check.
+ * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+ */
+function listCacheHas(key) {
+  return assocIndexOf(this.__data__, key) > -1;
+}
+
+/**
+ * Sets the list cache `key` to `value`.
+ *
+ * @private
+ * @name set
+ * @memberOf ListCache
+ * @param {string} key The key of the value to set.
+ * @param {*} value The value to set.
+ * @returns {Object} Returns the list cache instance.
+ */
+function listCacheSet(key, value) {
+  var data = this.__data__,
+      index = assocIndexOf(data, key);
+
+  if (index < 0) {
+    ++this.size;
+    data.push([key, value]);
+  } else {
+    data[index][1] = value;
+  }
+  return this;
+}
+
+/**
+ * Creates an list cache object.
+ *
+ * @private
+ * @constructor
+ * @param {Array} [entries] The key-value pairs to cache.
+ */
+function ListCache(entries) {
+  var index = -1,
+      length = entries == null ? 0 : entries.length;
+
+  this.clear();
+  while (++index < length) {
+    var entry = entries[index];
+    this.set(entry[0], entry[1]);
+  }
+}
+
+// Add methods to `ListCache`.
+ListCache.prototype.clear = listCacheClear;
+ListCache.prototype['delete'] = listCacheDelete;
+ListCache.prototype.get = listCacheGet;
+ListCache.prototype.has = listCacheHas;
+ListCache.prototype.set = listCacheSet;
+
+/* Built-in method references that are verified to be native. */
+var Map = getNative(root, 'Map');
+
+/**
+ * Removes all key-value entries from the map.
+ *
+ * @private
+ * @name clear
+ * @memberOf MapCache
+ */
+function mapCacheClear() {
+  this.size = 0;
+  this.__data__ = {
+    'hash': new Hash,
+    'map': new (Map || ListCache),
+    'string': new Hash
+  };
+}
+
+/**
+ * Checks if `value` is suitable for use as unique object key.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is suitable, else `false`.
+ */
+function isKeyable(value) {
+  var type = typeof value;
+  return (type == 'string' || type == 'number' || type == 'symbol' || type == 'boolean')
+    ? (value !== '__proto__')
+    : (value === null);
+}
+
+/**
+ * Gets the data for `map`.
+ *
+ * @private
+ * @param {Object} map The map to query.
+ * @param {string} key The reference key.
+ * @returns {*} Returns the map data.
+ */
+function getMapData(map, key) {
+  var data = map.__data__;
+  return isKeyable(key)
+    ? data[typeof key == 'string' ? 'string' : 'hash']
+    : data.map;
+}
+
+/**
+ * Removes `key` and its value from the map.
+ *
+ * @private
+ * @name delete
+ * @memberOf MapCache
+ * @param {string} key The key of the value to remove.
+ * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+ */
+function mapCacheDelete(key) {
+  var result = getMapData(this, key)['delete'](key);
+  this.size -= result ? 1 : 0;
+  return result;
+}
+
+/**
+ * Gets the map value for `key`.
+ *
+ * @private
+ * @name get
+ * @memberOf MapCache
+ * @param {string} key The key of the value to get.
+ * @returns {*} Returns the entry value.
+ */
+function mapCacheGet(key) {
+  return getMapData(this, key).get(key);
+}
+
+/**
+ * Checks if a map value for `key` exists.
+ *
+ * @private
+ * @name has
+ * @memberOf MapCache
+ * @param {string} key The key of the entry to check.
+ * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+ */
+function mapCacheHas(key) {
+  return getMapData(this, key).has(key);
+}
+
+/**
+ * Sets the map `key` to `value`.
+ *
+ * @private
+ * @name set
+ * @memberOf MapCache
+ * @param {string} key The key of the value to set.
+ * @param {*} value The value to set.
+ * @returns {Object} Returns the map cache instance.
+ */
+function mapCacheSet(key, value) {
+  var data = getMapData(this, key),
+      size = data.size;
+
+  data.set(key, value);
+  this.size += data.size == size ? 0 : 1;
+  return this;
+}
+
+/**
+ * Creates a map cache object to store key-value pairs.
+ *
+ * @private
+ * @constructor
+ * @param {Array} [entries] The key-value pairs to cache.
+ */
+function MapCache(entries) {
+  var index = -1,
+      length = entries == null ? 0 : entries.length;
+
+  this.clear();
+  while (++index < length) {
+    var entry = entries[index];
+    this.set(entry[0], entry[1]);
+  }
+}
+
+// Add methods to `MapCache`.
+MapCache.prototype.clear = mapCacheClear;
+MapCache.prototype['delete'] = mapCacheDelete;
+MapCache.prototype.get = mapCacheGet;
+MapCache.prototype.has = mapCacheHas;
+MapCache.prototype.set = mapCacheSet;
+
+/** Error message constants. */
+var FUNC_ERROR_TEXT = 'Expected a function';
+
+/**
+ * Creates a function that memoizes the result of `func`. If `resolver` is
+ * provided, it determines the cache key for storing the result based on the
+ * arguments provided to the memoized function. By default, the first argument
+ * provided to the memoized function is used as the map cache key. The `func`
+ * is invoked with the `this` binding of the memoized function.
+ *
+ * **Note:** The cache is exposed as the `cache` property on the memoized
+ * function. Its creation may be customized by replacing the `_.memoize.Cache`
+ * constructor with one whose instances implement the
+ * [`Map`](http://ecma-international.org/ecma-262/7.0/#sec-properties-of-the-map-prototype-object)
+ * method interface of `clear`, `delete`, `get`, `has`, and `set`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Function
+ * @param {Function} func The function to have its output memoized.
+ * @param {Function} [resolver] The function to resolve the cache key.
+ * @returns {Function} Returns the new memoized function.
+ * @example
+ *
+ * var object = { 'a': 1, 'b': 2 };
+ * var other = { 'c': 3, 'd': 4 };
+ *
+ * var values = _.memoize(_.values);
+ * values(object);
+ * // => [1, 2]
+ *
+ * values(other);
+ * // => [3, 4]
+ *
+ * object.a = 2;
+ * values(object);
+ * // => [1, 2]
+ *
+ * // Modify the result cache.
+ * values.cache.set(object, ['a', 'b']);
+ * values(object);
+ * // => ['a', 'b']
+ *
+ * // Replace `_.memoize.Cache`.
+ * _.memoize.Cache = WeakMap;
+ */
+function memoize(func, resolver) {
+  if (typeof func != 'function' || (resolver != null && typeof resolver != 'function')) {
+    throw new TypeError(FUNC_ERROR_TEXT);
+  }
+  var memoized = function() {
+    var args = arguments,
+        key = resolver ? resolver.apply(this, args) : args[0],
+        cache = memoized.cache;
+
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    var result = func.apply(this, args);
+    memoized.cache = cache.set(key, result) || cache;
+    return result;
+  };
+  memoized.cache = new (memoize.Cache || MapCache);
+  return memoized;
+}
+
+// Expose `MapCache`.
+memoize.Cache = MapCache;
+
+/** Used as the maximum memoize cache size. */
+var MAX_MEMOIZE_SIZE = 500;
+
+/**
+ * A specialized version of `_.memoize` which clears the memoized function's
+ * cache when it exceeds `MAX_MEMOIZE_SIZE`.
+ *
+ * @private
+ * @param {Function} func The function to have its output memoized.
+ * @returns {Function} Returns the new memoized function.
+ */
+function memoizeCapped(func) {
+  var result = memoize(func, function(key) {
+    if (cache.size === MAX_MEMOIZE_SIZE) {
+      cache.clear();
+    }
+    return key;
+  });
+
+  var cache = result.cache;
+  return result;
+}
+
+/** Used to match property names within property paths. */
+var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|$))/g;
+
+/** Used to match backslashes in property paths. */
+var reEscapeChar = /\\(\\)?/g;
+
+/**
+ * Converts `string` to a property path array.
+ *
+ * @private
+ * @param {string} string The string to convert.
+ * @returns {Array} Returns the property path array.
+ */
+var stringToPath = memoizeCapped(function(string) {
+  var result = [];
+  if (string.charCodeAt(0) === 46 /* . */) {
+    result.push('');
+  }
+  string.replace(rePropName, function(match, number, quote, subString) {
+    result.push(quote ? subString.replace(reEscapeChar, '$1') : (number || match));
+  });
+  return result;
+});
+
+/**
+ * A specialized version of `_.map` for arrays without support for iteratee
+ * shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ */
+function arrayMap(array, iteratee) {
+  var index = -1,
+      length = array == null ? 0 : array.length,
+      result = Array(length);
+
+  while (++index < length) {
+    result[index] = iteratee(array[index], index, array);
+  }
+  return result;
+}
+
+/** Used as references for various `Number` constants. */
+var INFINITY$3 = 1 / 0;
+
+/** Used to convert symbols to primitives and strings. */
+var symbolProto$2 = Symbol ? Symbol.prototype : undefined,
+    symbolToString = symbolProto$2 ? symbolProto$2.toString : undefined;
+
+/**
+ * The base implementation of `_.toString` which doesn't convert nullish
+ * values to empty strings.
+ *
+ * @private
+ * @param {*} value The value to process.
+ * @returns {string} Returns the string.
+ */
+function baseToString(value) {
+  // Exit early for strings to avoid a performance hit in some environments.
+  if (typeof value == 'string') {
+    return value;
+  }
+  if (isArray(value)) {
+    // Recursively convert values (susceptible to call stack limits).
+    return arrayMap(value, baseToString) + '';
+  }
+  if (isSymbol(value)) {
+    return symbolToString ? symbolToString.call(value) : '';
+  }
+  var result = (value + '');
+  return (result == '0' && (1 / value) == -INFINITY$3) ? '-0' : result;
+}
+
+/**
+ * Converts `value` to a string. An empty string is returned for `null`
+ * and `undefined` values. The sign of `-0` is preserved.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {string} Returns the converted string.
+ * @example
+ *
+ * _.toString(null);
+ * // => ''
+ *
+ * _.toString(-0);
+ * // => '-0'
+ *
+ * _.toString([1, 2, 3]);
+ * // => '1,2,3'
+ */
+function toString(value) {
+  return value == null ? '' : baseToString(value);
+}
+
+/**
+ * Casts `value` to a path array if it's not one.
+ *
+ * @private
+ * @param {*} value The value to inspect.
+ * @param {Object} [object] The object to query keys on.
+ * @returns {Array} Returns the cast property path array.
+ */
+function castPath(value, object) {
+  if (isArray(value)) {
+    return value;
+  }
+  return isKey(value, object) ? [value] : stringToPath(toString(value));
+}
+
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER$1 = 9007199254740991;
+
+/** Used to detect unsigned integer values. */
+var reIsUint = /^(?:0|[1-9]\d*)$/;
+
+/**
+ * Checks if `value` is a valid array-like index.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @param {number} [length=MAX_SAFE_INTEGER] The upper bounds of a valid index.
+ * @returns {boolean} Returns `true` if `value` is a valid index, else `false`.
+ */
+function isIndex(value, length) {
+  var type = typeof value;
+  length = length == null ? MAX_SAFE_INTEGER$1 : length;
+
+  return !!length &&
+    (type == 'number' ||
+      (type != 'symbol' && reIsUint.test(value))) &&
+        (value > -1 && value % 1 == 0 && value < length);
+}
+
+/** Used as references for various `Number` constants. */
+var INFINITY$2 = 1 / 0;
+
+/**
+ * Converts `value` to a string key if it's not a string or symbol.
+ *
+ * @private
+ * @param {*} value The value to inspect.
+ * @returns {string|symbol} Returns the key.
+ */
+function toKey(value) {
+  if (typeof value == 'string' || isSymbol(value)) {
+    return value;
+  }
+  var result = (value + '');
+  return (result == '0' && (1 / value) == -INFINITY$2) ? '-0' : result;
+}
+
+/**
+ * The base implementation of `_.set`.
+ *
+ * @private
+ * @param {Object} object The object to modify.
+ * @param {Array|string} path The path of the property to set.
+ * @param {*} value The value to set.
+ * @param {Function} [customizer] The function to customize path creation.
+ * @returns {Object} Returns `object`.
+ */
+function baseSet(object, path, value, customizer) {
+  if (!isObject$1(object)) {
+    return object;
+  }
+  path = castPath(path, object);
+
+  var index = -1,
+      length = path.length,
+      lastIndex = length - 1,
+      nested = object;
+
+  while (nested != null && ++index < length) {
+    var key = toKey(path[index]),
+        newValue = value;
+
+    if (key === '__proto__' || key === 'constructor' || key === 'prototype') {
+      return object;
+    }
+
+    if (index != lastIndex) {
+      var objValue = nested[key];
+      newValue = customizer ? customizer(objValue, key, nested) : undefined;
+      if (newValue === undefined) {
+        newValue = isObject$1(objValue)
+          ? objValue
+          : (isIndex(path[index + 1]) ? [] : {});
+      }
+    }
+    assignValue(nested, key, newValue);
+    nested = nested[key];
+  }
+  return object;
+}
+
+/**
+ * Sets the value at `path` of `object`. If a portion of `path` doesn't exist,
+ * it's created. Arrays are created for missing index properties while objects
+ * are created for all other missing properties. Use `_.setWith` to customize
+ * `path` creation.
+ *
+ * **Note:** This method mutates `object`.
+ *
+ * @static
+ * @memberOf _
+ * @since 3.7.0
+ * @category Object
+ * @param {Object} object The object to modify.
+ * @param {Array|string} path The path of the property to set.
+ * @param {*} value The value to set.
+ * @returns {Object} Returns `object`.
+ * @example
+ *
+ * var object = { 'a': [{ 'b': { 'c': 3 } }] };
+ *
+ * _.set(object, 'a[0].b.c', 4);
+ * console.log(object.a[0].b.c);
+ * // => 4
+ *
+ * _.set(object, ['x', '0', 'y', 'z'], 5);
+ * console.log(object.x[0].y.z);
+ * // => 5
+ */
+function set(object, path, value) {
+  return object == null ? object : baseSet(object, path, value);
+}
+
+/**
+ * The base implementation of `_.get` without support for default values.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {Array|string} path The path of the property to get.
+ * @returns {*} Returns the resolved value.
+ */
+function baseGet(object, path) {
+  path = castPath(path, object);
+
+  var index = 0,
+      length = path.length;
+
+  while (object != null && index < length) {
+    object = object[toKey(path[index++])];
+  }
+  return (index && index == length) ? object : undefined;
+}
+
+/**
+ * Gets the value at `path` of `object`. If the resolved value is
+ * `undefined`, the `defaultValue` is returned in its place.
+ *
+ * @static
+ * @memberOf _
+ * @since 3.7.0
+ * @category Object
+ * @param {Object} object The object to query.
+ * @param {Array|string} path The path of the property to get.
+ * @param {*} [defaultValue] The value returned for `undefined` resolved values.
+ * @returns {*} Returns the resolved value.
+ * @example
+ *
+ * var object = { 'a': [{ 'b': { 'c': 3 } }] };
+ *
+ * _.get(object, 'a[0].b.c');
+ * // => 3
+ *
+ * _.get(object, ['a', '0', 'b', 'c']);
+ * // => 3
+ *
+ * _.get(object, 'a.b.c', 'default');
+ * // => 'default'
+ */
+function get(object, path, defaultValue) {
+  var result = object == null ? undefined : baseGet(object, path);
+  return result === undefined ? defaultValue : result;
+}
+
+/** Used to stand-in for `undefined` hash values. */
+var HASH_UNDEFINED = '__lodash_hash_undefined__';
+
+/**
+ * Adds `value` to the array cache.
+ *
+ * @private
+ * @name add
+ * @memberOf SetCache
+ * @alias push
+ * @param {*} value The value to cache.
+ * @returns {Object} Returns the cache instance.
+ */
+function setCacheAdd(value) {
+  this.__data__.set(value, HASH_UNDEFINED);
+  return this;
+}
+
+/**
+ * Checks if `value` is in the array cache.
+ *
+ * @private
+ * @name has
+ * @memberOf SetCache
+ * @param {*} value The value to search for.
+ * @returns {number} Returns `true` if `value` is found, else `false`.
+ */
+function setCacheHas(value) {
+  return this.__data__.has(value);
+}
+
+/**
+ *
+ * Creates an array cache object to store unique values.
+ *
+ * @private
+ * @constructor
+ * @param {Array} [values] The values to cache.
+ */
+function SetCache(values) {
+  var index = -1,
+      length = values == null ? 0 : values.length;
+
+  this.__data__ = new MapCache;
+  while (++index < length) {
+    this.add(values[index]);
+  }
+}
+
+// Add methods to `SetCache`.
+SetCache.prototype.add = SetCache.prototype.push = setCacheAdd;
+SetCache.prototype.has = setCacheHas;
+
+/**
+ * The base implementation of `_.findIndex` and `_.findLastIndex` without
+ * support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {Function} predicate The function invoked per iteration.
+ * @param {number} fromIndex The index to search from.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {number} Returns the index of the matched value, else `-1`.
+ */
+function baseFindIndex(array, predicate, fromIndex, fromRight) {
+  var length = array.length,
+      index = fromIndex + (fromRight ? 1 : -1);
+
+  while ((fromRight ? index-- : ++index < length)) {
+    if (predicate(array[index], index, array)) {
+      return index;
+    }
+  }
+  return -1;
+}
+
+/**
+ * The base implementation of `_.isNaN` without support for number objects.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is `NaN`, else `false`.
+ */
+function baseIsNaN(value) {
+  return value !== value;
+}
+
+/**
+ * A specialized version of `_.indexOf` which performs strict equality
+ * comparisons of values, i.e. `===`.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {*} value The value to search for.
+ * @param {number} fromIndex The index to search from.
+ * @returns {number} Returns the index of the matched value, else `-1`.
+ */
+function strictIndexOf(array, value, fromIndex) {
+  var index = fromIndex - 1,
+      length = array.length;
+
+  while (++index < length) {
+    if (array[index] === value) {
+      return index;
+    }
+  }
+  return -1;
+}
+
+/**
+ * The base implementation of `_.indexOf` without `fromIndex` bounds checks.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {*} value The value to search for.
+ * @param {number} fromIndex The index to search from.
+ * @returns {number} Returns the index of the matched value, else `-1`.
+ */
+function baseIndexOf(array, value, fromIndex) {
+  return value === value
+    ? strictIndexOf(array, value, fromIndex)
+    : baseFindIndex(array, baseIsNaN, fromIndex);
+}
+
+/**
+ * A specialized version of `_.includes` for arrays without support for
+ * specifying an index to search from.
+ *
+ * @private
+ * @param {Array} [array] The array to inspect.
+ * @param {*} target The value to search for.
+ * @returns {boolean} Returns `true` if `target` is found, else `false`.
+ */
+function arrayIncludes(array, value) {
+  var length = array == null ? 0 : array.length;
+  return !!length && baseIndexOf(array, value, 0) > -1;
+}
+
+/**
+ * This function is like `arrayIncludes` except that it accepts a comparator.
+ *
+ * @private
+ * @param {Array} [array] The array to inspect.
+ * @param {*} target The value to search for.
+ * @param {Function} comparator The comparator invoked per element.
+ * @returns {boolean} Returns `true` if `target` is found, else `false`.
+ */
+function arrayIncludesWith(array, value, comparator) {
+  var index = -1,
+      length = array == null ? 0 : array.length;
+
+  while (++index < length) {
+    if (comparator(value, array[index])) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Checks if a `cache` value for `key` exists.
+ *
+ * @private
+ * @param {Object} cache The cache to query.
+ * @param {string} key The key of the entry to check.
+ * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+ */
+function cacheHas(cache, key) {
+  return cache.has(key);
+}
+
+/* Built-in method references that are verified to be native. */
+var Set = getNative(root, 'Set');
+
+/**
+ * This method returns `undefined`.
+ *
+ * @static
+ * @memberOf _
+ * @since 2.3.0
+ * @category Util
+ * @example
+ *
+ * _.times(2, _.noop);
+ * // => [undefined, undefined]
+ */
+function noop() {
+  // No operation performed.
+}
+
+/**
+ * Converts `set` to an array of its values.
+ *
+ * @private
+ * @param {Object} set The set to convert.
+ * @returns {Array} Returns the values.
+ */
+function setToArray(set) {
+  var index = -1,
+      result = Array(set.size);
+
+  set.forEach(function(value) {
+    result[++index] = value;
+  });
+  return result;
+}
+
+/** Used as references for various `Number` constants. */
+var INFINITY$1 = 1 / 0;
+
+/**
+ * Creates a set object of `values`.
+ *
+ * @private
+ * @param {Array} values The values to add to the set.
+ * @returns {Object} Returns the new set.
+ */
+var createSet = !(Set && (1 / setToArray(new Set([,-0]))[1]) == INFINITY$1) ? noop : function(values) {
+  return new Set(values);
+};
+
+/** Used as the size to enable large array optimizations. */
+var LARGE_ARRAY_SIZE$1 = 200;
+
+/**
+ * The base implementation of `_.uniqBy` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array} array The array to inspect.
+ * @param {Function} [iteratee] The iteratee invoked per element.
+ * @param {Function} [comparator] The comparator invoked per element.
+ * @returns {Array} Returns the new duplicate free array.
+ */
+function baseUniq(array, iteratee, comparator) {
+  var index = -1,
+      includes = arrayIncludes,
+      length = array.length,
+      isCommon = true,
+      result = [],
+      seen = result;
+
+  if (comparator) {
+    isCommon = false;
+    includes = arrayIncludesWith;
+  }
+  else if (length >= LARGE_ARRAY_SIZE$1) {
+    var set = iteratee ? null : createSet(array);
+    if (set) {
+      return setToArray(set);
+    }
+    isCommon = false;
+    includes = cacheHas;
+    seen = new SetCache;
+  }
+  else {
+    seen = iteratee ? [] : result;
+  }
+  outer:
+  while (++index < length) {
+    var value = array[index],
+        computed = iteratee ? iteratee(value) : value;
+
+    value = (comparator || value !== 0) ? value : 0;
+    if (isCommon && computed === computed) {
+      var seenIndex = seen.length;
+      while (seenIndex--) {
+        if (seen[seenIndex] === computed) {
+          continue outer;
+        }
+      }
+      if (iteratee) {
+        seen.push(computed);
+      }
+      result.push(value);
+    }
+    else if (!includes(seen, computed, comparator)) {
+      if (seen !== result) {
+        seen.push(computed);
+      }
+      result.push(value);
+    }
+  }
+  return result;
+}
+
+/**
+ * Creates a duplicate-free version of an array, using
+ * [`SameValueZero`](http://ecma-international.org/ecma-262/7.0/#sec-samevaluezero)
+ * for equality comparisons, in which only the first occurrence of each element
+ * is kept. The order of result values is determined by the order they occur
+ * in the array.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Array
+ * @param {Array} array The array to inspect.
+ * @returns {Array} Returns the new duplicate free array.
+ * @example
+ *
+ * _.uniq([2, 1, 2]);
+ * // => [2, 1]
+ */
+function uniq(array) {
+  return (array && array.length) ? baseUniq(array) : [];
+}
+
+/**
+ * Removes all key-value entries from the stack.
+ *
+ * @private
+ * @name clear
+ * @memberOf Stack
+ */
+function stackClear() {
+  this.__data__ = new ListCache;
+  this.size = 0;
+}
+
+/**
+ * Removes `key` and its value from the stack.
+ *
+ * @private
+ * @name delete
+ * @memberOf Stack
+ * @param {string} key The key of the value to remove.
+ * @returns {boolean} Returns `true` if the entry was removed, else `false`.
+ */
+function stackDelete(key) {
+  var data = this.__data__,
+      result = data['delete'](key);
+
+  this.size = data.size;
+  return result;
+}
+
+/**
+ * Gets the stack value for `key`.
+ *
+ * @private
+ * @name get
+ * @memberOf Stack
+ * @param {string} key The key of the value to get.
+ * @returns {*} Returns the entry value.
+ */
+function stackGet(key) {
+  return this.__data__.get(key);
+}
+
+/**
+ * Checks if a stack value for `key` exists.
+ *
+ * @private
+ * @name has
+ * @memberOf Stack
+ * @param {string} key The key of the entry to check.
+ * @returns {boolean} Returns `true` if an entry for `key` exists, else `false`.
+ */
+function stackHas(key) {
+  return this.__data__.has(key);
+}
+
+/** Used as the size to enable large array optimizations. */
+var LARGE_ARRAY_SIZE = 200;
+
+/**
+ * Sets the stack `key` to `value`.
+ *
+ * @private
+ * @name set
+ * @memberOf Stack
+ * @param {string} key The key of the value to set.
+ * @param {*} value The value to set.
+ * @returns {Object} Returns the stack cache instance.
+ */
+function stackSet(key, value) {
+  var data = this.__data__;
+  if (data instanceof ListCache) {
+    var pairs = data.__data__;
+    if (!Map || (pairs.length < LARGE_ARRAY_SIZE - 1)) {
+      pairs.push([key, value]);
+      this.size = ++data.size;
+      return this;
+    }
+    data = this.__data__ = new MapCache(pairs);
+  }
+  data.set(key, value);
+  this.size = data.size;
+  return this;
+}
+
+/**
+ * Creates a stack cache object to store key-value pairs.
+ *
+ * @private
+ * @constructor
+ * @param {Array} [entries] The key-value pairs to cache.
+ */
+function Stack(entries) {
+  var data = this.__data__ = new ListCache(entries);
+  this.size = data.size;
+}
+
+// Add methods to `Stack`.
+Stack.prototype.clear = stackClear;
+Stack.prototype['delete'] = stackDelete;
+Stack.prototype.get = stackGet;
+Stack.prototype.has = stackHas;
+Stack.prototype.set = stackSet;
+
+/**
+ * A specialized version of `_.some` for arrays without support for iteratee
+ * shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} predicate The function invoked per iteration.
+ * @returns {boolean} Returns `true` if any element passes the predicate check,
+ *  else `false`.
+ */
+function arraySome(array, predicate) {
+  var index = -1,
+      length = array == null ? 0 : array.length;
+
+  while (++index < length) {
+    if (predicate(array[index], index, array)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/** Used to compose bitmasks for value comparisons. */
+var COMPARE_PARTIAL_FLAG$5 = 1,
+    COMPARE_UNORDERED_FLAG$3 = 2;
+
+/**
+ * A specialized version of `baseIsEqualDeep` for arrays with support for
+ * partial deep comparisons.
+ *
+ * @private
+ * @param {Array} array The array to compare.
+ * @param {Array} other The other array to compare.
+ * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
+ * @param {Function} customizer The function to customize comparisons.
+ * @param {Function} equalFunc The function to determine equivalents of values.
+ * @param {Object} stack Tracks traversed `array` and `other` objects.
+ * @returns {boolean} Returns `true` if the arrays are equivalent, else `false`.
+ */
+function equalArrays(array, other, bitmask, customizer, equalFunc, stack) {
+  var isPartial = bitmask & COMPARE_PARTIAL_FLAG$5,
+      arrLength = array.length,
+      othLength = other.length;
+
+  if (arrLength != othLength && !(isPartial && othLength > arrLength)) {
+    return false;
+  }
+  // Check that cyclic values are equal.
+  var arrStacked = stack.get(array);
+  var othStacked = stack.get(other);
+  if (arrStacked && othStacked) {
+    return arrStacked == other && othStacked == array;
+  }
+  var index = -1,
+      result = true,
+      seen = (bitmask & COMPARE_UNORDERED_FLAG$3) ? new SetCache : undefined;
+
+  stack.set(array, other);
+  stack.set(other, array);
+
+  // Ignore non-index properties.
+  while (++index < arrLength) {
+    var arrValue = array[index],
+        othValue = other[index];
+
+    if (customizer) {
+      var compared = isPartial
+        ? customizer(othValue, arrValue, index, other, array, stack)
+        : customizer(arrValue, othValue, index, array, other, stack);
+    }
+    if (compared !== undefined) {
+      if (compared) {
+        continue;
+      }
+      result = false;
+      break;
+    }
+    // Recursively compare arrays (susceptible to call stack limits).
+    if (seen) {
+      if (!arraySome(other, function(othValue, othIndex) {
+            if (!cacheHas(seen, othIndex) &&
+                (arrValue === othValue || equalFunc(arrValue, othValue, bitmask, customizer, stack))) {
+              return seen.push(othIndex);
+            }
+          })) {
+        result = false;
+        break;
+      }
+    } else if (!(
+          arrValue === othValue ||
+            equalFunc(arrValue, othValue, bitmask, customizer, stack)
+        )) {
+      result = false;
+      break;
+    }
+  }
+  stack['delete'](array);
+  stack['delete'](other);
+  return result;
+}
+
+/** Built-in value references. */
+var Uint8Array = root.Uint8Array;
+
+/**
+ * Converts `map` to its key-value pairs.
+ *
+ * @private
+ * @param {Object} map The map to convert.
+ * @returns {Array} Returns the key-value pairs.
+ */
+function mapToArray(map) {
+  var index = -1,
+      result = Array(map.size);
+
+  map.forEach(function(value, key) {
+    result[++index] = [key, value];
+  });
+  return result;
+}
+
+/** Used to compose bitmasks for value comparisons. */
+var COMPARE_PARTIAL_FLAG$4 = 1,
+    COMPARE_UNORDERED_FLAG$2 = 2;
+
+/** `Object#toString` result references. */
+var boolTag$3 = '[object Boolean]',
+    dateTag$3 = '[object Date]',
+    errorTag$2 = '[object Error]',
+    mapTag$6 = '[object Map]',
+    numberTag$3 = '[object Number]',
+    regexpTag$3 = '[object RegExp]',
+    setTag$6 = '[object Set]',
+    stringTag$3 = '[object String]',
+    symbolTag$2 = '[object Symbol]';
+
+var arrayBufferTag$3 = '[object ArrayBuffer]',
+    dataViewTag$4 = '[object DataView]';
+
+/** Used to convert symbols to primitives and strings. */
+var symbolProto$1 = Symbol ? Symbol.prototype : undefined,
+    symbolValueOf$1 = symbolProto$1 ? symbolProto$1.valueOf : undefined;
+
+/**
+ * A specialized version of `baseIsEqualDeep` for comparing objects of
+ * the same `toStringTag`.
+ *
+ * **Note:** This function only supports comparing values with tags of
+ * `Boolean`, `Date`, `Error`, `Number`, `RegExp`, or `String`.
+ *
+ * @private
+ * @param {Object} object The object to compare.
+ * @param {Object} other The other object to compare.
+ * @param {string} tag The `toStringTag` of the objects to compare.
+ * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
+ * @param {Function} customizer The function to customize comparisons.
+ * @param {Function} equalFunc The function to determine equivalents of values.
+ * @param {Object} stack Tracks traversed `object` and `other` objects.
+ * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+ */
+function equalByTag(object, other, tag, bitmask, customizer, equalFunc, stack) {
+  switch (tag) {
+    case dataViewTag$4:
+      if ((object.byteLength != other.byteLength) ||
+          (object.byteOffset != other.byteOffset)) {
+        return false;
+      }
+      object = object.buffer;
+      other = other.buffer;
+
+    case arrayBufferTag$3:
+      if ((object.byteLength != other.byteLength) ||
+          !equalFunc(new Uint8Array(object), new Uint8Array(other))) {
+        return false;
+      }
+      return true;
+
+    case boolTag$3:
+    case dateTag$3:
+    case numberTag$3:
+      // Coerce booleans to `1` or `0` and dates to milliseconds.
+      // Invalid dates are coerced to `NaN`.
+      return eq(+object, +other);
+
+    case errorTag$2:
+      return object.name == other.name && object.message == other.message;
+
+    case regexpTag$3:
+    case stringTag$3:
+      // Coerce regexes to strings and treat strings, primitives and objects,
+      // as equal. See http://www.ecma-international.org/ecma-262/7.0/#sec-regexp.prototype.tostring
+      // for more details.
+      return object == (other + '');
+
+    case mapTag$6:
+      var convert = mapToArray;
+
+    case setTag$6:
+      var isPartial = bitmask & COMPARE_PARTIAL_FLAG$4;
+      convert || (convert = setToArray);
+
+      if (object.size != other.size && !isPartial) {
+        return false;
+      }
+      // Assume cyclic values are equal.
+      var stacked = stack.get(object);
+      if (stacked) {
+        return stacked == other;
+      }
+      bitmask |= COMPARE_UNORDERED_FLAG$2;
+
+      // Recursively compare objects (susceptible to call stack limits).
+      stack.set(object, other);
+      var result = equalArrays(convert(object), convert(other), bitmask, customizer, equalFunc, stack);
+      stack['delete'](object);
+      return result;
+
+    case symbolTag$2:
+      if (symbolValueOf$1) {
+        return symbolValueOf$1.call(object) == symbolValueOf$1.call(other);
+      }
+  }
+  return false;
+}
+
+/**
+ * Appends the elements of `values` to `array`.
+ *
+ * @private
+ * @param {Array} array The array to modify.
+ * @param {Array} values The values to append.
+ * @returns {Array} Returns `array`.
+ */
+function arrayPush(array, values) {
+  var index = -1,
+      length = values.length,
+      offset = array.length;
+
+  while (++index < length) {
+    array[offset + index] = values[index];
+  }
+  return array;
+}
+
+/**
+ * The base implementation of `getAllKeys` and `getAllKeysIn` which uses
+ * `keysFunc` and `symbolsFunc` to get the enumerable property names and
+ * symbols of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {Function} keysFunc The function to get the keys of `object`.
+ * @param {Function} symbolsFunc The function to get the symbols of `object`.
+ * @returns {Array} Returns the array of property names and symbols.
+ */
+function baseGetAllKeys(object, keysFunc, symbolsFunc) {
+  var result = keysFunc(object);
+  return isArray(object) ? result : arrayPush(result, symbolsFunc(object));
+}
+
+/**
+ * A specialized version of `_.filter` for arrays without support for
+ * iteratee shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} predicate The function invoked per iteration.
+ * @returns {Array} Returns the new filtered array.
+ */
+function arrayFilter(array, predicate) {
+  var index = -1,
+      length = array == null ? 0 : array.length,
+      resIndex = 0,
+      result = [];
+
+  while (++index < length) {
+    var value = array[index];
+    if (predicate(value, index, array)) {
+      result[resIndex++] = value;
+    }
+  }
+  return result;
+}
+
+/**
+ * This method returns a new empty array.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.13.0
+ * @category Util
+ * @returns {Array} Returns the new empty array.
+ * @example
+ *
+ * var arrays = _.times(2, _.stubArray);
+ *
+ * console.log(arrays);
+ * // => [[], []]
+ *
+ * console.log(arrays[0] === arrays[1]);
+ * // => false
+ */
+function stubArray() {
+  return [];
+}
+
+/** Used for built-in method references. */
+var objectProto$9 = Object.prototype;
+
+/** Built-in value references. */
+var propertyIsEnumerable$1 = objectProto$9.propertyIsEnumerable;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeGetSymbols$1 = Object.getOwnPropertySymbols;
+
+/**
+ * Creates an array of the own enumerable symbols of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of symbols.
+ */
+var getSymbols = !nativeGetSymbols$1 ? stubArray : function(object) {
+  if (object == null) {
+    return [];
+  }
+  object = Object(object);
+  return arrayFilter(nativeGetSymbols$1(object), function(symbol) {
+    return propertyIsEnumerable$1.call(object, symbol);
+  });
+};
+
+/**
+ * The base implementation of `_.times` without support for iteratee shorthands
+ * or max array length checks.
+ *
+ * @private
+ * @param {number} n The number of times to invoke `iteratee`.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the array of results.
+ */
+function baseTimes(n, iteratee) {
+  var index = -1,
+      result = Array(n);
+
+  while (++index < n) {
+    result[index] = iteratee(index);
+  }
+  return result;
+}
+
+/** `Object#toString` result references. */
+var argsTag$3 = '[object Arguments]';
+
+/**
+ * The base implementation of `_.isArguments`.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+ */
+function baseIsArguments(value) {
+  return isObjectLike(value) && baseGetTag(value) == argsTag$3;
+}
+
+/** Used for built-in method references. */
+var objectProto$8 = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$7 = objectProto$8.hasOwnProperty;
+
+/** Built-in value references. */
+var propertyIsEnumerable = objectProto$8.propertyIsEnumerable;
+
+/**
+ * Checks if `value` is likely an `arguments` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is an `arguments` object,
+ *  else `false`.
+ * @example
+ *
+ * _.isArguments(function() { return arguments; }());
+ * // => true
+ *
+ * _.isArguments([1, 2, 3]);
+ * // => false
+ */
+var isArguments = baseIsArguments(function() { return arguments; }()) ? baseIsArguments : function(value) {
+  return isObjectLike(value) && hasOwnProperty$7.call(value, 'callee') &&
+    !propertyIsEnumerable.call(value, 'callee');
+};
+
+/**
+ * This method returns `false`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.13.0
+ * @category Util
+ * @returns {boolean} Returns `false`.
+ * @example
+ *
+ * _.times(2, _.stubFalse);
+ * // => [false, false]
+ */
+function stubFalse() {
+  return false;
+}
+
+/** Detect free variable `exports`. */
+var freeExports$2 = typeof exports == 'object' && exports && !exports.nodeType && exports;
+
+/** Detect free variable `module`. */
+var freeModule$2 = freeExports$2 && typeof module == 'object' && module && !module.nodeType && module;
+
+/** Detect the popular CommonJS extension `module.exports`. */
+var moduleExports$2 = freeModule$2 && freeModule$2.exports === freeExports$2;
+
+/** Built-in value references. */
+var Buffer$2 = moduleExports$2 ? root.Buffer : undefined;
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeIsBuffer = Buffer$2 ? Buffer$2.isBuffer : undefined;
+
+/**
+ * Checks if `value` is a buffer.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.3.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a buffer, else `false`.
+ * @example
+ *
+ * _.isBuffer(new Buffer(2));
+ * // => true
+ *
+ * _.isBuffer(new Uint8Array(2));
+ * // => false
+ */
+var isBuffer = nativeIsBuffer || stubFalse;
+
+/** Used as references for various `Number` constants. */
+var MAX_SAFE_INTEGER = 9007199254740991;
+
+/**
+ * Checks if `value` is a valid array-like length.
+ *
+ * **Note:** This method is loosely based on
+ * [`ToLength`](http://ecma-international.org/ecma-262/7.0/#sec-tolength).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a valid length, else `false`.
+ * @example
+ *
+ * _.isLength(3);
+ * // => true
+ *
+ * _.isLength(Number.MIN_VALUE);
+ * // => false
+ *
+ * _.isLength(Infinity);
+ * // => false
+ *
+ * _.isLength('3');
+ * // => false
+ */
+function isLength(value) {
+  return typeof value == 'number' &&
+    value > -1 && value % 1 == 0 && value <= MAX_SAFE_INTEGER;
+}
+
+/** `Object#toString` result references. */
+var argsTag$2 = '[object Arguments]',
+    arrayTag$2 = '[object Array]',
+    boolTag$2 = '[object Boolean]',
+    dateTag$2 = '[object Date]',
+    errorTag$1 = '[object Error]',
+    funcTag$1 = '[object Function]',
+    mapTag$5 = '[object Map]',
+    numberTag$2 = '[object Number]',
+    objectTag$3 = '[object Object]',
+    regexpTag$2 = '[object RegExp]',
+    setTag$5 = '[object Set]',
+    stringTag$2 = '[object String]',
+    weakMapTag$2 = '[object WeakMap]';
+
+var arrayBufferTag$2 = '[object ArrayBuffer]',
+    dataViewTag$3 = '[object DataView]',
+    float32Tag$2 = '[object Float32Array]',
+    float64Tag$2 = '[object Float64Array]',
+    int8Tag$2 = '[object Int8Array]',
+    int16Tag$2 = '[object Int16Array]',
+    int32Tag$2 = '[object Int32Array]',
+    uint8Tag$2 = '[object Uint8Array]',
+    uint8ClampedTag$2 = '[object Uint8ClampedArray]',
+    uint16Tag$2 = '[object Uint16Array]',
+    uint32Tag$2 = '[object Uint32Array]';
+
+/** Used to identify `toStringTag` values of typed arrays. */
+var typedArrayTags = {};
+typedArrayTags[float32Tag$2] = typedArrayTags[float64Tag$2] =
+typedArrayTags[int8Tag$2] = typedArrayTags[int16Tag$2] =
+typedArrayTags[int32Tag$2] = typedArrayTags[uint8Tag$2] =
+typedArrayTags[uint8ClampedTag$2] = typedArrayTags[uint16Tag$2] =
+typedArrayTags[uint32Tag$2] = true;
+typedArrayTags[argsTag$2] = typedArrayTags[arrayTag$2] =
+typedArrayTags[arrayBufferTag$2] = typedArrayTags[boolTag$2] =
+typedArrayTags[dataViewTag$3] = typedArrayTags[dateTag$2] =
+typedArrayTags[errorTag$1] = typedArrayTags[funcTag$1] =
+typedArrayTags[mapTag$5] = typedArrayTags[numberTag$2] =
+typedArrayTags[objectTag$3] = typedArrayTags[regexpTag$2] =
+typedArrayTags[setTag$5] = typedArrayTags[stringTag$2] =
+typedArrayTags[weakMapTag$2] = false;
+
+/**
+ * The base implementation of `_.isTypedArray` without Node.js optimizations.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
+ */
+function baseIsTypedArray(value) {
+  return isObjectLike(value) &&
+    isLength(value.length) && !!typedArrayTags[baseGetTag(value)];
+}
+
+/**
+ * The base implementation of `_.unary` without support for storing metadata.
+ *
+ * @private
+ * @param {Function} func The function to cap arguments for.
+ * @returns {Function} Returns the new capped function.
+ */
+function baseUnary(func) {
+  return function(value) {
+    return func(value);
+  };
+}
+
+/** Detect free variable `exports`. */
+var freeExports$1 = typeof exports == 'object' && exports && !exports.nodeType && exports;
+
+/** Detect free variable `module`. */
+var freeModule$1 = freeExports$1 && typeof module == 'object' && module && !module.nodeType && module;
+
+/** Detect the popular CommonJS extension `module.exports`. */
+var moduleExports$1 = freeModule$1 && freeModule$1.exports === freeExports$1;
+
+/** Detect free variable `process` from Node.js. */
+var freeProcess = moduleExports$1 && freeGlobal.process;
+
+/** Used to access faster Node.js helpers. */
+var nodeUtil = (function() {
+  try {
+    // Use `util.types` for Node.js 10+.
+    var types = freeModule$1 && freeModule$1.require && freeModule$1.require('util').types;
+
+    if (types) {
+      return types;
+    }
+
+    // Legacy `process.binding('util')` for Node.js < 10.
+    return freeProcess && freeProcess.binding && freeProcess.binding('util');
+  } catch (e) {}
+}());
+
+/* Node.js helper references. */
+var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
+
+/**
+ * Checks if `value` is classified as a typed array.
+ *
+ * @static
+ * @memberOf _
+ * @since 3.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a typed array, else `false`.
+ * @example
+ *
+ * _.isTypedArray(new Uint8Array);
+ * // => true
+ *
+ * _.isTypedArray([]);
+ * // => false
+ */
+var isTypedArray = nodeIsTypedArray ? baseUnary(nodeIsTypedArray) : baseIsTypedArray;
+
+/** Used for built-in method references. */
+var objectProto$7 = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$6 = objectProto$7.hasOwnProperty;
+
+/**
+ * Creates an array of the enumerable property names of the array-like `value`.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @param {boolean} inherited Specify returning inherited property names.
+ * @returns {Array} Returns the array of property names.
+ */
+function arrayLikeKeys(value, inherited) {
+  var isArr = isArray(value),
+      isArg = !isArr && isArguments(value),
+      isBuff = !isArr && !isArg && isBuffer(value),
+      isType = !isArr && !isArg && !isBuff && isTypedArray(value),
+      skipIndexes = isArr || isArg || isBuff || isType,
+      result = skipIndexes ? baseTimes(value.length, String) : [],
+      length = result.length;
+
+  for (var key in value) {
+    if ((inherited || hasOwnProperty$6.call(value, key)) &&
+        !(skipIndexes && (
+           // Safari 9 has enumerable `arguments.length` in strict mode.
+           key == 'length' ||
+           // Node.js 0.10 has enumerable non-index properties on buffers.
+           (isBuff && (key == 'offset' || key == 'parent')) ||
+           // PhantomJS 2 has enumerable non-index properties on typed arrays.
+           (isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset')) ||
+           // Skip index properties.
+           isIndex(key, length)
+        ))) {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+/** Used for built-in method references. */
+var objectProto$6 = Object.prototype;
+
+/**
+ * Checks if `value` is likely a prototype object.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a prototype, else `false`.
+ */
+function isPrototype(value) {
+  var Ctor = value && value.constructor,
+      proto = (typeof Ctor == 'function' && Ctor.prototype) || objectProto$6;
+
+  return value === proto;
+}
+
+/**
+ * Creates a unary function that invokes `func` with its argument transformed.
+ *
+ * @private
+ * @param {Function} func The function to wrap.
+ * @param {Function} transform The argument transform.
+ * @returns {Function} Returns the new function.
+ */
+function overArg(func, transform) {
+  return function(arg) {
+    return func(transform(arg));
+  };
+}
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeKeys = overArg(Object.keys, Object);
+
+/** Used for built-in method references. */
+var objectProto$5 = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$5 = objectProto$5.hasOwnProperty;
+
+/**
+ * The base implementation of `_.keys` which doesn't treat sparse arrays as dense.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ */
+function baseKeys(object) {
+  if (!isPrototype(object)) {
+    return nativeKeys(object);
+  }
+  var result = [];
+  for (var key in Object(object)) {
+    if (hasOwnProperty$5.call(object, key) && key != 'constructor') {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+/**
+ * Checks if `value` is array-like. A value is considered array-like if it's
+ * not a function and has a `value.length` that's an integer greater than or
+ * equal to `0` and less than or equal to `Number.MAX_SAFE_INTEGER`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is array-like, else `false`.
+ * @example
+ *
+ * _.isArrayLike([1, 2, 3]);
+ * // => true
+ *
+ * _.isArrayLike(document.body.children);
+ * // => true
+ *
+ * _.isArrayLike('abc');
+ * // => true
+ *
+ * _.isArrayLike(_.noop);
+ * // => false
+ */
+function isArrayLike(value) {
+  return value != null && isLength(value.length) && !isFunction$1(value);
+}
+
+/**
+ * Creates an array of the own enumerable property names of `object`.
+ *
+ * **Note:** Non-object values are coerced to objects. See the
+ * [ES spec](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
+ * for more details.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Object
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ *   this.b = 2;
+ * }
+ *
+ * Foo.prototype.c = 3;
+ *
+ * _.keys(new Foo);
+ * // => ['a', 'b'] (iteration order is not guaranteed)
+ *
+ * _.keys('hi');
+ * // => ['0', '1']
+ */
+function keys(object) {
+  return isArrayLike(object) ? arrayLikeKeys(object) : baseKeys(object);
+}
+
+/**
+ * Creates an array of own enumerable property names and symbols of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names and symbols.
+ */
+function getAllKeys(object) {
+  return baseGetAllKeys(object, keys, getSymbols);
+}
+
+/** Used to compose bitmasks for value comparisons. */
+var COMPARE_PARTIAL_FLAG$3 = 1;
+
+/** Used for built-in method references. */
+var objectProto$4 = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$4 = objectProto$4.hasOwnProperty;
+
+/**
+ * A specialized version of `baseIsEqualDeep` for objects with support for
+ * partial deep comparisons.
+ *
+ * @private
+ * @param {Object} object The object to compare.
+ * @param {Object} other The other object to compare.
+ * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
+ * @param {Function} customizer The function to customize comparisons.
+ * @param {Function} equalFunc The function to determine equivalents of values.
+ * @param {Object} stack Tracks traversed `object` and `other` objects.
+ * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+ */
+function equalObjects(object, other, bitmask, customizer, equalFunc, stack) {
+  var isPartial = bitmask & COMPARE_PARTIAL_FLAG$3,
+      objProps = getAllKeys(object),
+      objLength = objProps.length,
+      othProps = getAllKeys(other),
+      othLength = othProps.length;
+
+  if (objLength != othLength && !isPartial) {
+    return false;
+  }
+  var index = objLength;
+  while (index--) {
+    var key = objProps[index];
+    if (!(isPartial ? key in other : hasOwnProperty$4.call(other, key))) {
+      return false;
+    }
+  }
+  // Check that cyclic values are equal.
+  var objStacked = stack.get(object);
+  var othStacked = stack.get(other);
+  if (objStacked && othStacked) {
+    return objStacked == other && othStacked == object;
+  }
+  var result = true;
+  stack.set(object, other);
+  stack.set(other, object);
+
+  var skipCtor = isPartial;
+  while (++index < objLength) {
+    key = objProps[index];
+    var objValue = object[key],
+        othValue = other[key];
+
+    if (customizer) {
+      var compared = isPartial
+        ? customizer(othValue, objValue, key, other, object, stack)
+        : customizer(objValue, othValue, key, object, other, stack);
+    }
+    // Recursively compare objects (susceptible to call stack limits).
+    if (!(compared === undefined
+          ? (objValue === othValue || equalFunc(objValue, othValue, bitmask, customizer, stack))
+          : compared
+        )) {
+      result = false;
+      break;
+    }
+    skipCtor || (skipCtor = key == 'constructor');
+  }
+  if (result && !skipCtor) {
+    var objCtor = object.constructor,
+        othCtor = other.constructor;
+
+    // Non `Object` object instances with different constructors are not equal.
+    if (objCtor != othCtor &&
+        ('constructor' in object && 'constructor' in other) &&
+        !(typeof objCtor == 'function' && objCtor instanceof objCtor &&
+          typeof othCtor == 'function' && othCtor instanceof othCtor)) {
+      result = false;
+    }
+  }
+  stack['delete'](object);
+  stack['delete'](other);
+  return result;
+}
+
+/* Built-in method references that are verified to be native. */
+var DataView = getNative(root, 'DataView');
+
+/* Built-in method references that are verified to be native. */
+var Promise$1 = getNative(root, 'Promise');
+
+/* Built-in method references that are verified to be native. */
+var WeakMap = getNative(root, 'WeakMap');
+
+/** `Object#toString` result references. */
+var mapTag$4 = '[object Map]',
+    objectTag$2 = '[object Object]',
+    promiseTag = '[object Promise]',
+    setTag$4 = '[object Set]',
+    weakMapTag$1 = '[object WeakMap]';
+
+var dataViewTag$2 = '[object DataView]';
+
+/** Used to detect maps, sets, and weakmaps. */
+var dataViewCtorString = toSource(DataView),
+    mapCtorString = toSource(Map),
+    promiseCtorString = toSource(Promise$1),
+    setCtorString = toSource(Set),
+    weakMapCtorString = toSource(WeakMap);
+
+/**
+ * Gets the `toStringTag` of `value`.
+ *
+ * @private
+ * @param {*} value The value to query.
+ * @returns {string} Returns the `toStringTag`.
+ */
+var getTag = baseGetTag;
+
+// Fallback for data views, maps, sets, and weak maps in IE 11 and promises in Node.js < 6.
+if ((DataView && getTag(new DataView(new ArrayBuffer(1))) != dataViewTag$2) ||
+    (Map && getTag(new Map) != mapTag$4) ||
+    (Promise$1 && getTag(Promise$1.resolve()) != promiseTag) ||
+    (Set && getTag(new Set) != setTag$4) ||
+    (WeakMap && getTag(new WeakMap) != weakMapTag$1)) {
+  getTag = function(value) {
+    var result = baseGetTag(value),
+        Ctor = result == objectTag$2 ? value.constructor : undefined,
+        ctorString = Ctor ? toSource(Ctor) : '';
+
+    if (ctorString) {
+      switch (ctorString) {
+        case dataViewCtorString: return dataViewTag$2;
+        case mapCtorString: return mapTag$4;
+        case promiseCtorString: return promiseTag;
+        case setCtorString: return setTag$4;
+        case weakMapCtorString: return weakMapTag$1;
+      }
+    }
+    return result;
+  };
+}
+
+var getTag$1 = getTag;
+
+/** Used to compose bitmasks for value comparisons. */
+var COMPARE_PARTIAL_FLAG$2 = 1;
+
+/** `Object#toString` result references. */
+var argsTag$1 = '[object Arguments]',
+    arrayTag$1 = '[object Array]',
+    objectTag$1 = '[object Object]';
+
+/** Used for built-in method references. */
+var objectProto$3 = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$3 = objectProto$3.hasOwnProperty;
+
+/**
+ * A specialized version of `baseIsEqual` for arrays and objects which performs
+ * deep comparisons and tracks traversed objects enabling objects with circular
+ * references to be compared.
+ *
+ * @private
+ * @param {Object} object The object to compare.
+ * @param {Object} other The other object to compare.
+ * @param {number} bitmask The bitmask flags. See `baseIsEqual` for more details.
+ * @param {Function} customizer The function to customize comparisons.
+ * @param {Function} equalFunc The function to determine equivalents of values.
+ * @param {Object} [stack] Tracks traversed `object` and `other` objects.
+ * @returns {boolean} Returns `true` if the objects are equivalent, else `false`.
+ */
+function baseIsEqualDeep(object, other, bitmask, customizer, equalFunc, stack) {
+  var objIsArr = isArray(object),
+      othIsArr = isArray(other),
+      objTag = objIsArr ? arrayTag$1 : getTag$1(object),
+      othTag = othIsArr ? arrayTag$1 : getTag$1(other);
+
+  objTag = objTag == argsTag$1 ? objectTag$1 : objTag;
+  othTag = othTag == argsTag$1 ? objectTag$1 : othTag;
+
+  var objIsObj = objTag == objectTag$1,
+      othIsObj = othTag == objectTag$1,
+      isSameTag = objTag == othTag;
+
+  if (isSameTag && isBuffer(object)) {
+    if (!isBuffer(other)) {
+      return false;
+    }
+    objIsArr = true;
+    objIsObj = false;
+  }
+  if (isSameTag && !objIsObj) {
+    stack || (stack = new Stack);
+    return (objIsArr || isTypedArray(object))
+      ? equalArrays(object, other, bitmask, customizer, equalFunc, stack)
+      : equalByTag(object, other, objTag, bitmask, customizer, equalFunc, stack);
+  }
+  if (!(bitmask & COMPARE_PARTIAL_FLAG$2)) {
+    var objIsWrapped = objIsObj && hasOwnProperty$3.call(object, '__wrapped__'),
+        othIsWrapped = othIsObj && hasOwnProperty$3.call(other, '__wrapped__');
+
+    if (objIsWrapped || othIsWrapped) {
+      var objUnwrapped = objIsWrapped ? object.value() : object,
+          othUnwrapped = othIsWrapped ? other.value() : other;
+
+      stack || (stack = new Stack);
+      return equalFunc(objUnwrapped, othUnwrapped, bitmask, customizer, stack);
+    }
+  }
+  if (!isSameTag) {
+    return false;
+  }
+  stack || (stack = new Stack);
+  return equalObjects(object, other, bitmask, customizer, equalFunc, stack);
+}
+
+/**
+ * The base implementation of `_.isEqual` which supports partial comparisons
+ * and tracks traversed objects.
+ *
+ * @private
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @param {boolean} bitmask The bitmask flags.
+ *  1 - Unordered comparison
+ *  2 - Partial comparison
+ * @param {Function} [customizer] The function to customize comparisons.
+ * @param {Object} [stack] Tracks traversed `value` and `other` objects.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ */
+function baseIsEqual(value, other, bitmask, customizer, stack) {
+  if (value === other) {
+    return true;
+  }
+  if (value == null || other == null || (!isObjectLike(value) && !isObjectLike(other))) {
+    return value !== value && other !== other;
+  }
+  return baseIsEqualDeep(value, other, bitmask, customizer, baseIsEqual, stack);
+}
+
+/** Used to compose bitmasks for value comparisons. */
+var COMPARE_PARTIAL_FLAG$1 = 1,
+    COMPARE_UNORDERED_FLAG$1 = 2;
+
+/**
+ * The base implementation of `_.isMatch` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Object} object The object to inspect.
+ * @param {Object} source The object of property values to match.
+ * @param {Array} matchData The property names, values, and compare flags to match.
+ * @param {Function} [customizer] The function to customize comparisons.
+ * @returns {boolean} Returns `true` if `object` is a match, else `false`.
+ */
+function baseIsMatch(object, source, matchData, customizer) {
+  var index = matchData.length,
+      length = index,
+      noCustomizer = !customizer;
+
+  if (object == null) {
+    return !length;
+  }
+  object = Object(object);
+  while (index--) {
+    var data = matchData[index];
+    if ((noCustomizer && data[2])
+          ? data[1] !== object[data[0]]
+          : !(data[0] in object)
+        ) {
+      return false;
+    }
+  }
+  while (++index < length) {
+    data = matchData[index];
+    var key = data[0],
+        objValue = object[key],
+        srcValue = data[1];
+
+    if (noCustomizer && data[2]) {
+      if (objValue === undefined && !(key in object)) {
+        return false;
+      }
+    } else {
+      var stack = new Stack;
+      if (customizer) {
+        var result = customizer(objValue, srcValue, key, object, source, stack);
+      }
+      if (!(result === undefined
+            ? baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG$1 | COMPARE_UNORDERED_FLAG$1, customizer, stack)
+            : result
+          )) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+/**
+ * Checks if `value` is suitable for strict equality comparisons, i.e. `===`.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` if suitable for strict
+ *  equality comparisons, else `false`.
+ */
+function isStrictComparable(value) {
+  return value === value && !isObject$1(value);
+}
+
+/**
+ * Gets the property names, values, and compare flags of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the match data of `object`.
+ */
+function getMatchData(object) {
+  var result = keys(object),
+      length = result.length;
+
+  while (length--) {
+    var key = result[length],
+        value = object[key];
+
+    result[length] = [key, value, isStrictComparable(value)];
+  }
+  return result;
+}
+
+/**
+ * A specialized version of `matchesProperty` for source values suitable
+ * for strict equality comparisons, i.e. `===`.
+ *
+ * @private
+ * @param {string} key The key of the property to get.
+ * @param {*} srcValue The value to match.
+ * @returns {Function} Returns the new spec function.
+ */
+function matchesStrictComparable(key, srcValue) {
+  return function(object) {
+    if (object == null) {
+      return false;
+    }
+    return object[key] === srcValue &&
+      (srcValue !== undefined || (key in Object(object)));
+  };
+}
+
+/**
+ * The base implementation of `_.matches` which doesn't clone `source`.
+ *
+ * @private
+ * @param {Object} source The object of property values to match.
+ * @returns {Function} Returns the new spec function.
+ */
+function baseMatches(source) {
+  var matchData = getMatchData(source);
+  if (matchData.length == 1 && matchData[0][2]) {
+    return matchesStrictComparable(matchData[0][0], matchData[0][1]);
+  }
+  return function(object) {
+    return object === source || baseIsMatch(object, source, matchData);
+  };
+}
+
+/**
+ * The base implementation of `_.hasIn` without support for deep paths.
+ *
+ * @private
+ * @param {Object} [object] The object to query.
+ * @param {Array|string} key The key to check.
+ * @returns {boolean} Returns `true` if `key` exists, else `false`.
+ */
+function baseHasIn(object, key) {
+  return object != null && key in Object(object);
+}
+
+/**
+ * Checks if `path` exists on `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @param {Array|string} path The path to check.
+ * @param {Function} hasFunc The function to check properties.
+ * @returns {boolean} Returns `true` if `path` exists, else `false`.
+ */
+function hasPath(object, path, hasFunc) {
+  path = castPath(path, object);
+
+  var index = -1,
+      length = path.length,
+      result = false;
+
+  while (++index < length) {
+    var key = toKey(path[index]);
+    if (!(result = object != null && hasFunc(object, key))) {
+      break;
+    }
+    object = object[key];
+  }
+  if (result || ++index != length) {
+    return result;
+  }
+  length = object == null ? 0 : object.length;
+  return !!length && isLength(length) && isIndex(key, length) &&
+    (isArray(object) || isArguments(object));
+}
+
+/**
+ * Checks if `path` is a direct or inherited property of `object`.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Object
+ * @param {Object} object The object to query.
+ * @param {Array|string} path The path to check.
+ * @returns {boolean} Returns `true` if `path` exists, else `false`.
+ * @example
+ *
+ * var object = _.create({ 'a': _.create({ 'b': 2 }) });
+ *
+ * _.hasIn(object, 'a');
+ * // => true
+ *
+ * _.hasIn(object, 'a.b');
+ * // => true
+ *
+ * _.hasIn(object, ['a', 'b']);
+ * // => true
+ *
+ * _.hasIn(object, 'b');
+ * // => false
+ */
+function hasIn(object, path) {
+  return object != null && hasPath(object, path, baseHasIn);
+}
+
+/** Used to compose bitmasks for value comparisons. */
+var COMPARE_PARTIAL_FLAG = 1,
+    COMPARE_UNORDERED_FLAG = 2;
+
+/**
+ * The base implementation of `_.matchesProperty` which doesn't clone `srcValue`.
+ *
+ * @private
+ * @param {string} path The path of the property to get.
+ * @param {*} srcValue The value to match.
+ * @returns {Function} Returns the new spec function.
+ */
+function baseMatchesProperty(path, srcValue) {
+  if (isKey(path) && isStrictComparable(srcValue)) {
+    return matchesStrictComparable(toKey(path), srcValue);
+  }
+  return function(object) {
+    var objValue = get(object, path);
+    return (objValue === undefined && objValue === srcValue)
+      ? hasIn(object, path)
+      : baseIsEqual(srcValue, objValue, COMPARE_PARTIAL_FLAG | COMPARE_UNORDERED_FLAG);
+  };
+}
+
+/**
+ * This method returns the first argument it receives.
+ *
+ * @static
+ * @since 0.1.0
+ * @memberOf _
+ * @category Util
+ * @param {*} value Any value.
+ * @returns {*} Returns `value`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ *
+ * console.log(_.identity(object) === object);
+ * // => true
+ */
+function identity(value) {
+  return value;
+}
+
+/**
+ * The base implementation of `_.property` without support for deep paths.
+ *
+ * @private
+ * @param {string} key The key of the property to get.
+ * @returns {Function} Returns the new accessor function.
+ */
+function baseProperty(key) {
+  return function(object) {
+    return object == null ? undefined : object[key];
+  };
+}
+
+/**
+ * A specialized version of `baseProperty` which supports deep paths.
+ *
+ * @private
+ * @param {Array|string} path The path of the property to get.
+ * @returns {Function} Returns the new accessor function.
+ */
+function basePropertyDeep(path) {
+  return function(object) {
+    return baseGet(object, path);
+  };
+}
+
+/**
+ * Creates a function that returns the value at `path` of a given object.
+ *
+ * @static
+ * @memberOf _
+ * @since 2.4.0
+ * @category Util
+ * @param {Array|string} path The path of the property to get.
+ * @returns {Function} Returns the new accessor function.
+ * @example
+ *
+ * var objects = [
+ *   { 'a': { 'b': 2 } },
+ *   { 'a': { 'b': 1 } }
+ * ];
+ *
+ * _.map(objects, _.property('a.b'));
+ * // => [2, 1]
+ *
+ * _.map(_.sortBy(objects, _.property(['a', 'b'])), 'a.b');
+ * // => [1, 2]
+ */
+function property(path) {
+  return isKey(path) ? baseProperty(toKey(path)) : basePropertyDeep(path);
+}
+
+/**
+ * The base implementation of `_.iteratee`.
+ *
+ * @private
+ * @param {*} [value=_.identity] The value to convert to an iteratee.
+ * @returns {Function} Returns the iteratee.
+ */
+function baseIteratee(value) {
+  // Don't store the `typeof` result in a variable to avoid a JIT bug in Safari 9.
+  // See https://bugs.webkit.org/show_bug.cgi?id=156034 for more details.
+  if (typeof value == 'function') {
+    return value;
+  }
+  if (value == null) {
+    return identity;
+  }
+  if (typeof value == 'object') {
+    return isArray(value)
+      ? baseMatchesProperty(value[0], value[1])
+      : baseMatches(value);
+  }
+  return property(value);
+}
+
+/**
+ * Creates a `_.find` or `_.findLast` function.
+ *
+ * @private
+ * @param {Function} findIndexFunc The function to find the collection index.
+ * @returns {Function} Returns the new find function.
+ */
+function createFind(findIndexFunc) {
+  return function(collection, predicate, fromIndex) {
+    var iterable = Object(collection);
+    if (!isArrayLike(collection)) {
+      var iteratee = baseIteratee(predicate);
+      collection = keys(collection);
+      predicate = function(key) { return iteratee(iterable[key], key, iterable); };
+    }
+    var index = findIndexFunc(collection, predicate, fromIndex);
+    return index > -1 ? iterable[iteratee ? collection[index] : index] : undefined;
+  };
+}
+
+/** Used to match a single whitespace character. */
+var reWhitespace = /\s/;
+
+/**
+ * Used by `_.trim` and `_.trimEnd` to get the index of the last non-whitespace
+ * character of `string`.
+ *
+ * @private
+ * @param {string} string The string to inspect.
+ * @returns {number} Returns the index of the last non-whitespace character.
+ */
+function trimmedEndIndex(string) {
+  var index = string.length;
+
+  while (index-- && reWhitespace.test(string.charAt(index))) {}
+  return index;
+}
+
+/** Used to match leading whitespace. */
+var reTrimStart = /^\s+/;
+
+/**
+ * The base implementation of `_.trim`.
+ *
+ * @private
+ * @param {string} string The string to trim.
+ * @returns {string} Returns the trimmed string.
+ */
+function baseTrim(string) {
+  return string
+    ? string.slice(0, trimmedEndIndex(string) + 1).replace(reTrimStart, '')
+    : string;
+}
+
+/** Used as references for various `Number` constants. */
+var NAN = 0 / 0;
+
+/** Used to detect bad signed hexadecimal string values. */
+var reIsBadHex = /^[-+]0x[0-9a-f]+$/i;
+
+/** Used to detect binary string values. */
+var reIsBinary = /^0b[01]+$/i;
+
+/** Used to detect octal string values. */
+var reIsOctal = /^0o[0-7]+$/i;
+
+/** Built-in method references without a dependency on `root`. */
+var freeParseInt = parseInt;
+
+/**
+ * Converts `value` to a number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to process.
+ * @returns {number} Returns the number.
+ * @example
+ *
+ * _.toNumber(3.2);
+ * // => 3.2
+ *
+ * _.toNumber(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toNumber(Infinity);
+ * // => Infinity
+ *
+ * _.toNumber('3.2');
+ * // => 3.2
+ */
+function toNumber(value) {
+  if (typeof value == 'number') {
+    return value;
+  }
+  if (isSymbol(value)) {
+    return NAN;
+  }
+  if (isObject$1(value)) {
+    var other = typeof value.valueOf == 'function' ? value.valueOf() : value;
+    value = isObject$1(other) ? (other + '') : other;
+  }
+  if (typeof value != 'string') {
+    return value === 0 ? value : +value;
+  }
+  value = baseTrim(value);
+  var isBinary = reIsBinary.test(value);
+  return (isBinary || reIsOctal.test(value))
+    ? freeParseInt(value.slice(2), isBinary ? 2 : 8)
+    : (reIsBadHex.test(value) ? NAN : +value);
+}
+
+/** Used as references for various `Number` constants. */
+var INFINITY = 1 / 0,
+    MAX_INTEGER = 1.7976931348623157e+308;
+
+/**
+ * Converts `value` to a finite number.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.12.0
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {number} Returns the converted number.
+ * @example
+ *
+ * _.toFinite(3.2);
+ * // => 3.2
+ *
+ * _.toFinite(Number.MIN_VALUE);
+ * // => 5e-324
+ *
+ * _.toFinite(Infinity);
+ * // => 1.7976931348623157e+308
+ *
+ * _.toFinite('3.2');
+ * // => 3.2
+ */
+function toFinite(value) {
+  if (!value) {
+    return value === 0 ? value : 0;
+  }
+  value = toNumber(value);
+  if (value === INFINITY || value === -INFINITY) {
+    var sign = (value < 0 ? -1 : 1);
+    return sign * MAX_INTEGER;
+  }
+  return value === value ? value : 0;
+}
+
+/**
+ * Converts `value` to an integer.
+ *
+ * **Note:** This method is loosely based on
+ * [`ToInteger`](http://www.ecma-international.org/ecma-262/7.0/#sec-tointeger).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category Lang
+ * @param {*} value The value to convert.
+ * @returns {number} Returns the converted integer.
+ * @example
+ *
+ * _.toInteger(3.2);
+ * // => 3
+ *
+ * _.toInteger(Number.MIN_VALUE);
+ * // => 0
+ *
+ * _.toInteger(Infinity);
+ * // => 1.7976931348623157e+308
+ *
+ * _.toInteger('3.2');
+ * // => 3
+ */
+function toInteger(value) {
+  var result = toFinite(value),
+      remainder = result % 1;
+
+  return result === result ? (remainder ? result - remainder : result) : 0;
+}
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeMax = Math.max;
+
+/**
+ * This method is like `_.find` except that it returns the index of the first
+ * element `predicate` returns truthy for instead of the element itself.
+ *
+ * @static
+ * @memberOf _
+ * @since 1.1.0
+ * @category Array
+ * @param {Array} array The array to inspect.
+ * @param {Function} [predicate=_.identity] The function invoked per iteration.
+ * @param {number} [fromIndex=0] The index to search from.
+ * @returns {number} Returns the index of the found element, else `-1`.
+ * @example
+ *
+ * var users = [
+ *   { 'user': 'barney',  'active': false },
+ *   { 'user': 'fred',    'active': false },
+ *   { 'user': 'pebbles', 'active': true }
+ * ];
+ *
+ * _.findIndex(users, function(o) { return o.user == 'barney'; });
+ * // => 0
+ *
+ * // The `_.matches` iteratee shorthand.
+ * _.findIndex(users, { 'user': 'fred', 'active': false });
+ * // => 1
+ *
+ * // The `_.matchesProperty` iteratee shorthand.
+ * _.findIndex(users, ['active', false]);
+ * // => 0
+ *
+ * // The `_.property` iteratee shorthand.
+ * _.findIndex(users, 'active');
+ * // => 2
+ */
+function findIndex(array, predicate, fromIndex) {
+  var length = array == null ? 0 : array.length;
+  if (!length) {
+    return -1;
+  }
+  var index = fromIndex == null ? 0 : toInteger(fromIndex);
+  if (index < 0) {
+    index = nativeMax(length + index, 0);
+  }
+  return baseFindIndex(array, baseIteratee(predicate), index);
+}
+
+/**
+ * Iterates over elements of `collection`, returning the first element
+ * `predicate` returns truthy for. The predicate is invoked with three
+ * arguments: (value, index|key, collection).
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Collection
+ * @param {Array|Object} collection The collection to inspect.
+ * @param {Function} [predicate=_.identity] The function invoked per iteration.
+ * @param {number} [fromIndex=0] The index to search from.
+ * @returns {*} Returns the matched element, else `undefined`.
+ * @example
+ *
+ * var users = [
+ *   { 'user': 'barney',  'age': 36, 'active': true },
+ *   { 'user': 'fred',    'age': 40, 'active': false },
+ *   { 'user': 'pebbles', 'age': 1,  'active': true }
+ * ];
+ *
+ * _.find(users, function(o) { return o.age < 40; });
+ * // => object for 'barney'
+ *
+ * // The `_.matches` iteratee shorthand.
+ * _.find(users, { 'age': 1, 'active': true });
+ * // => object for 'pebbles'
+ *
+ * // The `_.matchesProperty` iteratee shorthand.
+ * _.find(users, ['active', false]);
+ * // => object for 'fred'
+ *
+ * // The `_.property` iteratee shorthand.
+ * _.find(users, 'active');
+ * // => object for 'barney'
+ */
+var find = createFind(findIndex);
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeIsFinite = root.isFinite,
+    nativeMin = Math.min;
+
+/**
+ * Creates a function like `_.round`.
+ *
+ * @private
+ * @param {string} methodName The name of the `Math` method to use when rounding.
+ * @returns {Function} Returns the new round function.
+ */
+function createRound(methodName) {
+  var func = Math[methodName];
+  return function(number, precision) {
+    number = toNumber(number);
+    precision = precision == null ? 0 : nativeMin(toInteger(precision), 292);
+    if (precision && nativeIsFinite(number)) {
+      // Shift with exponential notation to avoid floating-point issues.
+      // See [MDN](https://mdn.io/round#Examples) for more details.
+      var pair = (toString(number) + 'e').split('e'),
+          value = func(pair[0] + 'e' + (+pair[1] + precision));
+
+      pair = (toString(value) + 'e').split('e');
+      return +(pair[0] + 'e' + (+pair[1] - precision));
+    }
+    return func(number);
+  };
+}
+
+/**
+ * Computes `number` rounded to `precision`.
+ *
+ * @static
+ * @memberOf _
+ * @since 3.10.0
+ * @category Math
+ * @param {number} number The number to round.
+ * @param {number} [precision=0] The precision to round to.
+ * @returns {number} Returns the rounded number.
+ * @example
+ *
+ * _.round(4.006);
+ * // => 4
+ *
+ * _.round(4.006, 2);
+ * // => 4.01
+ *
+ * _.round(4060, -2);
+ * // => 4100
+ */
+var round = createRound('round');
+
+/**
+ * A specialized version of `_.forEach` for arrays without support for
+ * iteratee shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns `array`.
+ */
+function arrayEach(array, iteratee) {
+  var index = -1,
+      length = array == null ? 0 : array.length;
+
+  while (++index < length) {
+    if (iteratee(array[index], index, array) === false) {
+      break;
+    }
+  }
+  return array;
+}
+
+/**
+ * Copies properties of `source` to `object`.
+ *
+ * @private
+ * @param {Object} source The object to copy properties from.
+ * @param {Array} props The property identifiers to copy.
+ * @param {Object} [object={}] The object to copy properties to.
+ * @param {Function} [customizer] The function to customize copied values.
+ * @returns {Object} Returns `object`.
+ */
+function copyObject(source, props, object, customizer) {
+  var isNew = !object;
+  object || (object = {});
+
+  var index = -1,
+      length = props.length;
+
+  while (++index < length) {
+    var key = props[index];
+
+    var newValue = customizer
+      ? customizer(object[key], source[key], key, object, source)
+      : undefined;
+
+    if (newValue === undefined) {
+      newValue = source[key];
+    }
+    if (isNew) {
+      baseAssignValue(object, key, newValue);
+    } else {
+      assignValue(object, key, newValue);
+    }
+  }
+  return object;
+}
+
+/**
+ * The base implementation of `_.assign` without support for multiple sources
+ * or `customizer` functions.
+ *
+ * @private
+ * @param {Object} object The destination object.
+ * @param {Object} source The source object.
+ * @returns {Object} Returns `object`.
+ */
+function baseAssign(object, source) {
+  return object && copyObject(source, keys(source), object);
+}
+
+/**
+ * This function is like
+ * [`Object.keys`](http://ecma-international.org/ecma-262/7.0/#sec-object.keys)
+ * except that it includes inherited enumerable properties.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ */
+function nativeKeysIn(object) {
+  var result = [];
+  if (object != null) {
+    for (var key in Object(object)) {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+/** Used for built-in method references. */
+var objectProto$2 = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$2 = objectProto$2.hasOwnProperty;
+
+/**
+ * The base implementation of `_.keysIn` which doesn't treat sparse arrays as dense.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ */
+function baseKeysIn(object) {
+  if (!isObject$1(object)) {
+    return nativeKeysIn(object);
+  }
+  var isProto = isPrototype(object),
+      result = [];
+
+  for (var key in object) {
+    if (!(key == 'constructor' && (isProto || !hasOwnProperty$2.call(object, key)))) {
+      result.push(key);
+    }
+  }
+  return result;
+}
+
+/**
+ * Creates an array of the own and inherited enumerable property names of `object`.
+ *
+ * **Note:** Non-object values are coerced to objects.
+ *
+ * @static
+ * @memberOf _
+ * @since 3.0.0
+ * @category Object
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names.
+ * @example
+ *
+ * function Foo() {
+ *   this.a = 1;
+ *   this.b = 2;
+ * }
+ *
+ * Foo.prototype.c = 3;
+ *
+ * _.keysIn(new Foo);
+ * // => ['a', 'b', 'c'] (iteration order is not guaranteed)
+ */
+function keysIn(object) {
+  return isArrayLike(object) ? arrayLikeKeys(object, true) : baseKeysIn(object);
+}
+
+/**
+ * The base implementation of `_.assignIn` without support for multiple sources
+ * or `customizer` functions.
+ *
+ * @private
+ * @param {Object} object The destination object.
+ * @param {Object} source The source object.
+ * @returns {Object} Returns `object`.
+ */
+function baseAssignIn(object, source) {
+  return object && copyObject(source, keysIn(source), object);
+}
+
+/** Detect free variable `exports`. */
+var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
+
+/** Detect free variable `module`. */
+var freeModule = freeExports && typeof module == 'object' && module && !module.nodeType && module;
+
+/** Detect the popular CommonJS extension `module.exports`. */
+var moduleExports = freeModule && freeModule.exports === freeExports;
+
+/** Built-in value references. */
+var Buffer$1 = moduleExports ? root.Buffer : undefined,
+    allocUnsafe = Buffer$1 ? Buffer$1.allocUnsafe : undefined;
+
+/**
+ * Creates a clone of  `buffer`.
+ *
+ * @private
+ * @param {Buffer} buffer The buffer to clone.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @returns {Buffer} Returns the cloned buffer.
+ */
+function cloneBuffer(buffer, isDeep) {
+  if (isDeep) {
+    return buffer.slice();
+  }
+  var length = buffer.length,
+      result = allocUnsafe ? allocUnsafe(length) : new buffer.constructor(length);
+
+  buffer.copy(result);
+  return result;
+}
+
+/**
+ * Copies the values of `source` to `array`.
+ *
+ * @private
+ * @param {Array} source The array to copy values from.
+ * @param {Array} [array=[]] The array to copy values to.
+ * @returns {Array} Returns `array`.
+ */
+function copyArray(source, array) {
+  var index = -1,
+      length = source.length;
+
+  array || (array = Array(length));
+  while (++index < length) {
+    array[index] = source[index];
+  }
+  return array;
+}
+
+/**
+ * Copies own symbols of `source` to `object`.
+ *
+ * @private
+ * @param {Object} source The object to copy symbols from.
+ * @param {Object} [object={}] The object to copy symbols to.
+ * @returns {Object} Returns `object`.
+ */
+function copySymbols(source, object) {
+  return copyObject(source, getSymbols(source), object);
+}
+
+/** Built-in value references. */
+var getPrototype = overArg(Object.getPrototypeOf, Object);
+
+/* Built-in method references for those with the same name as other `lodash` methods. */
+var nativeGetSymbols = Object.getOwnPropertySymbols;
+
+/**
+ * Creates an array of the own and inherited enumerable symbols of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of symbols.
+ */
+var getSymbolsIn = !nativeGetSymbols ? stubArray : function(object) {
+  var result = [];
+  while (object) {
+    arrayPush(result, getSymbols(object));
+    object = getPrototype(object);
+  }
+  return result;
+};
+
+/**
+ * Copies own and inherited symbols of `source` to `object`.
+ *
+ * @private
+ * @param {Object} source The object to copy symbols from.
+ * @param {Object} [object={}] The object to copy symbols to.
+ * @returns {Object} Returns `object`.
+ */
+function copySymbolsIn(source, object) {
+  return copyObject(source, getSymbolsIn(source), object);
+}
+
+/**
+ * Creates an array of own and inherited enumerable property names and
+ * symbols of `object`.
+ *
+ * @private
+ * @param {Object} object The object to query.
+ * @returns {Array} Returns the array of property names and symbols.
+ */
+function getAllKeysIn(object) {
+  return baseGetAllKeys(object, keysIn, getSymbolsIn);
+}
+
+/** Used for built-in method references. */
+var objectProto$1 = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty$1 = objectProto$1.hasOwnProperty;
+
+/**
+ * Initializes an array clone.
+ *
+ * @private
+ * @param {Array} array The array to clone.
+ * @returns {Array} Returns the initialized clone.
+ */
+function initCloneArray(array) {
+  var length = array.length,
+      result = new array.constructor(length);
+
+  // Add properties assigned by `RegExp#exec`.
+  if (length && typeof array[0] == 'string' && hasOwnProperty$1.call(array, 'index')) {
+    result.index = array.index;
+    result.input = array.input;
+  }
+  return result;
+}
+
+/**
+ * Creates a clone of `arrayBuffer`.
+ *
+ * @private
+ * @param {ArrayBuffer} arrayBuffer The array buffer to clone.
+ * @returns {ArrayBuffer} Returns the cloned array buffer.
+ */
+function cloneArrayBuffer(arrayBuffer) {
+  var result = new arrayBuffer.constructor(arrayBuffer.byteLength);
+  new Uint8Array(result).set(new Uint8Array(arrayBuffer));
+  return result;
+}
+
+/**
+ * Creates a clone of `dataView`.
+ *
+ * @private
+ * @param {Object} dataView The data view to clone.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @returns {Object} Returns the cloned data view.
+ */
+function cloneDataView(dataView, isDeep) {
+  var buffer = isDeep ? cloneArrayBuffer(dataView.buffer) : dataView.buffer;
+  return new dataView.constructor(buffer, dataView.byteOffset, dataView.byteLength);
+}
+
+/** Used to match `RegExp` flags from their coerced string values. */
+var reFlags = /\w*$/;
+
+/**
+ * Creates a clone of `regexp`.
+ *
+ * @private
+ * @param {Object} regexp The regexp to clone.
+ * @returns {Object} Returns the cloned regexp.
+ */
+function cloneRegExp(regexp) {
+  var result = new regexp.constructor(regexp.source, reFlags.exec(regexp));
+  result.lastIndex = regexp.lastIndex;
+  return result;
+}
+
+/** Used to convert symbols to primitives and strings. */
+var symbolProto = Symbol ? Symbol.prototype : undefined,
+    symbolValueOf = symbolProto ? symbolProto.valueOf : undefined;
+
+/**
+ * Creates a clone of the `symbol` object.
+ *
+ * @private
+ * @param {Object} symbol The symbol object to clone.
+ * @returns {Object} Returns the cloned symbol object.
+ */
+function cloneSymbol(symbol) {
+  return symbolValueOf ? Object(symbolValueOf.call(symbol)) : {};
+}
+
+/**
+ * Creates a clone of `typedArray`.
+ *
+ * @private
+ * @param {Object} typedArray The typed array to clone.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @returns {Object} Returns the cloned typed array.
+ */
+function cloneTypedArray(typedArray, isDeep) {
+  var buffer = isDeep ? cloneArrayBuffer(typedArray.buffer) : typedArray.buffer;
+  return new typedArray.constructor(buffer, typedArray.byteOffset, typedArray.length);
+}
+
+/** `Object#toString` result references. */
+var boolTag$1 = '[object Boolean]',
+    dateTag$1 = '[object Date]',
+    mapTag$3 = '[object Map]',
+    numberTag$1 = '[object Number]',
+    regexpTag$1 = '[object RegExp]',
+    setTag$3 = '[object Set]',
+    stringTag$1 = '[object String]',
+    symbolTag$1 = '[object Symbol]';
+
+var arrayBufferTag$1 = '[object ArrayBuffer]',
+    dataViewTag$1 = '[object DataView]',
+    float32Tag$1 = '[object Float32Array]',
+    float64Tag$1 = '[object Float64Array]',
+    int8Tag$1 = '[object Int8Array]',
+    int16Tag$1 = '[object Int16Array]',
+    int32Tag$1 = '[object Int32Array]',
+    uint8Tag$1 = '[object Uint8Array]',
+    uint8ClampedTag$1 = '[object Uint8ClampedArray]',
+    uint16Tag$1 = '[object Uint16Array]',
+    uint32Tag$1 = '[object Uint32Array]';
+
+/**
+ * Initializes an object clone based on its `toStringTag`.
+ *
+ * **Note:** This function only supports cloning values with tags of
+ * `Boolean`, `Date`, `Error`, `Map`, `Number`, `RegExp`, `Set`, or `String`.
+ *
+ * @private
+ * @param {Object} object The object to clone.
+ * @param {string} tag The `toStringTag` of the object to clone.
+ * @param {boolean} [isDeep] Specify a deep clone.
+ * @returns {Object} Returns the initialized clone.
+ */
+function initCloneByTag(object, tag, isDeep) {
+  var Ctor = object.constructor;
+  switch (tag) {
+    case arrayBufferTag$1:
+      return cloneArrayBuffer(object);
+
+    case boolTag$1:
+    case dateTag$1:
+      return new Ctor(+object);
+
+    case dataViewTag$1:
+      return cloneDataView(object, isDeep);
+
+    case float32Tag$1: case float64Tag$1:
+    case int8Tag$1: case int16Tag$1: case int32Tag$1:
+    case uint8Tag$1: case uint8ClampedTag$1: case uint16Tag$1: case uint32Tag$1:
+      return cloneTypedArray(object, isDeep);
+
+    case mapTag$3:
+      return new Ctor;
+
+    case numberTag$1:
+    case stringTag$1:
+      return new Ctor(object);
+
+    case regexpTag$1:
+      return cloneRegExp(object);
+
+    case setTag$3:
+      return new Ctor;
+
+    case symbolTag$1:
+      return cloneSymbol(object);
+  }
+}
+
+/** Built-in value references. */
+var objectCreate = Object.create;
+
+/**
+ * The base implementation of `_.create` without support for assigning
+ * properties to the created object.
+ *
+ * @private
+ * @param {Object} proto The object to inherit from.
+ * @returns {Object} Returns the new object.
+ */
+var baseCreate = (function() {
+  function object() {}
+  return function(proto) {
+    if (!isObject$1(proto)) {
+      return {};
+    }
+    if (objectCreate) {
+      return objectCreate(proto);
+    }
+    object.prototype = proto;
+    var result = new object;
+    object.prototype = undefined;
+    return result;
+  };
+}());
+
+/**
+ * Initializes an object clone.
+ *
+ * @private
+ * @param {Object} object The object to clone.
+ * @returns {Object} Returns the initialized clone.
+ */
+function initCloneObject(object) {
+  return (typeof object.constructor == 'function' && !isPrototype(object))
+    ? baseCreate(getPrototype(object))
+    : {};
+}
+
+/** `Object#toString` result references. */
+var mapTag$2 = '[object Map]';
+
+/**
+ * The base implementation of `_.isMap` without Node.js optimizations.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a map, else `false`.
+ */
+function baseIsMap(value) {
+  return isObjectLike(value) && getTag$1(value) == mapTag$2;
+}
+
+/* Node.js helper references. */
+var nodeIsMap = nodeUtil && nodeUtil.isMap;
+
+/**
+ * Checks if `value` is classified as a `Map` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.3.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a map, else `false`.
+ * @example
+ *
+ * _.isMap(new Map);
+ * // => true
+ *
+ * _.isMap(new WeakMap);
+ * // => false
+ */
+var isMap = nodeIsMap ? baseUnary(nodeIsMap) : baseIsMap;
+
+/** `Object#toString` result references. */
+var setTag$2 = '[object Set]';
+
+/**
+ * The base implementation of `_.isSet` without Node.js optimizations.
+ *
+ * @private
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a set, else `false`.
+ */
+function baseIsSet(value) {
+  return isObjectLike(value) && getTag$1(value) == setTag$2;
+}
+
+/* Node.js helper references. */
+var nodeIsSet = nodeUtil && nodeUtil.isSet;
+
+/**
+ * Checks if `value` is classified as a `Set` object.
+ *
+ * @static
+ * @memberOf _
+ * @since 4.3.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is a set, else `false`.
+ * @example
+ *
+ * _.isSet(new Set);
+ * // => true
+ *
+ * _.isSet(new WeakSet);
+ * // => false
+ */
+var isSet = nodeIsSet ? baseUnary(nodeIsSet) : baseIsSet;
+
+/** Used to compose bitmasks for cloning. */
+var CLONE_DEEP_FLAG$1 = 1,
+    CLONE_FLAT_FLAG = 2,
+    CLONE_SYMBOLS_FLAG$1 = 4;
+
+/** `Object#toString` result references. */
+var argsTag = '[object Arguments]',
+    arrayTag = '[object Array]',
+    boolTag = '[object Boolean]',
+    dateTag = '[object Date]',
+    errorTag = '[object Error]',
+    funcTag = '[object Function]',
+    genTag = '[object GeneratorFunction]',
+    mapTag$1 = '[object Map]',
+    numberTag = '[object Number]',
+    objectTag = '[object Object]',
+    regexpTag = '[object RegExp]',
+    setTag$1 = '[object Set]',
+    stringTag = '[object String]',
+    symbolTag = '[object Symbol]',
+    weakMapTag = '[object WeakMap]';
+
+var arrayBufferTag = '[object ArrayBuffer]',
+    dataViewTag = '[object DataView]',
+    float32Tag = '[object Float32Array]',
+    float64Tag = '[object Float64Array]',
+    int8Tag = '[object Int8Array]',
+    int16Tag = '[object Int16Array]',
+    int32Tag = '[object Int32Array]',
+    uint8Tag = '[object Uint8Array]',
+    uint8ClampedTag = '[object Uint8ClampedArray]',
+    uint16Tag = '[object Uint16Array]',
+    uint32Tag = '[object Uint32Array]';
+
+/** Used to identify `toStringTag` values supported by `_.clone`. */
+var cloneableTags = {};
+cloneableTags[argsTag] = cloneableTags[arrayTag] =
+cloneableTags[arrayBufferTag] = cloneableTags[dataViewTag] =
+cloneableTags[boolTag] = cloneableTags[dateTag] =
+cloneableTags[float32Tag] = cloneableTags[float64Tag] =
+cloneableTags[int8Tag] = cloneableTags[int16Tag] =
+cloneableTags[int32Tag] = cloneableTags[mapTag$1] =
+cloneableTags[numberTag] = cloneableTags[objectTag] =
+cloneableTags[regexpTag] = cloneableTags[setTag$1] =
+cloneableTags[stringTag] = cloneableTags[symbolTag] =
+cloneableTags[uint8Tag] = cloneableTags[uint8ClampedTag] =
+cloneableTags[uint16Tag] = cloneableTags[uint32Tag] = true;
+cloneableTags[errorTag] = cloneableTags[funcTag] =
+cloneableTags[weakMapTag] = false;
+
+/**
+ * The base implementation of `_.clone` and `_.cloneDeep` which tracks
+ * traversed objects.
+ *
+ * @private
+ * @param {*} value The value to clone.
+ * @param {boolean} bitmask The bitmask flags.
+ *  1 - Deep clone
+ *  2 - Flatten inherited properties
+ *  4 - Clone symbols
+ * @param {Function} [customizer] The function to customize cloning.
+ * @param {string} [key] The key of `value`.
+ * @param {Object} [object] The parent object of `value`.
+ * @param {Object} [stack] Tracks traversed objects and their clone counterparts.
+ * @returns {*} Returns the cloned value.
+ */
+function baseClone(value, bitmask, customizer, key, object, stack) {
+  var result,
+      isDeep = bitmask & CLONE_DEEP_FLAG$1,
+      isFlat = bitmask & CLONE_FLAT_FLAG,
+      isFull = bitmask & CLONE_SYMBOLS_FLAG$1;
+
+  if (customizer) {
+    result = object ? customizer(value, key, object, stack) : customizer(value);
+  }
+  if (result !== undefined) {
+    return result;
+  }
+  if (!isObject$1(value)) {
+    return value;
+  }
+  var isArr = isArray(value);
+  if (isArr) {
+    result = initCloneArray(value);
+    if (!isDeep) {
+      return copyArray(value, result);
+    }
+  } else {
+    var tag = getTag$1(value),
+        isFunc = tag == funcTag || tag == genTag;
+
+    if (isBuffer(value)) {
+      return cloneBuffer(value, isDeep);
+    }
+    if (tag == objectTag || tag == argsTag || (isFunc && !object)) {
+      result = (isFlat || isFunc) ? {} : initCloneObject(value);
+      if (!isDeep) {
+        return isFlat
+          ? copySymbolsIn(value, baseAssignIn(result, value))
+          : copySymbols(value, baseAssign(result, value));
+      }
+    } else {
+      if (!cloneableTags[tag]) {
+        return object ? value : {};
+      }
+      result = initCloneByTag(value, tag, isDeep);
+    }
+  }
+  // Check for circular references and return its corresponding clone.
+  stack || (stack = new Stack);
+  var stacked = stack.get(value);
+  if (stacked) {
+    return stacked;
+  }
+  stack.set(value, result);
+
+  if (isSet(value)) {
+    value.forEach(function(subValue) {
+      result.add(baseClone(subValue, bitmask, customizer, subValue, value, stack));
+    });
+  } else if (isMap(value)) {
+    value.forEach(function(subValue, key) {
+      result.set(key, baseClone(subValue, bitmask, customizer, key, value, stack));
+    });
+  }
+
+  var keysFunc = isFull
+    ? (isFlat ? getAllKeysIn : getAllKeys)
+    : (isFlat ? keysIn : keys);
+
+  var props = isArr ? undefined : keysFunc(value);
+  arrayEach(props || value, function(subValue, key) {
+    if (props) {
+      key = subValue;
+      subValue = value[key];
+    }
+    // Recursively populate clone (susceptible to call stack limits).
+    assignValue(result, key, baseClone(subValue, bitmask, customizer, key, value, stack));
+  });
+  return result;
+}
+
+/** Used to compose bitmasks for cloning. */
+var CLONE_DEEP_FLAG = 1,
+    CLONE_SYMBOLS_FLAG = 4;
+
+/**
+ * This method is like `_.clone` except that it recursively clones `value`.
+ *
+ * @static
+ * @memberOf _
+ * @since 1.0.0
+ * @category Lang
+ * @param {*} value The value to recursively clone.
+ * @returns {*} Returns the deep cloned value.
+ * @see _.clone
+ * @example
+ *
+ * var objects = [{ 'a': 1 }, { 'b': 2 }];
+ *
+ * var deep = _.cloneDeep(objects);
+ * console.log(deep[0] === objects[0]);
+ * // => false
+ */
+function cloneDeep(value) {
+  return baseClone(value, CLONE_DEEP_FLAG | CLONE_SYMBOLS_FLAG);
+}
+
+/**
+ * Performs a deep comparison between two values to determine if they are
+ * equivalent.
+ *
+ * **Note:** This method supports comparing arrays, array buffers, booleans,
+ * date objects, error objects, maps, numbers, `Object` objects, regexes,
+ * sets, strings, symbols, and typed arrays. `Object` objects are compared
+ * by their own, not inherited, enumerable properties. Functions and DOM
+ * nodes are compared by strict equality, i.e. `===`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to compare.
+ * @param {*} other The other value to compare.
+ * @returns {boolean} Returns `true` if the values are equivalent, else `false`.
+ * @example
+ *
+ * var object = { 'a': 1 };
+ * var other = { 'a': 1 };
+ *
+ * _.isEqual(object, other);
+ * // => true
+ *
+ * object === other;
+ * // => false
+ */
+function isEqual(value, other) {
+  return baseIsEqual(value, other);
+}
+
+let options$2 = {};
+
+function merge(x, y, opt = {}) {
+  if (!y || typeof y !== 'object') {
+    return x;
+  }
+  if (!x || typeof x !== 'object') {
+    return x;
+  }
+  function arrayMerge(target, source, options) {
+    const destination = target.slice();
+    source.forEach((item, index) => {
+      if (typeof destination[index] === 'undefined') {
+        destination[index] = options.cloneUnlessOtherwiseSpecified(
+          item,
+          options,
+        );
+      } else if (options.isMergeableObject(item)) {
+        destination[index] = merge(target[index], item, options);
+      } else if (target.indexOf(item) === -1) {
+        destination.push(item);
+      }
+    });
+    return destination;
+  }
+  return deepmerge__default["default"](x, y, {
+    arrayMerge,
+  });
+}
+
+function setOptions(optns) {
+  options$2 = optns;
+}
+
+function getOptions() {
+  return options$2;
+}
+
+function isObject(val) {
+  return val && typeof val === 'object' && !(val instanceof Array);
+}
+
+function camelCase(str) {
+  return fastCase.camelize(str);
+}
+
+function snakeCase(str) {
+  return fastCase.decamelize(str, '_');
+}
+
+function toCamel(obj) {
+  if (!obj) return obj;
+  const objCopy = JSON.parse(JSON.stringify(obj));
+  return fastCase.camelizeKeys(objCopy);
+}
+
+function toCamelPath(str) {
+  if (typeof str === 'string') {
+    return str.split('.').map(fastCase.camelize).join('.');
+  }
+  return str;
+}
+
+function toSnake(obj) {
+  if (!obj) return obj;
+  const objCopy = JSON.parse(JSON.stringify(obj));
+  return fastCase.decamelizeKeys(objCopy, '_');
+}
+
+function trimBoth(str) {
+  return trimStart(trimEnd(str));
+}
+
+function trimStart(str) {
+  return typeof str === 'string' ? str.replace(/^[/]+/, '') : '';
+}
+
+function trimEnd(str) {
+  return typeof str === 'string' ? str.replace(/[/]+$/, '') : '';
+}
+
+function stringifyQuery(str) {
+  return qs.stringify(str);
+}
+
+function map$1(arr, cb) {
+  return arr instanceof Array ? arr.map(cb) : [];
+}
+
+function reduce$1(arr, cb, init) {
+  return arr instanceof Array ? arr.reduce(cb, init) : init;
+}
+
+function isServer() {
+  return !(typeof window !== 'undefined' && window && window.document);
+}
+
+function isFunction(func) {
+  return typeof func === 'function';
+}
+
+function defaultMethods(request, uri, methods) {
+  return {
+    list:
+      methods.indexOf('list') >= 0
+        ? function (query) {
+            return request('get', uri, undefined, query);
+          }
+        : undefined,
+
+    get:
+      methods.indexOf('get') >= 0
+        ? function (id, query) {
+            return request('get', uri, id, query);
+          }
+        : undefined,
+  };
+}
+
+async function vaultRequest(method, url, data, opt = undefined) {
+  const vaultUrl = options$2.vaultUrl;
+  const timeout = options$2.timeout;
+  const requestId = vaultRequestId();
+  const callback = `swell_vault_response_${requestId}`;
+
+  data = {
+    $jsonp: {
+      method,
+      callback,
+    },
+    $data: data,
+    $key: options$2.key,
+  };
+
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.src = `${trimEnd(vaultUrl)}/${trimStart(url)}?${serializeData(
+      data,
+    )}`;
+
+    const errorTimeout = setTimeout(() => {
+      window[callback]({
+        $error: `Request timed out after ${timeout / 1000} seconds`,
+        $status: 500,
+      });
+    }, timeout);
+
+    window[callback] = (result) => {
+      clearTimeout(errorTimeout);
+      if (result && result.$error) {
+        const err = new Error(result.$error);
+        err.code = 'request_error';
+        err.status = result.$status;
+        reject(err);
+      } else if (!result || result.$status >= 300) {
+        const err = new Error(
+          'A connection error occurred while making the request',
+        );
+        err.code = 'connection_error';
+        err.status = result.$status;
+        reject(err);
+      } else {
+        resolve(options$2.useCamelCase ? toCamel(result.$data) : result.$data);
+      }
+      delete window[callback];
+      script.parentNode.removeChild(script);
+    };
+
+    document.getElementsByTagName('head')[0].appendChild(script);
+  });
+}
+
+function vaultRequestId() {
+  window.__swell_vault_request_id = window.__swell_vault_request_id || 0;
+  window.__swell_vault_request_id++;
+  return window.__swell_vault_request_id;
+}
+
+function serializeData(data) {
+  const s = [];
+  const add = function (key, value) {
+    // If value is a function, invoke it and return its value
+    if (typeof value === 'function') {
+      value = value();
+    } else if (value == null) {
+      value = '';
+    }
+    s[s.length] = encodeURIComponent(key) + '=' + encodeURIComponent(value);
+  };
+  for (const key in data) {
+    buildParams(key, data[key], add);
+  }
+  return s.join('&').replace(' ', '+');
+}
+const rbracket = /\[\]$/;
+function buildParams(key, obj, add) {
+  let name;
+  if (obj instanceof Array) {
+    for (let i = 0; i < obj.length; i++) {
+      if (rbracket.test(key)) {
+        // Treat each array item as a scalar.
+        add(key, v);
+      } else {
+        // Item is non-scalar (array or object), encode its numeric index.
+        buildParams(
+          key + '[' + (typeof v === 'object' && v != null ? i : '') + ']',
+          v,
+          add,
+        );
+      }
+    }
+  } else if (obj && typeof obj === 'object') {
+    // Serialize object item.
+    for (name in obj) {
+      buildParams(key + '[' + name + ']', obj[name], add);
+    }
+  } else {
+    // Serialize scalar item.
+    add(key, obj);
+  }
+}
+
+function base64Encode(string) {
+  if (typeof btoa !== 'undefined') {
+    return btoa(string);
+  }
+  return Buffer.from(string).toString('base64');
+}
+
+function getLocationParams(location) {
+  const url = location.search;
+  const query = url.substr(1);
+  const result = {};
+  query.split('&').forEach(function (part) {
+    const item = part.split('=');
+    result[item[0]] = decodeURIComponent(item[1]);
+  });
+  return result;
+}
+
+function removeUrlParams() {
+  const url = window.location.origin + window.location.pathname;
+  window.history.pushState({ path: url }, '', url);
+}
+
+var utils = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  defaultMethods: defaultMethods,
+  set: set,
+  get: get,
+  uniq: uniq,
+  find: find,
+  round: round,
+  findIndex: findIndex,
+  camelCase: camelCase,
+  cloneDeep: cloneDeep,
+  merge: merge,
+  setOptions: setOptions,
+  getOptions: getOptions,
+  toCamel: toCamel,
+  toCamelPath: toCamelPath,
+  toSnake: toSnake,
+  trimBoth: trimBoth,
+  trimStart: trimStart,
+  trimEnd: trimEnd,
+  stringifyQuery: stringifyQuery,
+  isServer: isServer,
+  isFunction: isFunction,
+  isObject: isObject,
+  isEqual: isEqual,
+  snakeCase: snakeCase,
+  map: map$1,
+  reduce: reduce$1,
+  base64Encode: base64Encode,
+  vaultRequest: vaultRequest,
+  getLocationParams: getLocationParams,
+  removeUrlParams: removeUrlParams
+});
+
+const cardApi = {
+  async createToken(data) {
+    let error = null;
+    let code = null;
+    let param = null;
+    if (!data) {
+      error = 'Card details are missing in `swell.card.createToken(card)`';
+      param = '';
+    }
+    const card = toSnake(data);
+    if (!card.nonce) {
+      if (!this.validateNumber(card.number)) {
+        error = 'Card number appears to be invalid';
+        code = 'invalid_card_number';
+        param = 'number';
+      }
+      if (card.exp) {
+        const exp = this.expiry(card.exp);
+        card.exp_month = exp.month;
+        card.exp_year = exp.year;
+      }
+      if (!this.validateExpiry(card.exp_month, card.exp_year)) {
+        error = 'Card expiry appears to be invalid';
+        code = 'invalid_card_expiry';
+        param = 'exp_month';
+      }
+      if (!this.validateCVC(card.cvc)) {
+        error = 'Card CVC code appears to be invalid';
+        code = 'invalid_card_cvc';
+        param = 'exp_cvc';
+      }
+    }
+
+    if (error) {
+      const err = new Error(error);
+      err.code = code || 'invalid_card';
+      err.status = 402;
+      err.param = param;
+      throw err;
+    }
+
+    // Get a token from the vault
+    const result = await vaultRequest('post', '/tokens', card);
+    if (result.errors) {
+      const param = Object.keys(result.errors)[0];
+      const err = new Error(result.errors[param].message || 'Unknown error');
+      err.code = 'vault_error';
+      err.status = 402;
+      err.param = param;
+      throw err;
+    }
+    return result;
+  },
+
+  expiry(value) {
+    if (value && value.month && value.year) {
+      return value;
+    }
+
+    const parts = new String(value).split(/[\s\/\-]+/, 2);
+    const month = parts[0];
+    let year = parts[1];
+
+    // Convert 2 digit year
+    if (year && year.length === 2 && /^\d+$/.test(year)) {
+      const prefix = new Date().getFullYear().toString().substring(0, 2);
+      year = prefix + year;
+    }
+
+    return {
+      month: ~~month,
+      year: ~~year,
+    };
+  },
+
+  types() {
+    let e, t, n, r;
+    t = {};
+    for (e = n = 40; n <= 49; e = ++n) t[e] = 'Visa';
+    for (e = r = 50; r <= 59; e = ++r) t[e] = 'MasterCard';
+    return (
+      (t[34] = t[37] = 'American Express'),
+      (t[60] = t[62] = t[64] = t[65] = 'Discover'),
+      (t[35] = 'JCB'),
+      (t[30] = t[36] = t[38] = t[39] = 'Diners Club'),
+      t
+    );
+  },
+
+  type(num) {
+    return this.types()[num.slice(0, 2)] || 'Unknown';
+  },
+
+  luhnCheck(num) {
+    let t, n, r, i, s, o;
+    (r = !0), (i = 0), (n = (num + '').split('').reverse());
+    for (s = 0, o = n.length; s < o; s++) {
+      (t = n[s]), (t = parseInt(t, 10));
+      if ((r = !r)) t *= 2;
+      t > 9 && (t -= 9), (i += t);
+    }
+    return i % 10 === 0;
+  },
+
+  validateNumber(num) {
+    return (
+      (num = (num + '').replace(/\s+|-/g, '')),
+      num.length >= 10 && num.length <= 16 && this.luhnCheck(num)
+    );
+  },
+
+  validateExpiry(month, year) {
+    let r, i;
+    return (
+      (month = String(month).trim()),
+      (year = String(year).trim()),
+      /^\d+$/.test(month)
+        ? /^\d+$/.test(year)
+          ? parseInt(month, 10) <= 12
+            ? ((i = new Date(year, month)),
+              (r = new Date()),
+              i.setMonth(i.getMonth() - 1),
+              i.setMonth(i.getMonth() + 1, 1),
+              i > r)
+            : !1
+          : !1
+        : !1
+    );
+  },
+
+  validateCVC(val) {
+    return (
+      (val = String(val).trim()),
+      /^\d+$/.test(val) && val.length >= 3 && val.length <= 4
+    );
+  },
+};
+
+const COOKIE_MAX_AGE = 604800; // 1 week
+
+function getCookie(name) {
+  if (isServer()) {
+    return undefined;
+  }
+
+  const matches = document.cookie.match(
+    new RegExp(
+      '(?:^|; )' + name.replace(/([.$?*|{}()[]\\\/\+^])/g, '\\$1') + '=([^;]*)',
+    ),
+  );
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+function setCookie(name, value, options = {}) {
+  if (isServer()) {
+    return;
+  }
+
+  // default cookie options, which can be overridden
+  options = {
+    path: '/',
+    'max-age': COOKIE_MAX_AGE,
+    samesite: 'lax',
+    ...options,
+  };
+
+  if (options.expires && options.expires.toUTCString) {
+    options.expires = options.expires.toUTCString();
+  }
+
+  let updatedCookie =
+    encodeURIComponent(name) + '=' + encodeURIComponent(value);
+
+  for (const optionKey in options) {
+    updatedCookie += '; ' + optionKey;
+    const optionValue = options[optionKey];
+
+    if (optionValue !== true) {
+      updatedCookie += '=' + optionValue;
+    }
+  }
+
+  document.cookie = updatedCookie;
+}
+
+const RECORD_TIMEOUT = 5000;
+
+let VALUES = {
+  /*
+  [model]: {
+    [id]: {
+      data,
+      record,
+      recordTimer,
+      presets,
+    }
+  }
+*/
+};
+
+const cacheApi = {
+  options: {
+    enabled: true,
+    debug: false,
+  },
+
+  debug(...args) {
+    if (this.options.debug) {
+      console.log(...args);
+    }
+  },
+
+  values({ model, id }, setValues = undefined) {
+    this.debug('cache.values', ...arguments);
+    if (setValues !== undefined) {
+      for (let key in setValues) {
+        set(VALUES, `${model}.${id}.${key}`, setValues[key]);
+      }
+      return;
+    }
+    return get(VALUES, `${model}.${id}`, {});
+  },
+
+  preset(details) {
+    this.debug('cache.preset', ...arguments);
+    const { presets = [] } = this.values(details);
+    presets.push(details);
+    this.values(details, { presets });
+  },
+
+  set(details) {
+    this.debug('cache.set', ...arguments);
+    let { model, id, path, value } = details;
+    let { data = {}, record, presets } = this.values(details);
+
+    if (id === null) {
+      return;
+    }
+
+    if (record === undefined) {
+      return this.preset(details);
+    }
+
+    data = merge(record || {}, data);
+
+    const { useCamelCase } = getOptions();
+    if (useCamelCase && value && typeof value === 'object') {
+      value = toCamel(value);
+    }
+
+    if (path || value instanceof Array) {
+      let upData = { ...(data || {}) };
+      let upPath = useCamelCase ? toCamelPath(path) : path;
+      set(upData, upPath || '', value);
+      data = upData;
+    } else if (value && typeof value === 'object') {
+      data = data || {};
+      data = merge(data, value);
+    } else {
+      data = value;
+    }
+
+    this.values(details, { data });
+
+    try {
+      // Make sure values have clean refs
+      const cache = VALUES[model][id];
+      if (cache !== undefined) {
+        if (cache.data !== undefined) {
+          cache.data = JSON.parse(JSON.stringify(cache.data));
+        }
+        if (cache.record !== undefined) {
+          cache.record = JSON.parse(JSON.stringify(cache.record));
+        }
+      }
+    } catch (err) {
+      // noop
+    }
+  },
+
+  get(model, id) {
+    this.debug('cache.get', ...arguments);
+    const { data, recordTimer } = this.values({ model, id });
+    this.debug('cache.get:data+recordTimer', ...arguments);
+    if (recordTimer) {
+      return data;
+    }
+  },
+
+  setRecord(record, details) {
+    this.debug('cache.setRecord', ...arguments);
+    let { recordTimer, presets } = this.values(details);
+
+    if (recordTimer) {
+      clearTimeout(recordTimer);
+    }
+
+    recordTimer = setTimeout(() => {
+      this.values(details, { record: undefined, recordTimer: undefined });
+    }, RECORD_TIMEOUT);
+
+    // Record has to be null at minimum, not undefined
+    this.values(details, {
+      record: record !== undefined ? record : null,
+      recordTimer,
+    });
+
+    if (presets) {
+      for (let preset of presets) {
+        this.set(preset);
+      }
+      this.values(details, { presets: undefined });
+    }
+
+    const result = this.get(details.model, details.id);
+
+    return result !== undefined ? result : record;
+  },
+
+  async getFetch(model, id, fetch) {
+    if (this.options.enabled) {
+      this.debug('cache.getFetch', ...arguments);
+      const value = this.get(model, id);
+
+      if (value !== undefined) {
+        return value;
+      }
+    }
+
+    const record = await fetch();
+    return this.setRecord(record, { model, id });
+  },
+
+  clear(model = undefined, id = undefined) {
+    this.debug('cache.clear', ...arguments);
+    if (model) {
+      if (id) {
+        set(VALUES, `${model}.${id}`, undefined);
+      } else {
+        set(VALUES, model, undefined);
+      }
+    } else {
+      VALUES = {};
+    }
+  },
+};
+
+function methods$a(request) {
+  const { get, list } = defaultMethods(request, '/attributes', ['list', 'get']);
+
+  return {
+    get: (id, ...args) => {
+      return cacheApi.getFetch('attributes', id, () => get(id, ...args));
+    },
+
+    list,
+  };
+}
+
+let OPTIONS;
+
+function methods$9(request, opt) {
+  OPTIONS = opt;
+  const { get, list } = defaultMethods(request, '/products', ['list', 'get']);
+  return {
+    get: (id, ...args) => {
+      return cacheApi.getFetch('products', id, () => get(id, ...args));
+    },
+
+    list,
+
+    variation: calculateVariation,
+
+    categories: getCategories,
+
+    attributes: getAttributes,
+
+    priceRange: getPriceRange,
+
+    filters: getFilters,
+
+    filterableAttributeFilters: (products, options) =>
+      getFilterableAttributeFilters(request, products, options),
+  };
+}
+
+function getProductOptionIndex(product, filter = undefined) {
+  if (!product.options) {
+    return {};
+  }
+  const productOptions = filter
+    ? product.options.filter(filter)
+    : product.options;
+  return reduce$1(
+    productOptions,
+    (acc, op) => {
+      const values = reduce$1(
+        op.values,
+        (acc, val) => ({
+          ...acc,
+          [val.id]: { ...val, id: val.id },
+          [val.name]: { ...val, id: val.id },
+        }),
+        {},
+      );
+      return {
+        ...acc,
+        [op.id]: { ...op, values },
+        [op.name]: { ...op, values },
+      };
+    },
+    {},
+  );
+}
+
+function cleanProductOptions(options) {
+  let result = options || [];
+  if (options && typeof options === 'object' && !(options instanceof Array)) {
+    result = [];
+    for (const key in options) {
+      result.push({
+        id: key,
+        value: options[key],
+      });
+    }
+  }
+  if (result instanceof Array) {
+    return result.map((op) => ({
+      id: op.id || op.name,
+      value: op.value,
+    }));
+  }
+  return result;
+}
+
+function findVariantWithOptionValueIds(product, ids) {
+  if (ids.length > 0) {
+    const variants = product.variants && product.variants.results;
+    if (variants.length > 0) {
+      for (const variant of variants) {
+        const variantObj = toSnake(variant);
+        const matched = isEqual(variantObj.option_value_ids.sort(), ids.sort());
+        if (matched) {
+          return variant;
+        }
+      }
+    }
+  }
+  return null;
+}
+
+function calculateVariation(input, options, purchaseOption) {
+  const product = OPTIONS.useCamelCase ? toSnake(input) : input;
+  const purchaseOp = findPurchaseOption(product, purchaseOption);
+  const variation = {
+    ...product,
+    price: purchaseOp.price || 0,
+    sale_price: purchaseOp.sale_price,
+    orig_price: purchaseOp.orig_price,
+    stock_status: product.stock_status,
+  };
+  let optionPrice = 0;
+  const variantOptionValueIds = [];
+  const cleanOptions = cleanProductOptions(options);
+  const index = getProductOptionIndex(product);
+  for (const option of cleanOptions) {
+    if (index[option.id] && index[option.id].values[option.value]) {
+      if (index[option.id].variant) {
+        variantOptionValueIds.push(index[option.id].values[option.value].id);
+      } else {
+        optionPrice += index[option.id].values[option.value].price || 0;
+      }
+    }
+  }
+  if (variantOptionValueIds.length > 0) {
+    const variant = findVariantWithOptionValueIds(
+      product,
+      variantOptionValueIds,
+    );
+    if (variant) {
+      let variantPurchaseOp = purchaseOp;
+      try {
+        variantPurchaseOp = findPurchaseOption(variant, purchaseOption);
+      } catch (err) {
+        // noop
+      }
+      variation.variant_id = variant.id;
+      variation.price = variantPurchaseOp.price || 0;
+      variation.sale_price =
+        variantPurchaseOp.sale_price || purchaseOp.sale_price;
+      variation.orig_price =
+        variantPurchaseOp.orig_price || purchaseOp.orig_price;
+      variation.stock_status = variant.stock_status;
+      variation.stock_level = variant.stock_level || 0;
+      variation.images =
+        (variant.images && variant.images.length
+          ? variant.images
+          : product.images) || [];
+    }
+  }
+  if (optionPrice > 0) {
+    variation.price += optionPrice;
+    if (variation.sale_price) {
+      variation.sale_price += optionPrice;
+    }
+    if (variation.orig_price) {
+      variation.orig_price += optionPrice;
+    }
+  }
+  if (variation.sale_price === undefined) {
+    delete variation.sale_price;
+  }
+  if (variation.orig_price === undefined) {
+    delete variation.orig_price;
+  }
+  return OPTIONS.useCamelCase ? toCamel(variation) : variation;
+}
+
+function findPurchaseOption(product, purchaseOption) {
+  const plan = get(purchaseOption, 'plan_id', get(purchaseOption, 'plan'));
+  const type = get(
+    purchaseOption,
+    'type',
+    typeof purchaseOption === 'string'
+      ? purchaseOption
+      : plan !== undefined
+      ? 'subscription'
+      : 'standard',
+  );
+  let option = get(product, `purchase_options.${type}`);
+  if (!option && type !== 'standard') {
+    throw new Error(
+      `Product purchase option '${type}' not found or not active`,
+    );
+  }
+  if (option) {
+    if (option.plans) {
+      if (plan !== undefined) {
+        option = find(option.plans, { id: plan });
+        if (!option) {
+          throw new Error(
+            `Subscription purchase plan '${plan}' not found or not active`,
+          );
+        }
+      } else {
+        option = option.plans[0];
+      }
+    }
+    return {
+      ...option,
+      price: typeof option.price === 'number' ? option.price : product.price,
+      sale_price:
+        typeof option.sale_price === 'number'
+          ? option.sale_price
+          : product.sale_price,
+      orig_price:
+        typeof option.orig_price === 'number'
+          ? option.orig_price
+          : product.orig_price,
+    };
+  }
+  return {
+    type: 'standard',
+    price: product.price,
+    sale_price: product.sale_price,
+    orig_price: product.orig_price,
+  };
+}
+
+async function getFilterableAttributeFilters(request, products, options) {
+  const { results: filterableAttributes } = await methods$a(
+    request).list({
+    filterable: true,
+  });
+
+  return getFilters(products, { ...options, filterableAttributes });
+}
+
+function getFilters(products, options = {}) {
+  let attributes =
+    (options.attributes || options.attributes === undefined) &&
+    getAttributes(products);
+
+  if (options.filterableAttributes) {
+    attributes = attributes.filter((productAttr) =>
+      options.filterableAttributes.find(
+        (filterableAttr) => productAttr.id === filterableAttr.id,
+      ),
+    );
+  }
+
+  const categories =
+    (options.categories || options.categories === undefined) &&
+    getCategories(products);
+  const priceRange =
+    (options.price || options.price === undefined) && getPriceRange(products);
+
+  let filters = [];
+
+  if (priceRange) {
+    filters.push({
+      id: 'price',
+      label: 'Price',
+      type: 'range',
+      options: [
+        {
+          value: priceRange.min,
+          label: priceRange.min, // TODO: formatting
+        },
+        {
+          value: priceRange.max,
+          label: priceRange.max, // TODO: formatting
+        },
+      ],
+      interval: priceRange.interval,
+    });
+  }
+
+  if (categories && categories.length > 0) {
+    filters.push({
+      id: 'category',
+      label: 'Category',
+      type: 'select',
+      options: categories.map((category) => ({
+        value: category.slug,
+        label: category.name,
+      })),
+    });
+  }
+
+  if (attributes && attributes.length > 0) {
+    filters = [
+      ...filters,
+      ...reduce$1(
+        attributes,
+        (acc, attr) => [
+          ...acc,
+          ...(attr.id !== 'category' &&
+          attr.id !== 'price' &&
+          attr.values instanceof Array &&
+          attr.values.length > 0
+            ? [
+                {
+                  id: attr.id,
+                  label: attr.name,
+                  type: 'select',
+                  options: attr.values.map((value) => ({
+                    value,
+                    label: value,
+                  })),
+                },
+              ]
+            : []),
+        ],
+        [],
+      ),
+    ];
+  }
+
+  return filters;
+}
+
+function getCategories(products) {
+  const categories = [];
+  const collection =
+    (products && products.results) || (products.id ? [products] : products);
+  if (collection instanceof Array) {
+    for (let product of collection) {
+      if (product.categories) {
+        for (let category of product.categories) {
+          if (!category) continue;
+          let ex = find(categories, { id: category.id });
+          if (!ex) {
+            categories.push(category);
+          }
+        }
+      }
+    }
+  }
+  return categories;
+}
+
+function getAttributes(products) {
+  const attributes = [];
+  const collection =
+    (products && products.results) || (products.id ? [products] : products);
+  if (collection instanceof Array) {
+    for (let product of collection) {
+      if (product.attributes) {
+        for (let id in product.attributes) {
+          if (!product.attributes[id]) continue;
+          const value = product.attributes[id].value;
+          let attr = find(attributes, { id: snakeCase(id) });
+          if (attr) {
+            attr.values = uniq([
+              ...attr.values,
+              ...(value instanceof Array ? value : [value]),
+            ]);
+          } else {
+            attributes.push({
+              ...product.attributes[id],
+              value: undefined,
+              values: [...(value instanceof Array ? value : [value])],
+            });
+          }
+        }
+      }
+    }
+  }
+  return attributes;
+}
+
+function getPriceRange(products) {
+  let min;
+  let max;
+  let interval;
+  const collection =
+    (products && products.results) || (products.id ? [products] : products);
+  if (collection instanceof Array) {
+    for (let product of collection) {
+      if (max === undefined || product.price > max) {
+        max = Math.ceil(product.price);
+      }
+      if (min === undefined || product.price < min) {
+        min = Math.floor(product.price);
+      }
+    }
+  }
+  if (min === max) {
+    return null;
+  }
+  interval = Math.ceil((max - min) / 10) || 1;
+  if (interval > 1000) {
+    interval = 1000;
+  } else if (interval > 100) {
+    interval = 100;
+  } else if (interval > 10) {
+    interval = 10;
+  }
+  if (max % interval > 0) {
+    max = interval + max - (max % interval);
+  }
+  if (min % interval > 0) {
+    min = min - (min % interval);
+  }
+  while (((max - min) / interval) % 1 > 0) {
+    max++;
+  }
+  return {
+    min,
+    max,
+    interval,
+  };
+}
+
+function methods$8(request, options) {
+  return {
+    state: null,
+    order: null,
+    settings: null,
+    requested: false,
+    pendingRequests: [],
+    cacheClear: null,
+
+    async requestStateChange(method, url, id, data) {
+      return this.requestStateSync(async () => {
+        const result = await request(method, url, id, data);
+        if (result && result.errors) {
+          return result;
+        }
+        this.state = result;
+        return result;
+      });
+    },
+
+    async requestStateSync(handler) {
+      if (this.state) {
+        return await handler();
+      } else if (this.requested) {
+        return new Promise((resolve) => {
+          this.pendingRequests.push({ handler, resolve });
+        });
+      }
+
+      this.requested = true;
+      const result = await handler();
+      this.requested = false;
+      while (this.pendingRequests.length > 0) {
+        const { handler, resolve } = this.pendingRequests.shift();
+        resolve(handler());
+      }
+      return result;
+    },
+
+    get() {
+      let data;
+      if (this.cacheClear) {
+        this.cacheClear = null;
+        data = { $cache: false };
+      }
+      return this.requestStateChange('get', '/cart', undefined, data);
+    },
+
+    clearCache() {
+      this.cacheClear = true;
+    },
+
+    getItemData(item, data = {}) {
+      let result = cloneDeep(item);
+      if (typeof item === 'string') {
+        result = {
+          ...(data || {}),
+          product_id: item,
+        };
+      }
+      if (result && result.options) {
+        result.options = cleanProductOptions(result.options);
+      }
+      return result;
+    },
+
+    addItem(item, data) {
+      return this.requestStateChange(
+        'post',
+        '/cart/items',
+        this.getItemData(item, data),
+      );
+    },
+
+    updateItem(id, item) {
+      return this.requestStateChange(
+        'put',
+        `/cart/items/${id}`,
+        this.getItemData(item),
+      );
+    },
+
+    setItems(input) {
+      let items = input;
+      if (items && items.map) {
+        items = items.map(this.getItemData);
+      }
+      return this.requestStateChange('put', '/cart/items', items);
+    },
+
+    removeItem(id) {
+      return this.requestStateChange('delete', `/cart/items/${id}`);
+    },
+
+    recover(checkoutId) {
+      return this.requestStateChange('put', `/cart/recover/${checkoutId}`);
+    },
+
+    update(input) {
+      let data = input;
+      if (data.items && data.items.map) {
+        data = {
+          ...data,
+          items: data.items.map(this.getItemData),
+        };
+      }
+      return this.requestStateChange('put', `/cart`, data);
+    },
+
+    applyCoupon(code) {
+      return this.requestStateChange('put', '/cart/coupon', { code });
+    },
+
+    removeCoupon() {
+      return this.requestStateChange('delete', '/cart/coupon');
+    },
+
+    applyGiftcard(code) {
+      return this.requestStateChange('post', '/cart/giftcards', { code });
+    },
+
+    removeGiftcard(id) {
+      return this.requestStateChange('delete', `/cart/giftcards/${id}`);
+    },
+
+    async getShippingRates() {
+      await this.requestStateChange('get', '/cart/shipment-rating');
+      return this.state[
+        options.useCamelCase ? 'shipmentRating' : 'shipment_rating'
+      ];
+    },
+
+    async submitOrder() {
+      const result = await request('post', '/cart/order');
+      if (result.errors) {
+        return result;
+      }
+      this.state = null;
+      this.order = result;
+      return result;
+    },
+
+    async getOrder(checkoutId = undefined) {
+      let result;
+      if (checkoutId) {
+        result = await request('get', `/cart/order`, {
+          checkout_id: checkoutId,
+        });
+      } else {
+        result = await request('get', `/cart/order`);
+      }
+      this.order = result;
+      return result;
+    },
+
+    async getSettings() {
+      this.settings = await request('get', '/cart/settings');
+      return this.settings;
+    },
+  };
+}
+
+function methods$7(request) {
+  return {
+    state: null,
+
+    async requestStateChange(method, url, id, data) {
+      const result = await request(method, url, id, data);
+      if (result && result.errors) {
+        return result;
+      }
+      return (this.state = result);
+    },
+
+    get(query) {
+      return this.requestStateChange('get', '/account', query);
+    },
+
+    create(data) {
+      return this.requestStateChange('post', '/account', data);
+    },
+
+    update(data) {
+      return this.requestStateChange('put', '/account', data);
+    },
+
+    login(email, password) {
+      if (password && password.password_token) {
+        return this.requestStateChange('post', '/account/login', {
+          email,
+          password_token: password.password_token,
+        });
+      }
+      return this.requestStateChange('post', '/account/login', {
+        email,
+        password,
+      });
+    },
+
+    logout() {
+      this.state = null;
+      return request('post', '/account/logout');
+    },
+
+    recover(data) {
+      return request('post', '/account/recover', data);
+    },
+
+    listAddresses(query) {
+      return request('get', '/account/addresses', query);
+    },
+
+    createAddress(data) {
+      return request('post', '/account/addresses', data);
+    },
+
+    updateAddress(id, data) {
+      return request('put', `/account/addresses/${id}`, data);
+    },
+
+    deleteAddress(id) {
+      return request('delete', `/account/addresses/${id}`);
+    },
+
+    listCards(query) {
+      return request('get', '/account/cards', query);
+    },
+
+    createCard(data) {
+      return request('post', '/account/cards', data);
+    },
+
+    updateCard(id, data) {
+      return request('put', `/account/cards/${id}`, data);
+    },
+
+    deleteCard(id) {
+      return request('delete', `/account/cards/${id}`);
+    },
+
+    listOrders(query) {
+      return request('get', `/account/orders`, query);
+    },
+
+    getOrder(id) {
+      return request('get', `/account/orders/${id}`);
+    },
+
+    // Deprecated methods
+    getAddresses(query) {
+      return request('get', '/account/addresses', query);
+    },
+    getCards(query) {
+      return request('get', '/account/cards', query);
+    },
+    getOrders(query) {
+      return request('get', `/account/orders`, query);
+    },
+  };
+}
+
+function methods$6(request) {
+  const { get, list } = defaultMethods(request, '/categories', ['list', 'get']);
+
+  return {
+    get: (id, ...args) => {
+      return cacheApi.getFetch('categories', id, () => get(id, ...args));
+    },
+
+    list,
+  };
+}
+
+function methods$5(request) {
+  const { get, list } = defaultMethods(request, '/subscriptions', [
+    'list',
+    'get',
+  ]);
+  return {
+    get: (id, ...args) => {
+      return cacheApi.getFetch('subscriptions', id, () => get(id, ...args));
+    },
+
+    list,
+
+    getCleanData(data) {
+      if (data && data.options) {
+        data.options = cleanProductOptions(data.options);
+      }
+      if (data.items && data.items.map) {
+        data.items = data.items.map((item) => {
+          if (item.options) {
+            item.options = cleanProductOptions(item.options);
+          }
+          return item;
+        });
+      }
+      return data;
+    },
+
+    create(data) {
+      return request('post', '/subscriptions', this.getCleanData(data));
+    },
+
+    update(id, data) {
+      return request('put', `/subscriptions/${id}`, this.getCleanData(data));
+    },
+
+    addItem(id, item) {
+      return request(
+        'post',
+        `/subscriptions/${id}/items`,
+        this.getCleanData(item),
+      );
+    },
+
+    setItems(id, items) {
+      if (items && items.map) {
+        items = items.map(this.getCleanData);
+      }
+      return request('put', `/subscriptions/${id}/items`, items);
+    },
+
+    updateItem(id, itemId, item) {
+      return request(
+        'put',
+        `/subscriptions/${id}/items/${itemId}`,
+        this.getCleanData(item),
+      );
+    },
+
+    removeItem(id, itemId) {
+      return request('delete', `/subscriptions/${id}/items/${itemId}`);
+    },
+  };
+}
+
+function methods$4(request, opt) {
+  return {
+    get: (type, id, query) => {
+      return cacheApi.getFetch(`content_${type}`, id, () =>
+        request('get', `/content/${type}`, id, {
+          $preview: opt.previewContent,
+          ...(query || {}),
+        }),
+      );
+    },
+
+    list: (type, query) => request('get', `/content/${type}`, undefined, query),
+  };
+}
+
+function methods$3(request, opt) {
+  return {
+    state: null,
+    menuState: null,
+    paymentState: null,
+    subscriptionState: null,
+    sessionState: null,
+    localizedState: {},
+
+    refresh() {
+      this.state = null;
+      this.menuState = null;
+      this.paymentState = null;
+      this.subscriptionState = null;
+      this.sessionState = null;
+      this.localizedState = {};
+      return this.get();
+    },
+
+    getState(
+      uri,
+      stateName,
+      {
+        id = undefined,
+        def = undefined,
+        refresh = false,
+        locale = undefined,
+      } = {},
+    ) {
+      if (!this[stateName] || refresh) {
+        this[stateName] = request('get', uri);
+      }
+      if (this[stateName] && typeof this[stateName].then === 'function') {
+        return this[stateName].then((state) => {
+          this[stateName] = state;
+          return this.getLocalizedState(stateName, id, def, locale);
+        });
+      }
+      return this.getLocalizedState(stateName, id, def, locale);
+    },
+
+    getLocalizedState(stateName, id, def, loc) {
+      const locale = loc || this.getCurrentLocale();
+
+      const ls = this.localizedState;
+      if (ls.code !== locale) {
+        ls.code = locale;
+        delete ls[locale];
+      }
+      if (!ls[locale]) {
+        ls[locale] = {};
+      }
+      if (!ls[locale][stateName]) {
+        ls[locale][stateName] = this.decodeLocale(this[stateName], loc);
+      }
+      return id ? get(ls[locale][stateName], id, def) : ls[locale][stateName];
+    },
+
+    findState(
+      uri,
+      stateName,
+      { where = undefined, def = undefined, locale = undefined } = {},
+    ) {
+      const state = this.getState(uri, stateName, { locale });
+      if (state && typeof state.then === 'function') {
+        return state.then((state) => find(state, where) || def);
+      }
+      return find(state, where) || def;
+    },
+
+    get(id = undefined, def = undefined, locale = undefined) {
+      return this.getState('/settings', 'state', { id, def, locale });
+    },
+
+    getCurrentLocale() {
+      return opt.api.locale.selected();
+    },
+
+    getStoreLocale() {
+      return get(this.state, 'store.locale');
+    },
+
+    getStoreLocales() {
+      return get(this.state, 'store.locales');
+    },
+
+    set({ model, path, value, loc }) {
+      const locale = loc || this.getCurrentLocale();
+      const stateName = model ? `${model.replace(/s$/, '')}State` : 'state';
+      const { useCamelCase } = opt;
+
+      let mergeData = {};
+
+      if (path) set(mergeData, path, value);
+      else mergeData = value;
+
+      if (useCamelCase) {
+        mergeData = toCamel(mergeData);
+      }
+
+      this[stateName] = merge(this[stateName] || {}, mergeData);
+
+      if (this.localizedState[locale]) {
+        this.localizedState[locale][stateName] = this.decodeLocale(
+          this[stateName],
+          locale,
+        );
+      }
+    },
+
+    menus(id = undefined, def = undefined, locale = undefined) {
+      return this.findState('/settings/menus', 'menuState', {
+        where: { id },
+        def,
+        locale,
+      });
+    },
+
+    payments(id = undefined, def = undefined, locale = undefined) {
+      return this.getState('/settings/payments', 'paymentState', {
+        id,
+        def,
+        locale,
+      });
+    },
+
+    subscriptions(id = undefined, def = undefined, locale = undefined) {
+      return this.getState('/settings/subscriptions', 'subscriptionState', {
+        id,
+        def,
+        locale,
+      });
+    },
+
+    session(id = undefined, def = undefined, locale = undefined) {
+      return this.getState('/session', 'sessionState', { id, def, locale });
+    },
+
+    decodeLocale(values, loc) {
+      const locale = loc || this.getCurrentLocale();
+
+      if (!values || typeof values !== 'object') {
+        return values;
+      }
+
+      let configs = this.getStoreLocales();
+      if (configs) {
+        configs = configs.reduce(
+          (acc, config) => ({
+            ...acc,
+            [config.code]: config,
+          }),
+          {},
+        );
+      } else {
+        configs = {};
+      }
+
+      return decodeLocaleObjects(cloneDeep(values), locale, configs, opt);
+    },
+
+    async load() {
+      try {
+        const { settings, menus, payments, subscriptions, session } =
+          await request('get', '/settings/all');
+
+        this.localizedState = {};
+
+        this.set({
+          value: settings,
+        });
+
+        this.set({
+          model: 'menus',
+          value: menus,
+        });
+
+        this.set({
+          model: 'payments',
+          value: payments,
+        });
+
+        this.set({
+          model: 'subscriptions',
+          value: subscriptions,
+        });
+
+        this.set({
+          model: 'session',
+          value: session,
+        });
+      } catch (err) {
+        console.error(`Swell: unable to loading settings (${err})`);
+      }
+    },
+  };
+}
+
+function decodeLocaleObjects(values, locale, configs, opt) {
+  if (isObject(values)) {
+    const keys = Object.keys(values);
+    for (let key of keys) {
+      if (key === '$locale') {
+        decodeLocaleValue(locale, values, key, configs, opt);
+        delete values.$locale;
+      }
+      if (values[key] !== undefined) {
+        values[key] = decodeLocaleObjects(values[key], locale, configs, opt);
+      }
+    }
+  } else if (values instanceof Array) {
+    for (var i = 0; i < values.length; i++) {
+      values[i] = decodeLocaleObjects(values[i], locale, configs, opt);
+    }
+  }
+  return values;
+}
+
+function decodeLocaleValue(locale, values, key, configs, opt) {
+  if (!locale || !isObject(values[key])) {
+    return;
+  }
+
+  let returnLocaleKey;
+  let returnLocaleConfig;
+  const localeKeys = Object.keys(values[key]);
+  for (let localeKey of localeKeys) {
+    const shortKey = localeKey.replace(/\-.+$/, '');
+    const transformedLocale = opt.useCamelCase ? camelCase(locale) : locale;
+
+    if (
+      localeKey === locale ||
+      localeKey === transformedLocale ||
+      shortKey === transformedLocale
+    ) {
+      returnLocaleKey = locale;
+      returnLocaleConfig = configs[locale];
+    }
+  }
+
+  // Find configured locale for fallback
+  if (!returnLocaleKey && isObject(configs)) {
+    const localeKeys = Object.keys(configs);
+    for (let localeKey of localeKeys) {
+      const shortKey = localeKey.replace(/\-.+$/, '');
+      if (localeKey === locale || shortKey === locale) {
+        returnLocaleKey = localeKey;
+        returnLocaleConfig = configs[localeKey];
+      }
+    }
+  }
+
+  // Find fallback key and values if applicable
+  let fallbackKeys;
+  let fallbackValues = {};
+  if (returnLocaleConfig) {
+    let fallbackKey = returnLocaleConfig.fallback;
+    const origFallbackKey = fallbackKey;
+    while (fallbackKey) {
+      fallbackKeys = fallbackKeys || [];
+      fallbackKeys.push(fallbackKey);
+      fallbackValues = {
+        ...(values[key][fallbackKey] || {}),
+        ...fallbackValues,
+      };
+      fallbackKey = configs[fallbackKey] && configs[fallbackKey].fallback;
+      if (origFallbackKey === fallbackKey) {
+        break;
+      }
+    }
+  }
+
+  // Merge locale value with fallbacks
+  let localeValues = {
+    ...fallbackValues,
+    ...(values[key][returnLocaleKey] || {}),
+  };
+  const valueKeys = Object.keys(localeValues);
+  for (let valueKey of valueKeys) {
+    const hasValue =
+      localeValues[valueKey] !== null && localeValues[valueKey] !== '';
+    let shouldFallback = fallbackKeys && !hasValue;
+    if (shouldFallback) {
+      for (let fallbackKey of fallbackKeys) {
+        shouldFallback =
+          !values[key][fallbackKey] ||
+          values[key][fallbackKey][valueKey] === null ||
+          values[key][fallbackKey][valueKey] === '';
+        if (shouldFallback) {
+          if (fallbackKey === 'none') {
+            values[valueKey] = null;
+            break;
+          }
+          continue;
+        } else {
+          values[valueKey] = values[key][fallbackKey][valueKey];
+          break;
+        }
+      }
+    } else {
+      if (hasValue) {
+        values[valueKey] = localeValues[valueKey];
+      }
+    }
+  }
+}
+
+/**
+ * Converts `string`, as a whole, to lower case just like
+ * [String#toLowerCase](https://mdn.io/toLowerCase).
+ *
+ * @static
+ * @memberOf _
+ * @since 4.0.0
+ * @category String
+ * @param {string} [string=''] The string to convert.
+ * @returns {string} Returns the lower cased string.
+ * @example
+ *
+ * _.toLower('--Foo-Bar--');
+ * // => '--foo-bar--'
+ *
+ * _.toLower('fooBar');
+ * // => 'foobar'
+ *
+ * _.toLower('__FOO_BAR__');
+ * // => '__foo_bar__'
+ */
+function toLower(value) {
+  return toString(value).toLowerCase();
+}
+
+/**
+ * A specialized version of `_.reduce` for arrays without support for
+ * iteratee shorthands.
+ *
+ * @private
+ * @param {Array} [array] The array to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @param {*} [accumulator] The initial value.
+ * @param {boolean} [initAccum] Specify using the first element of `array` as
+ *  the initial value.
+ * @returns {*} Returns the accumulated value.
+ */
+function arrayReduce(array, iteratee, accumulator, initAccum) {
+  var index = -1,
+      length = array == null ? 0 : array.length;
+
+  if (initAccum && length) {
+    accumulator = array[++index];
+  }
+  while (++index < length) {
+    accumulator = iteratee(accumulator, array[index], index, array);
+  }
+  return accumulator;
+}
+
+/**
+ * Creates a base function for methods like `_.forIn` and `_.forOwn`.
+ *
+ * @private
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new base function.
+ */
+function createBaseFor(fromRight) {
+  return function(object, iteratee, keysFunc) {
+    var index = -1,
+        iterable = Object(object),
+        props = keysFunc(object),
+        length = props.length;
+
+    while (length--) {
+      var key = props[fromRight ? length : ++index];
+      if (iteratee(iterable[key], key, iterable) === false) {
+        break;
+      }
+    }
+    return object;
+  };
+}
+
+/**
+ * The base implementation of `baseForOwn` which iterates over `object`
+ * properties returned by `keysFunc` and invokes `iteratee` for each property.
+ * Iteratee functions may exit iteration early by explicitly returning `false`.
+ *
+ * @private
+ * @param {Object} object The object to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @param {Function} keysFunc The function to get the keys of `object`.
+ * @returns {Object} Returns `object`.
+ */
+var baseFor = createBaseFor();
+
+/**
+ * The base implementation of `_.forOwn` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Object} object The object to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Object} Returns `object`.
+ */
+function baseForOwn(object, iteratee) {
+  return object && baseFor(object, iteratee, keys);
+}
+
+/**
+ * Creates a `baseEach` or `baseEachRight` function.
+ *
+ * @private
+ * @param {Function} eachFunc The function to iterate over a collection.
+ * @param {boolean} [fromRight] Specify iterating from right to left.
+ * @returns {Function} Returns the new base function.
+ */
+function createBaseEach(eachFunc, fromRight) {
+  return function(collection, iteratee) {
+    if (collection == null) {
+      return collection;
+    }
+    if (!isArrayLike(collection)) {
+      return eachFunc(collection, iteratee);
+    }
+    var length = collection.length,
+        index = fromRight ? length : -1,
+        iterable = Object(collection);
+
+    while ((fromRight ? index-- : ++index < length)) {
+      if (iteratee(iterable[index], index, iterable) === false) {
+        break;
+      }
+    }
+    return collection;
+  };
+}
+
+/**
+ * The base implementation of `_.forEach` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array|Object} Returns `collection`.
+ */
+var baseEach = createBaseEach(baseForOwn);
+
+/**
+ * The base implementation of `_.reduce` and `_.reduceRight`, without support
+ * for iteratee shorthands, which iterates over `collection` using `eachFunc`.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @param {*} accumulator The initial value.
+ * @param {boolean} initAccum Specify using the first or last element of
+ *  `collection` as the initial value.
+ * @param {Function} eachFunc The function to iterate over `collection`.
+ * @returns {*} Returns the accumulated value.
+ */
+function baseReduce(collection, iteratee, accumulator, initAccum, eachFunc) {
+  eachFunc(collection, function(value, index, collection) {
+    accumulator = initAccum
+      ? (initAccum = false, value)
+      : iteratee(accumulator, value, index, collection);
+  });
+  return accumulator;
+}
+
+/**
+ * Reduces `collection` to a value which is the accumulated result of running
+ * each element in `collection` thru `iteratee`, where each successive
+ * invocation is supplied the return value of the previous. If `accumulator`
+ * is not given, the first element of `collection` is used as the initial
+ * value. The iteratee is invoked with four arguments:
+ * (accumulator, value, index|key, collection).
+ *
+ * Many lodash methods are guarded to work as iteratees for methods like
+ * `_.reduce`, `_.reduceRight`, and `_.transform`.
+ *
+ * The guarded methods are:
+ * `assign`, `defaults`, `defaultsDeep`, `includes`, `merge`, `orderBy`,
+ * and `sortBy`
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} [iteratee=_.identity] The function invoked per iteration.
+ * @param {*} [accumulator] The initial value.
+ * @returns {*} Returns the accumulated value.
+ * @see _.reduceRight
+ * @example
+ *
+ * _.reduce([1, 2], function(sum, n) {
+ *   return sum + n;
+ * }, 0);
+ * // => 3
+ *
+ * _.reduce({ 'a': 1, 'b': 2, 'c': 1 }, function(result, value, key) {
+ *   (result[value] || (result[value] = [])).push(key);
+ *   return result;
+ * }, {});
+ * // => { '1': ['a', 'c'], '2': ['b'] } (iteration order is not guaranteed)
+ */
+function reduce(collection, iteratee, accumulator) {
+  var func = isArray(collection) ? arrayReduce : baseReduce,
+      initAccum = arguments.length < 3;
+
+  return func(collection, baseIteratee(iteratee), accumulator, initAccum, baseEach);
+}
+
+/** `Object#toString` result references. */
+var mapTag = '[object Map]',
+    setTag = '[object Set]';
+
+/** Used for built-in method references. */
+var objectProto = Object.prototype;
+
+/** Used to check objects for own properties. */
+var hasOwnProperty = objectProto.hasOwnProperty;
+
+/**
+ * Checks if `value` is an empty object, collection, map, or set.
+ *
+ * Objects are considered empty if they have no own enumerable string keyed
+ * properties.
+ *
+ * Array-like values such as `arguments` objects, arrays, buffers, strings, or
+ * jQuery-like collections are considered empty if they have a `length` of `0`.
+ * Similarly, maps and sets are considered empty if they have a `size` of `0`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Lang
+ * @param {*} value The value to check.
+ * @returns {boolean} Returns `true` if `value` is empty, else `false`.
+ * @example
+ *
+ * _.isEmpty(null);
+ * // => true
+ *
+ * _.isEmpty(true);
+ * // => true
+ *
+ * _.isEmpty(1);
+ * // => true
+ *
+ * _.isEmpty([1, 2, 3]);
+ * // => false
+ *
+ * _.isEmpty({ 'a': 1 });
+ * // => false
+ */
+function isEmpty(value) {
+  if (value == null) {
+    return true;
+  }
+  if (isArrayLike(value) &&
+      (isArray(value) || typeof value == 'string' || typeof value.splice == 'function' ||
+        isBuffer(value) || isTypedArray(value) || isArguments(value))) {
+    return !value.length;
+  }
+  var tag = getTag$1(value);
+  if (tag == mapTag || tag == setTag) {
+    return !value.size;
+  }
+  if (isPrototype(value)) {
+    return !baseKeys(value).length;
+  }
+  for (var key in value) {
+    if (hasOwnProperty.call(value, key)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/**
+ * The base implementation of `_.map` without support for iteratee shorthands.
+ *
+ * @private
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} iteratee The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ */
+function baseMap(collection, iteratee) {
+  var index = -1,
+      result = isArrayLike(collection) ? Array(collection.length) : [];
+
+  baseEach(collection, function(value, key, collection) {
+    result[++index] = iteratee(value, key, collection);
+  });
+  return result;
+}
+
+/**
+ * Creates an array of values by running each element in `collection` thru
+ * `iteratee`. The iteratee is invoked with three arguments:
+ * (value, index|key, collection).
+ *
+ * Many lodash methods are guarded to work as iteratees for methods like
+ * `_.every`, `_.filter`, `_.map`, `_.mapValues`, `_.reject`, and `_.some`.
+ *
+ * The guarded methods are:
+ * `ary`, `chunk`, `curry`, `curryRight`, `drop`, `dropRight`, `every`,
+ * `fill`, `invert`, `parseInt`, `random`, `range`, `rangeRight`, `repeat`,
+ * `sampleSize`, `slice`, `some`, `sortBy`, `split`, `take`, `takeRight`,
+ * `template`, `trim`, `trimEnd`, `trimStart`, and `words`
+ *
+ * @static
+ * @memberOf _
+ * @since 0.1.0
+ * @category Collection
+ * @param {Array|Object} collection The collection to iterate over.
+ * @param {Function} [iteratee=_.identity] The function invoked per iteration.
+ * @returns {Array} Returns the new mapped array.
+ * @example
+ *
+ * function square(n) {
+ *   return n * n;
+ * }
+ *
+ * _.map([4, 8], square);
+ * // => [16, 64]
+ *
+ * _.map({ 'a': 4, 'b': 8 }, square);
+ * // => [16, 64] (iteration order is not guaranteed)
+ *
+ * var users = [
+ *   { 'user': 'barney' },
+ *   { 'user': 'fred' }
+ * ];
+ *
+ * // The `_.property` iteratee shorthand.
+ * _.map(users, 'user');
+ * // => ['barney', 'fred']
+ */
+function map(collection, iteratee) {
+  var func = isArray(collection) ? arrayMap : baseMap;
+  return func(collection, baseIteratee(iteratee));
+}
+
+const addressFieldsMap$1 = {
+  city: 'city',
+  country: 'country',
+  line1: 'address1',
+  line2: 'address2',
+  postal_code: 'zip',
+  state: 'state',
+};
+
+const billingFieldsMap = {
+  name: 'name',
+  phone: 'phone',
+};
+
+function mapValues(fieldsMap, data) {
+  const result = {};
+  for (const [destinationKey, sourceKey] of Object.entries(fieldsMap)) {
+    const value = data[sourceKey];
+    if (value) {
+      result[destinationKey] = value;
+    }
+  }
+  return result;
+}
+
+function getBillingDetails(cart) {
+  const details = {
+    ...mapValues(billingFieldsMap, cart.billing),
+  };
+
+  if (cart.account && cart.account.email) {
+    details.email = cart.account.email;
+  }
+
+  const address = mapValues(addressFieldsMap$1, cart.billing);
+  if (!isEmpty(address)) {
+    details.address = address;
+  }
+
+  return details;
+}
+
+function getKlarnaItems(cart) {
+  const currency = toLower(get(cart, 'currency', 'eur'));
+  const items = map(cart.items, (item) => ({
+    type: 'sku',
+    description: item.product.name,
+    quantity: item.quantity,
+    currency,
+    amount: Math.round(toNumber(item.price_total - item.discount_total) * 100),
+  }));
+
+  const tax = get(cart, 'tax_included_total');
+  if (tax) {
+    items.push({
+      type: 'tax',
+      description: 'Taxes',
+      currency,
+      amount: Math.round(toNumber(tax) * 100),
+    });
+  }
+
+  const shipping = get(cart, 'shipping', {});
+  const shippingTotal = get(cart, 'shipment_total', {});
+  if (shipping.price) {
+    items.push({
+      type: 'shipping',
+      description: shipping.service_name,
+      currency,
+      amount: Math.round(toNumber(shippingTotal) * 100),
+    });
+  }
+
+  return items;
+}
+
+function setKlarnaBillingShipping(source, data) {
+  const shippingNameFieldsMap = {
+    shipping_first_name: 'first_name',
+    shipping_last_name: 'last_name',
+  };
+  const shippingFieldsMap = {
+    phone: 'phone',
+  };
+  const billingNameFieldsMap = {
+    first_name: 'first_name',
+    last_name: 'last_name',
+  };
+  const billingFieldsMap = {
+    email: 'email',
+  };
+
+  const fillValues = (fieldsMap, data) =>
+    reduce(
+      fieldsMap,
+      (acc, srcKey, destKey) => {
+        const value = data[srcKey];
+        if (value) {
+          acc[destKey] = value;
+        }
+        return acc;
+      },
+      {},
+    );
+
+  source.klarna = {
+    ...source.klarna,
+    ...fillValues(shippingNameFieldsMap, data.shipping),
+  };
+  const shipping = fillValues(shippingFieldsMap, data.shipping);
+  const shippingAddress = fillValues(addressFieldsMap$1, data.shipping);
+  if (shipping || shippingAddress) {
+    source.source_order.shipping = {
+      ...(shipping ? shipping : {}),
+      ...(shippingAddress ? { address: shippingAddress } : {}),
+    };
+  }
+
+  source.klarna = {
+    ...source.klarna,
+    ...fillValues(
+      billingNameFieldsMap,
+      data.billing || get(data, 'account.billing') || data.shipping,
+    ),
+  };
+  const billing = fillValues(billingFieldsMap, data.account);
+  const billingAddress = fillValues(
+    addressFieldsMap$1,
+    data.billing || get(data, 'account.billing') || data.shipping,
+  );
+  if (billing || billingAddress) {
+    source.owner = {
+      ...(billing ? billing : {}),
+      ...(billingAddress ? { address: billingAddress } : {}),
+    };
+  }
+}
+
+function setBancontactOwner(source, data) {
+  const fillValues = (fieldsMap, data) =>
+    reduce(
+      fieldsMap,
+      (acc, srcKey, destKey) => {
+        const value = data[srcKey];
+        if (value) {
+          acc[destKey] = value;
+        }
+        return acc;
+      },
+      {},
+    );
+  const { account = {}, billing, shipping } = data;
+  const billingData = {
+    ...account.shipping,
+    ...account.billing,
+    ...shipping,
+    ...billing,
+  };
+  const billingAddress = fillValues(addressFieldsMap$1, billingData);
+
+  source.owner = {
+    email: account.email,
+    name: billingData.name || account.name,
+    ...(billingData.phone
+      ? { phone: billingData.phone }
+      : account.phone
+      ? { phone: account.phone }
+      : {}),
+    ...(!isEmpty(billingAddress) ? { address: billingAddress } : {}),
+  };
+}
+
+async function createPaymentMethod(stripe, cardElement, cart) {
+  const billingDetails = getBillingDetails(cart);
+  const { paymentMethod, error } = await stripe.createPaymentMethod({
+    type: 'card',
+    card: cardElement,
+    billing_details: billingDetails,
+  });
+
+  return error
+    ? { error }
+    : {
+        token: paymentMethod.id,
+        last4: paymentMethod.card.last4,
+        exp_month: paymentMethod.card.exp_month,
+        exp_year: paymentMethod.card.exp_year,
+        brand: paymentMethod.card.brand,
+        address_check: paymentMethod.card.checks.address_line1_check,
+        cvc_check: paymentMethod.card.checks.cvc_check,
+        zip_check: paymentMethod.card.checks.address_zip_check,
+      };
+}
+
+async function createIDealPaymentMethod(stripe, element, cart) {
+  const billingDetails = getBillingDetails(cart);
+  return await stripe.createPaymentMethod({
+    type: 'ideal',
+    ideal: element,
+    ...(billingDetails ? { billing_details: billingDetails } : {}),
+  });
+}
+
+async function createKlarnaSource(stripe, cart) {
+  const sourceObject = {
+    type: 'klarna',
+    flow: 'redirect',
+    amount: Math.round(get(cart, 'grand_total', 0) * 100),
+    currency: toLower(get(cart, 'currency', 'eur')),
+    klarna: {
+      product: 'payment',
+      purchase_country: get(cart, 'settings.country', 'DE'),
+    },
+    source_order: {
+      items: getKlarnaItems(cart),
+    },
+    redirect: {
+      return_url: window.location.href,
+    },
+  };
+  setKlarnaBillingShipping(sourceObject, cart);
+
+  return await stripe.createSource(sourceObject);
+}
+
+async function createBancontactSource(stripe, cart) {
+  const sourceObject = {
+    type: 'bancontact',
+    amount: Math.round(get(cart, 'grand_total', 0) * 100),
+    currency: toLower(get(cart, 'currency', 'eur')),
+    redirect: {
+      return_url: window.location.href,
+    },
+  };
+  setBancontactOwner(sourceObject, cart);
+
+  return await stripe.createSource(sourceObject);
+}
+
+function stripeAmountByCurrency(currency, amount) {
+  const zeroDecimalCurrencies = [
+    'BIF', // Burundian Franc
+    'DJF', // Djiboutian Franc,
+    'JPY', // Japanese Yen
+    'KRW', // South Korean Won
+    'PYG', // Paraguayan Guaraní
+    'VND', // Vietnamese Đồng
+    'XAF', // Central African Cfa Franc
+    'XPF', // Cfp Franc
+    'CLP', // Chilean Peso
+    'GNF', // Guinean Franc
+    'KMF', // Comorian Franc
+    'MGA', // Malagasy Ariary
+    'RWF', // Rwandan Franc
+    'VUV', // Vanuatu Vatu
+    'XOF', // West African Cfa Franc
+  ];
+  if (zeroDecimalCurrencies.includes(currency.toUpperCase())) {
+    return amount;
+  } else {
+    return Math.round(amount * 100);
+  }
+}
+
+function generateOrderId() {
+  return Math.random().toString(36).substr(2, 9);
+}
+
+async function createQuickpayCard(authorize) {
+  const returnUrl = window.location.origin + window.location.pathname;
+  const authorization = await authorize({
+    gateway: 'quickpay',
+    params: {
+      action: 'create',
+      continueurl: `${returnUrl}?gateway=quickpay&redirect_status=succeeded`,
+      cancelurl: `${returnUrl}?gateway=quickpay&redirect_status=canceled`,
+    },
+  });
+
+  if (authorization && authorization.url) {
+    window.location.replace(authorization.url);
+  }
+}
+
+async function getQuickpayCardDetais(id, authorize) {
+  return await authorize({
+    gateway: 'quickpay',
+    params: { action: 'get', id },
+  });
+}
+
+async function createQuickpayPayment(cart, createIntent) {
+  return await createIntent({
+    gateway: 'quickpay',
+    intent: {
+      currency: get(cart, 'currency', 'USD'),
+      order_id: generateOrderId(),
+    },
+  });
+}
+
+async function createPaysafecardPayment(cart, createIntent) {
+  const returnUrl = window.location.origin + window.location.pathname;
+  const url = `${returnUrl}?gateway=paysafecard`;
+
+  return await createIntent({
+    gateway: 'paysafecard',
+    intent: {
+      type: 'PAYSAFECARD',
+      amount: cart.grand_total,
+      redirect: {
+        success_url: url,
+        failure_url: url,
+      },
+      notification_url: url,
+      customer: {
+        id: get(cart, 'account.id'),
+      },
+      currency: get(cart, 'currency', 'USD'),
+    },
+  });
+}
+
+const addressFieldsMap = {
+  given_name: 'first_name',
+  family_name: 'last_name',
+  city: 'city',
+  country: 'country',
+  phone: 'phone',
+  postal_code: 'zip',
+  street_address: 'address1',
+  street_address2: 'address2',
+  region: 'state',
+};
+
+const mapFields = (fieldsMap, data) =>
+  reduce(
+    fieldsMap,
+    (acc, srcKey, destKey) => {
+      const value = data[srcKey];
+      if (value) {
+        acc[destKey] = value;
+      }
+      return acc;
+    },
+    {},
+  );
+
+const mapAddressFields = (cart, addressField) => ({
+  ...mapFields(addressFieldsMap, cart[addressField]),
+  email: get(cart, 'account.email'),
+});
+
+function getOrderLines(cart) {
+  const items = map(cart.items, (item) => ({
+    type: 'physical',
+    name: get(item, 'product.name'),
+    reference: get(item, 'product.sku') || get(item, 'product.slug'),
+    quantity: item.quantity,
+    unit_price: Math.round(toNumber(item.price - item.discount_each) * 100),
+    total_amount: Math.round(
+      toNumber(item.price_total - item.discount_total) * 100,
+    ),
+    tax_rate: 0,
+    total_tax_amount: 0,
+  }));
+
+  const tax = get(cart, 'tax_included_total');
+  const taxAmount = toNumber(tax) * 100;
+  if (tax) {
+    items.push({
+      type: 'sales_tax',
+      name: 'Taxes',
+      quantity: 1,
+      unit_price: taxAmount,
+      total_amount: taxAmount,
+      tax_rate: 0,
+      total_tax_amount: 0,
+    });
+  }
+
+  const shipping = get(cart, 'shipping', {});
+  const shippingTotal = get(cart, 'shipment_total', {});
+  const shippingAmount = toNumber(shippingTotal) * 100;
+  if (shipping.price) {
+    items.push({
+      type: 'shipping_fee',
+      name: shipping.service_name,
+      quantity: 1,
+      unit_price: shippingAmount,
+      total_amount: shippingAmount,
+      tax_rate: 0,
+      total_tax_amount: 0,
+    });
+  }
+
+  return items;
+}
+
+async function createKlarnaSession(cart, createIntent) {
+  const returnUrl = `${window.location.origin}${window.location.pathname}?gateway=klarna_direct&sid={{session_id}}`;
+  const successUrl = `${returnUrl}&authorization_token={{authorization_token}}`;
+
+  return createIntent({
+    gateway: 'klarna',
+    intent: {
+      locale: cart.display_locale || get(cart, 'settings.locale') || 'en-US',
+      purchase_country:
+        get(cart, 'billing.country') || get(cart, 'shipping.country'),
+      purchase_currency: cart.currency,
+      billing_address: mapAddressFields(cart, 'billing'),
+      shipping_address: mapAddressFields(cart, 'shipping'),
+      order_amount: Math.round(get(cart, 'grand_total', 0) * 100),
+      order_lines: JSON.stringify(getOrderLines(cart)),
+      merchant_urls: {
+        success: successUrl,
+        back: returnUrl,
+        cancel: returnUrl,
+        error: returnUrl,
+        failure: returnUrl,
+      },
+    },
+  });
+}
+
+const LOADING_SCRIPTS = {};
+const CARD_ELEMENTS = {};
+const API = {};
+
+let options$1 = null;
+
+function methods$2(request, opts) {
+  options$1 = opts || options$1;
+
+  return {
+    params: null,
+    methodSettings: null,
+
+    get(id) {
+      return request('get', '/payments', id);
+    },
+
+    async methods() {
+      if (this.methodSettings) {
+        return this.methodSettings;
+      }
+      const result = await request('get', '/payment/methods');
+      return (this.methodSettings = result);
+    },
+
+    async createElements(elementParams) {
+      this.params = elementParams || {};
+      const cart = toSnake(await methods$8(request, options$1).get());
+      if (!cart) {
+        throw new Error('Cart not found');
+      }
+      const payMethods = toSnake(
+        await methods$3(request, options$1).payments(),
+      );
+      if (payMethods.error) {
+        throw new Error(payMethods.error);
+      }
+      await render(request, cart, payMethods, this.params);
+    },
+
+    async tokenize(params) {
+      const cart = toSnake(await methods$8(request, options$1).get());
+      if (!cart) {
+        throw new Error('Cart not found');
+      }
+      const payMethods = toSnake(
+        await methods$3(request, options$1).payments(),
+      );
+      if (payMethods.error) {
+        throw new Error(payMethods.error);
+      }
+      return await paymentTokenize(
+        request,
+        params || this.params,
+        payMethods,
+        cart,
+      );
+    },
+
+    async handleRedirect(params) {
+      const cart = toSnake(await methods$8(request, options$1).get());
+      if (!cart) {
+        throw new Error('Cart not found');
+      }
+      return await handleRedirect(request, params || this.params, cart);
+    },
+
+    async authenticate(id) {
+      const payment = await this.get(id);
+      if (!payment) {
+        throw new Error('Payment not found');
+      }
+      const payMethods = toSnake(
+        await methods$3(request, options$1).payments(),
+      );
+      if (payMethods.error) {
+        throw new Error(payMethods.error);
+      }
+      return await authenticate(request, payment, payMethods);
+    },
+
+    async createIntent(data) {
+      const intent = await vaultRequest('post', '/intent', data);
+      if (intent.errors) {
+        const param = Object.keys(intent.errors)[0];
+        const err = new Error(intent.errors[param].message || 'Unknown error');
+        err.code = 'vault_error';
+        err.status = 402;
+        err.param = param;
+        throw err;
+      }
+      return intent;
+    },
+
+    async updateIntent(data) {
+      const intent = await vaultRequest('put', '/intent', data);
+      if (intent.errors) {
+        const param = Object.keys(intent.errors)[0];
+        const err = new Error(intent.errors[param].message || 'Unknown error');
+        err.code = 'vault_error';
+        err.status = 402;
+        err.param = param;
+        throw err;
+      }
+      return intent;
+    },
+
+    async authorizeGateway(data) {
+      const authorization = await vaultRequest('post', '/authorization', data);
+      if (authorization.errors) {
+        const param = Object.keys(authorization.errors)[0];
+        const err = new Error(
+          authorization.errors[param].message || 'Unknown error',
+        );
+        err.code = 'vault_error';
+        err.status = 402;
+        err.param = param;
+        throw err;
+      }
+      return authorization;
+    },
+  };
+}
+
+async function render(request, cart, payMethods, params) {
+  if (params.card) {
+    if (!payMethods.card) {
+      console.error(
+        `Payment element error: credit card payments are disabled. See Payment settings in the Swell dashboard for details.`,
+      );
+    } else if (payMethods.card.gateway === 'braintree') {
+      if (!window.braintree) {
+        await loadScript(
+          'braintree-web',
+          'https://js.braintreegateway.com/web/3.57.0/js/client.min.js',
+        );
+      }
+      // TODO: implement braintree elements
+    } else if (payMethods.card.gateway === 'stripe') {
+      if (!window.Stripe) {
+        await loadScript('stripe-js', 'https://js.stripe.com/v3/');
+      }
+      await stripeElements(request, payMethods, params);
+    }
+  }
+  if (params.ideal) {
+    if (!payMethods.card) {
+      console.error(
+        `Payment element error: credit card payments are disabled. See Payment settings in the Swell dashboard for details.`,
+      );
+    } else if (!payMethods.ideal) {
+      console.error(
+        `Payment element error: iDEAL payments are disabled. See Payment settings in the Swell dashboard for details.`,
+      );
+    } else if (payMethods.card.gateway === 'stripe') {
+      if (!window.Stripe) {
+        await loadScript('stripe-js', 'https://js.stripe.com/v3/');
+      }
+      await stripeElements(request, payMethods, params);
+    }
+  }
+  if (params.paypal) {
+    if (!payMethods.paypal) {
+      console.error(
+        `Payment element error: PayPal payments are disabled. See Payment settings in the Swell dashboard for details.`,
+      );
+    } else if (
+      payMethods.card &&
+      payMethods.card.gateway === 'braintree' &&
+      payMethods.paypal.gateway === 'braintree'
+    ) {
+      if (!window.paypal) {
+        await loadScript(
+          'paypal-sdk',
+          `https://www.paypal.com/sdk/js?currency=${cart.currency}&client-id=${payMethods.paypal.client_id}&merchant-id=${payMethods.paypal.merchant_id}&vault=true`,
+        );
+      }
+      if (!window.braintree) {
+        await loadScript(
+          'braintree-web',
+          'https://js.braintreegateway.com/web/3.57.0/js/client.min.js',
+        );
+      }
+      if (window.braintree && !window.braintree.paypalCheckout) {
+        await loadScript(
+          'braintree-web-paypal-checkout',
+          'https://js.braintreegateway.com/web/3.57.0/js/paypal-checkout.min.js',
+        );
+      }
+      await braintreePayPalButton(request, cart, payMethods, params);
+    } else {
+      if (!window.paypal) {
+        await loadScript(
+          'paypal-sdk',
+          `https://www.paypal.com/sdk/js?currency=${cart.currency}&client-id=${payMethods.paypal.client_id}&merchant-id=${payMethods.paypal.merchant_id}&intent=authorize&commit=false`,
+        );
+      }
+      await payPalButton(request, cart, payMethods, params);
+    }
+  }
+}
+
+const loadScript = async (id, src) => {
+  LOADING_SCRIPTS[id] =
+    LOADING_SCRIPTS[id] ||
+    new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.id = id;
+      script.src = src;
+      script.async = true;
+      script.type = 'text/javascript';
+      script.addEventListener(
+        'load',
+        () => {
+          resolve();
+          LOADING_SCRIPTS[id] = null;
+        },
+        {
+          once: true,
+        },
+      );
+      document.head.appendChild(script);
+    });
+  return LOADING_SCRIPTS[id];
+};
+
+async function stripeElements(request, payMethods, params) {
+  const { publishable_key } = payMethods.card;
+  const stripe = window.Stripe(publishable_key);
+  const elements = stripe.elements(params.config);
+  const createElement = (type) => {
+    const elementParams =
+      get(params, `card[${type}]`) || params.card || params.ideal;
+    const elementOptions = elementParams.options || {};
+    const element = elements.create(type, elementOptions);
+    element.mount(elementParams.elementId || `#${type}-element`);
+
+    elementParams.onChange && element.on('change', elementParams.onChange);
+    elementParams.onReady && element.on('ready', elementParams.onReady);
+    elementParams.onFocus && element.on('focus', elementParams.onFocus);
+    elementParams.onBlur && element.on('blur', elementParams.onBlur);
+    elementParams.onEscape && element.on('escape', elementParams.onEscape);
+    elementParams.onClick && element.on('click', elementParams.onClick);
+
+    if (type === 'card' || type === 'cardNumber' || type === 'idealBank') {
+      CARD_ELEMENTS.stripe = element;
+    }
+  };
+  API.stripe = stripe;
+
+  if (params.ideal) {
+    createElement('idealBank');
+  } else if (params.card.separateElements) {
+    createElement('cardNumber');
+    createElement('cardExpiry');
+    createElement('cardCvc');
+  } else {
+    createElement('card');
+  }
+}
+
+/**
+ * Update cart email with paypal's when no email is present
+ */
+async function shouldUsePayPalEmail(guest, request, options) {
+  // Only check if the email should be updated when the user is not logged in (guest user)
+  if (!guest) return false;
+
+  // Refetch to avoid stale data from the cart
+  const updatedCart = await methods$8(request, options).get();
+  const currentEmail = get(updatedCart, 'account.email');
+
+  // If no email is present, use paypal's email
+  if (!currentEmail) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+async function payPalButton(request, cart, payMethods, params) {
+  const paypal = window.paypal;
+  const { paypal: { locale, style, elementId } = {} } = params;
+  const { capture_total, currency, guest } = cart;
+
+  const onError = (error) => {
+    const errorHandler = get(params, 'paypal.onError');
+    if (isFunction(errorHandler)) {
+      return errorHandler(error);
+    }
+    throw new Error(error.message);
+  };
+  const onSuccess = () => {
+    const successHandler = get(params, 'paypal.onSuccess');
+    return isFunction(successHandler) && successHandler();
+  };
+
+  if (!(capture_total > 0)) {
+    throw new Error(
+      'Invalid PayPal button amount. Value should be greater than zero.',
+    );
+  }
+
+  paypal
+    .Buttons(
+      {
+        locale: locale || 'en_US',
+        style: style || {
+          layout: 'horizontal',
+          height: 45,
+          color: 'gold',
+          shape: 'rect',
+          label: 'paypal',
+          tagline: false,
+        },
+        createOrder: (data, actions) =>
+          actions.order.create({
+            intent: 'AUTHORIZE',
+            purchase_units: [
+              {
+                amount: {
+                  value: +capture_total.toFixed(2),
+                  currency_code: currency,
+                },
+              },
+            ],
+          }),
+        onApprove: (data, actions) =>
+          actions.order
+            .get()
+            .then(async (order) => {
+              const orderId = order.id;
+              const payer = order.payer;
+              const shipping = get(order, 'purchase_units[0].shipping');
+
+              const usePayPalEmail = await shouldUsePayPalEmail(
+                guest,
+                request,
+                options$1,
+              );
+
+              return methods$8(request).update({
+                ...(usePayPalEmail && {
+                  account: {
+                    email: payer.email_address,
+                  },
+                }),
+                billing: {
+                  method: 'paypal',
+                  paypal: { order_id: orderId },
+                },
+                shipping: {
+                  name: shipping.name.full_name,
+                  address1: shipping.address.address_line_1,
+                  address2: shipping.address.address_line_2,
+                  state: shipping.address.admin_area_1,
+                  city: shipping.address.admin_area_2,
+                  zip: shipping.address.postal_code,
+                  country: shipping.address.country_code,
+                },
+              });
+            })
+            .then(onSuccess)
+            .catch(onError),
+      },
+      onError,
+    )
+    .render(elementId || '#paypal-button');
+}
+
+async function braintreePayPalButton(request, cart, payMethods, params) {
+  const authorization = await vaultRequest('post', '/authorization', {
+    gateway: 'braintree',
+  });
+  if (authorization.error) {
+    throw new Error(authorization.error);
+  }
+  const braintree = window.braintree;
+  const paypal = window.paypal;
+  braintree.client
+    .create({
+      authorization,
+    })
+    .then((client) =>
+      braintree.paypalCheckout.create({
+        client,
+      }),
+    )
+    .then((paypalCheckoutInstance) => {
+      return paypal
+        .Buttons({
+          style: params.paypal.style || {},
+          createBillingAgreement: () =>
+            paypalCheckoutInstance.createPayment({
+              flow: 'vault',
+              currency: cart.currency,
+              amount: cart.grand_total,
+            }),
+          onApprove: (data, actions) =>
+            paypalCheckoutInstance
+              .tokenizePayment(data)
+              .then(({ nonce }) =>
+                methods$8(request, options$1).update({
+                  billing: { paypal: { nonce } },
+                }),
+              )
+              .then(
+                () =>
+                  isFunction(params.paypal.onSuccess) &&
+                  params.paypal.onSuccess(data, actions),
+              )
+              .catch(
+                isFunction(params.paypal.onError)
+                  ? params.paypal.onError
+                  : (err) => console.error('PayPal error', err),
+              ),
+          onCancel: isFunction(params.paypal.onCancel)
+            ? () => params.paypal.onCancel()
+            : () => console.log('PayPal payment cancelled'),
+          onError: isFunction(params.paypal.onError)
+            ? (err) => params.paypal.onError(err)
+            : (err) => console.error('PayPal error', err),
+        })
+        .render(params.paypal.elementId || '#paypal-button');
+    })
+    .catch(
+      isFunction(params.paypal.onError)
+        ? params.paypal.onError
+        : (err) => console.error('PayPal error', err),
+    );
+}
+
+async function paymentTokenize(request, params, payMethods, cart) {
+  const { capture_total, auth_total } = cart;
+  const onError = (error) => {
+    const errorHandler =
+      get(params, 'card.onError') ||
+      get(params, 'ideal.onError') ||
+      get(params, 'klarna.onError') ||
+      get(params, 'bancontact.onError') ||
+      get(params, 'paysafecard.onError');
+    if (isFunction(errorHandler)) {
+      return errorHandler(error);
+    }
+    throw new Error(error.message);
+  };
+  const onSuccess = (result) => {
+    const successHandler =
+      get(params, 'card.onSuccess') || get(params, 'ideal.onSuccess');
+    if (isFunction(successHandler)) {
+      return successHandler(result);
+    }
+  };
+
+  if (!params) {
+    return onError({ message: 'Tokenization parameters not passed' });
+  }
+  if (params.card && payMethods.card) {
+    if (
+      payMethods.card.gateway === 'stripe' &&
+      CARD_ELEMENTS.stripe &&
+      API.stripe
+    ) {
+      const stripe = API.stripe;
+      const paymentMethod = await createPaymentMethod(
+        stripe,
+        CARD_ELEMENTS.stripe,
+        cart,
+      ).catch(onError);
+
+      if (!paymentMethod) {
+        return;
+      } else if (paymentMethod.error) {
+        return onError(paymentMethod.error);
+      } else if (capture_total < 1) {
+        // should save payment method data when payment amount is less than 1
+        // https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts
+        return methods$8(request, options$1)
+          .update({
+            billing: {
+              method: 'card',
+              card: paymentMethod,
+            },
+          })
+          .then(onSuccess)
+          .catch(onError);
+      }
+
+      const currency = toLower(get(cart, 'currency', 'usd'));
+      const amount = stripeAmountByCurrency(
+        currency,
+        capture_total + auth_total,
+      );
+      const stripeCustomer = get(cart, 'account.stripe_customer');
+      const intent = toSnake(
+        await methods$2(request)
+          .createIntent({
+            gateway: 'stripe',
+            intent: {
+              payment_method: paymentMethod.token,
+              amount,
+              currency,
+              capture_method: 'manual',
+              setup_future_usage: 'off_session',
+              ...(stripeCustomer ? { customer: stripeCustomer } : {}),
+            },
+          })
+          .catch(onError),
+      );
+
+      if (
+        intent &&
+        ['requires_capture', 'requires_confirmation'].includes(intent.status)
+      ) {
+        if (intent.status === 'requires_confirmation') {
+          // Confirm the payment intent
+          const { error } = await stripe.confirmCardPayment(
+            intent.client_secret,
+          );
+          if (error) {
+            return onError(error);
+          }
+        }
+
+        // Capture the payment
+        return await methods$8(request, options$1)
+          .update({
+            billing: {
+              method: 'card',
+              card: paymentMethod,
+              intent: {
+                stripe: {
+                  id: intent.id,
+                  ...(!!auth_total && {
+                    auth_amount: auth_total,
+                  }),
+                },
+              },
+            },
+          })
+          .then(onSuccess)
+          .catch(onError);
+      }
+    } else if (payMethods.card.gateway === 'quickpay') {
+      const intent = await createQuickpayPayment(
+        cart,
+        methods$2(request).createIntent,
+      ).catch(onError);
+      if (!intent) {
+        return;
+      } else if (intent.error) {
+        return onError(intent.error);
+      }
+
+      await methods$8(request, options$1).update({
+        billing: {
+          method: 'card',
+          intent: {
+            quickpay: {
+              id: intent,
+            },
+          },
+        },
+      });
+
+      createQuickpayCard(methods$2(request).authorizeGateway).catch(onError);
+    }
+  } else if (params.ideal && payMethods.ideal) {
+    if (
+      payMethods.card &&
+      payMethods.card.gateway === 'stripe' &&
+      CARD_ELEMENTS.stripe &&
+      API.stripe
+    ) {
+      const { error, paymentMethod } = await createIDealPaymentMethod(
+        API.stripe,
+        CARD_ELEMENTS.stripe,
+        cart,
+      );
+
+      if (error) {
+        return onError(error);
+      }
+
+      const currency = toLower(get(cart, 'currency', 'eur'));
+      const amount = stripeAmountByCurrency(currency, capture_total);
+      const intent = toSnake(
+        await methods$2(request)
+          .createIntent({
+            gateway: 'stripe',
+            intent: {
+              payment_method: paymentMethod.id,
+              amount,
+              currency,
+              payment_method_types: 'ideal',
+              confirmation_method: 'manual',
+              confirm: true,
+              return_url: window.location.href,
+            },
+          })
+          .catch(onError),
+      );
+
+      if (intent) {
+        await methods$8(request, options$1)
+          .update({
+            billing: {
+              method: 'ideal',
+              ideal: {
+                token: paymentMethod.id,
+              },
+              intent: { stripe: { id: intent.id } },
+            },
+          })
+          .catch(onError);
+
+        return (
+          (intent.status === 'requires_action' ||
+            intent.status === 'requires_source_action') &&
+          (await API.stripe.handleCardAction(intent.client_secret))
+        );
+      }
+    }
+  } else if (params.klarna && payMethods.klarna) {
+    if (payMethods.klarna.gateway === 'klarna') {
+      const session = await createKlarnaSession(
+        cart,
+        methods$2(request).createIntent,
+      ).catch(onError);
+      return session && window.location.replace(session.redirect_url);
+    } else if (payMethods.card && payMethods.card.gateway === 'stripe') {
+      if (!window.Stripe) {
+        await loadScript('stripe-js', 'https://js.stripe.com/v3/');
+      }
+      const { publishable_key } = payMethods.card;
+      const stripe = window.Stripe(publishable_key);
+      const settings = toSnake(await methods$3(request, options$1).get());
+
+      const { error, source } = await createKlarnaSource(stripe, {
+        ...cart,
+        settings: settings.store,
+      });
+
+      return error
+        ? onError(error)
+        : methods$8(request, options$1)
+            .update({
+              billing: {
+                method: 'klarna',
+              },
+            })
+            .then(() => window.location.replace(source.redirect.url))
+            .catch(onError);
+    }
+  } else if (params.bancontact && payMethods.bancontact) {
+    if (payMethods.card && payMethods.card.gateway === 'stripe') {
+      if (!window.Stripe) {
+        await loadScript('stripe-js', 'https://js.stripe.com/v3/');
+      }
+      const { publishable_key } = payMethods.card;
+      const stripe = window.Stripe(publishable_key);
+
+      const { error, source } = await createBancontactSource(stripe, cart);
+
+      return error
+        ? onError(error)
+        : methods$8(request, options$1)
+            .update({
+              billing: {
+                method: 'bancontact',
+              },
+            })
+            .then(() => window.location.replace(source.redirect.url))
+            .catch(onError);
+    }
+  } else if (params.paysafecard && payMethods.paysafecard) {
+    const intent = await createPaysafecardPayment(
+      cart,
+      methods$2(request).createIntent,
+    ).catch(onError);
+    if (!intent) {
+      return;
+    }
+
+    await methods$8(request, options$1).update({
+      billing: {
+        method: 'paysafecard',
+        intent: {
+          paysafecard: {
+            id: intent.id,
+          },
+        },
+      },
+    });
+
+    return window.location.replace(intent.redirect.auth_url);
+  }
+}
+
+async function handleRedirect(request, params, cart) {
+  const onError = (error) => {
+    const errorHandler =
+      get(params, 'card.onError') ||
+      get(params, 'paysafecard.onError') ||
+      get(params, 'klarna.onError');
+    if (isFunction(errorHandler)) {
+      return errorHandler(error);
+    }
+    throw new Error(error.message);
+  };
+  const onSuccess = (result) => {
+    const successHandler =
+      get(params, 'card.onSuccess') ||
+      get(params, 'paysafecard.onSuccess') ||
+      get(params, 'klarna.onSuccess');
+    if (isFunction(successHandler)) {
+      return successHandler(result);
+    }
+  };
+
+  const queryParams = getLocationParams(window.location);
+  removeUrlParams();
+  const { gateway } = queryParams;
+  let result;
+  if (gateway === 'quickpay') {
+    result = await handleQuickpayRedirectAction(
+      request,
+      cart,
+      params,
+      queryParams,
+    );
+  } else if (gateway === 'paysafecard') {
+    result = await handlePaysafecardRedirectAction(
+      request,
+      cart);
+  } else if (gateway === 'klarna_direct') {
+    result = await handleDirectKlarnaRedirectAction(
+      request,
+      cart,
+      params,
+      queryParams,
+    );
+  }
+
+  if (!result) {
+    return;
+  } else if (result.error) {
+    return onError(result.error);
+  } else {
+    return onSuccess(result);
+  }
+}
+
+async function handleQuickpayRedirectAction(
+  request,
+  cart,
+  params,
+  queryParams,
+) {
+  const { redirect_status: status, card_id: id } = queryParams;
+
+  switch (status) {
+    case 'succeeded':
+      const card = await getQuickpayCardDetais(
+        id,
+        methods$2(request).authorizeGateway,
+      );
+      if (!card) {
+        return;
+      } else if (card.error) {
+        return card;
+      } else {
+        await methods$8(request, options$1).update({
+          billing: {
+            method: 'card',
+            card,
+          },
+        });
+        return { success: true };
+      }
+    case 'canceled':
+      return {
+        error: {
+          message:
+            'We are unable to authenticate your payment method. Please choose a different payment method and try again.',
+        },
+      };
+    default:
+      return { error: { message: `Unknown redirect status: ${status}.` } };
+  }
+}
+
+async function handlePaysafecardRedirectAction(request, cart) {
+  const paymentId = get(cart, 'billing.intent.paysafecard.id');
+  if (!paymentId) {
+    return {
+      error: {
+        message: 'Paysafecard payment ID not defined.',
+      },
+    };
+  }
+
+  const intent = await methods$2(request).updateIntent({
+    gateway: 'paysafecard',
+    intent: { payment_id: paymentId },
+  });
+
+  if (!intent) {
+    return;
+  }
+  switch (intent.status) {
+    case 'AUTHORIZED':
+      return { success: true };
+    case 'CANCELED_CUSTOMER':
+      return {
+        error: {
+          message:
+            'We are unable to authenticate your payment method. Please choose a different payment method and try again.',
+        },
+      };
+    default:
+      return {
+        error: { message: `Unknown redirect status: ${intent.status}.` },
+      };
+  }
+}
+
+async function handleDirectKlarnaRedirectAction(
+  request,
+  cart,
+  params,
+  queryParams,
+) {
+  const { authorization_token } = queryParams;
+
+  if (!authorization_token) {
+    return {
+      error: {
+        message:
+          'We are unable to authenticate your payment method. Please choose a different payment method and try again.',
+      },
+    };
+  }
+
+  await methods$8(request, options$1).update({
+    billing: {
+      method: 'klarna',
+      klarna: {
+        token: authorization_token,
+      },
+    },
+  });
+  return { success: true };
+}
+
+async function authenticate(request, payment, payMethods) {
+  const { method, gateway } = payment;
+  if (method === 'card') {
+    const cardMethod = payMethods.card;
+    if (!cardMethod) {
+      console.error(
+        `Authenticate error: credit card payments are disabled. See Payment settings in the Swell dashboard for details.`,
+      );
+    } else if (gateway === 'stripe' && cardMethod.gateway === 'stripe') {
+      if (!window.Stripe) {
+        await loadScript('stripe-js', 'https://js.stripe.com/v3/');
+      }
+      return authenticateStripeCard(request, payment, payMethods);
+    }
+  }
+}
+
+async function authenticateStripeCard(request, payment, payMethods) {
+  const { transaction_id: id, card: { token } = {} } = payment;
+  const { publishable_key } = payMethods.card;
+  const intent = await methods$2(request, options$1)
+    .updateIntent({
+      gateway: 'stripe',
+      intent: { id, payment_method: token },
+    })
+    .catch((error) => ({
+      error,
+    }));
+  if (intent.error) {
+    return intent;
+  }
+  const stripe = window.Stripe(publishable_key);
+  const actionResult = await stripe.confirmCardPayment(intent.client_secret);
+  return actionResult.error
+    ? {
+        error: {
+          message: actionResult.error.message,
+          code: actionResult.error.code,
+        },
+      }
+    : { status: actionResult.status };
+}
+
+function methods$1(request, opt) {
+  return {
+    code: null,
+    state: null,
+
+    list() {
+      return opt.api.settings.get('store.locales', []);
+    },
+
+    async select(locale) {
+      this.set(locale);
+      setCookie('swell-locale', locale);
+      opt.api.settings.locale = locale;
+      return await request('put', '/session', { locale });
+    },
+
+    selected() {
+      if (this.code) {
+        return this.code;
+      }
+      const storeLocale = opt.api.settings.getStoreLocale();
+      const cookieLocale = getCookie('swell-locale');
+      opt.api.settings.locale = cookieLocale || storeLocale;
+      return cookieLocale || storeLocale;
+    },
+
+    get() {
+      if (!this.code) {
+        this.code = this.selected();
+      }
+      if (!this.state) {
+        this.state = this.set(this.code);
+      }
+      return this.state;
+    },
+
+    set(code) {
+      this.code = code;
+      this.state = find(this.list(), { code }) || {};
+      return this.state;
+    },
+  };
+}
+
+const FORMATTERS = {};
+
+function methods(request, opt) {
+  return {
+    code: null,
+    state: null,
+    locale: null,
+
+    list(locale) {
+      return opt.api.settings.get('store.currencies', [], locale);
+    },
+
+    async select(currency) {
+      this.set(currency);
+
+      return request('put', '/session', { currency });
+    },
+
+    selected() {
+      if (!this.code) {
+        this.set(
+          getCookie('swell-currency') || opt.api.settings.get('store.currency'),
+        );
+      }
+
+      return this.code;
+    },
+
+    get() {
+      if (!this.code) {
+        this.code = this.selected();
+      }
+      if (!this.state) {
+        this.state = this.set(this.code);
+      }
+      return this.state;
+    },
+
+    set(code = 'USD') {
+      this.code = code;
+      this.state = find(this.list(), { code }) || { code };
+
+      this.locale = String(
+        opt.api.settings.get(
+          'store.locale',
+          typeof navigator === 'object' ? navigator.language : 'en-US',
+        ),
+      );
+
+      setCookie('swell-currency', code);
+
+      return this.state;
+    },
+
+    format(amount, params = {}) {
+      let state = this.get();
+      if (params.code && params.code !== state.code) {
+        const list = this.list();
+        state = find(list, { code: params.code }) || { code: params.code };
+      }
+
+      const { code = 'USD', type, decimals, rate } = state;
+      const formatCode = params.code || code;
+      const formatRate = params.rate || rate;
+      const formatLocale = params.locale || this.locale;
+      const formatDecimals =
+        typeof params.decimals === 'number' ? params.decimals : decimals;
+      const { convert = true } = params;
+
+      let formatAmount = amount;
+      if (
+        convert &&
+        (type === 'display' || params.rate) &&
+        typeof formatAmount === 'number' &&
+        typeof formatRate === 'number'
+      ) {
+        // Convert the price currency into the display currency
+        formatAmount = this.applyRounding(amount * formatRate, state);
+      }
+
+      const formatter = this.formatter({
+        code: formatCode,
+        locale: formatLocale,
+        decimals: formatDecimals,
+      });
+      try {
+        if (typeof formatAmount === 'number') {
+          return formatter.format(formatAmount);
+        } else {
+          // Otherwise return the currency symbol only, falling back to '$'
+          const symbol = get(formatter.formatToParts(0), '0.value', '$');
+          return symbol !== formatCode ? symbol : '';
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+
+      return String(amount);
+    },
+
+    formatter({ code, locale, decimals }) {
+      locale = String(locale || '').replace('_', '-');
+
+      const key = [code, locale, decimals].join('|');
+
+      if (FORMATTERS[key]) {
+        return FORMATTERS[key];
+      }
+
+      const formatLocales = [];
+
+      if (locale) {
+        formatLocales.push(locale);
+      }
+
+      formatLocales.push('en-US');
+
+      const formatDecimals =
+        typeof decimals === 'number' ? decimals : undefined;
+
+      const props = {
+        style: 'currency',
+        currency: code,
+        currencyDisplay: 'symbol',
+        minimumFractionDigits: formatDecimals,
+        maximumFractionDigits: formatDecimals,
+      };
+
+      try {
+        try {
+          FORMATTERS[key] = new Intl.NumberFormat(formatLocales, props);
+        } catch (err) {
+          if (err.message.indexOf('Invalid language tag') >= 0) {
+            FORMATTERS[key] = new Intl.NumberFormat('en-US', props);
+          }
+        }
+      } catch (err) {
+        console.warn(err);
+      }
+
+      return FORMATTERS[key];
+    },
+
+    applyRounding(value, config) {
+      if (!config || !config.round) {
+        return value;
+      }
+
+      const scale = config.decimals;
+      const fraction =
+        config.round_interval === 'fraction' ? config.round_fraction || 0 : 0;
+
+      let roundValue = ~~value;
+      let decimalValue = this.round(value, scale);
+
+      if (decimalValue === fraction) {
+        return roundValue + decimalValue;
+      }
+
+      const diff = this.round(decimalValue - fraction, 1);
+      const direction =
+        config.round === 'nearest'
+          ? diff > 0
+            ? diff >= 0.5
+              ? 'up'
+              : 'down'
+            : diff <= -0.5
+            ? 'down'
+            : 'up'
+          : config.round;
+
+      switch (direction) {
+        case 'down':
+          roundValue =
+            roundValue + fraction - (decimalValue > fraction ? 0 : 1);
+          break;
+        case 'up':
+        default:
+          roundValue =
+            roundValue + fraction + (decimalValue > fraction ? 1 : 0);
+          break;
+      }
+
+      return this.round(roundValue, scale);
+    },
+
+    round,
+  };
+}
+
+const options = {
+  store: null,
+  key: null,
+  url: null,
+  useCamelCase: null,
+  previewContent: null,
+};
+
+const api = {
+  version: '3.19.4',
+  options,
+  request,
+
+  init(store, key, opt = {}) {
+    options.key = key;
+    options.store = store;
+    options.url = opt.url
+      ? trimEnd(opt.url)
+      : `https://${store}.swell.store`;
+    options.vaultUrl = opt.vaultUrl
+      ? trimEnd(opt.vaultUrl)
+      : `https://vault.schema.io`;
+    options.timeout = (opt.timeout && parseInt(opt.timeout, 10)) || 20000;
+    options.useCamelCase = opt.useCamelCase || false;
+    options.previewContent = opt.previewContent || false;
+    options.session = opt.session;
+    options.locale = opt.locale;
+    options.currency = opt.currency;
+    options.api = api;
+    setOptions(options);
+  },
+
+  // Backward compatibility
+  auth(...args) {
+    return this.init(...args);
+  },
+
+  get(url, query) {
+    return request('get', url, query);
+  },
+
+  put(url, data) {
+    return request('put', url, data);
+  },
+
+  post(url, data) {
+    return request('post', url, data);
+  },
+
+  delete(url, data) {
+    return request('delete', url, data);
+  },
+
+  cache: cacheApi,
+
+  card: cardApi,
+
+  cart: methods$8(request, options),
+
+  account: methods$7(request),
+
+  products: methods$9(request, options),
+
+  categories: methods$6(request),
+
+  attributes: methods$a(request),
+
+  subscriptions: methods$5(request),
+
+  content: methods$4(request, options),
+
+  settings: methods$3(request, options),
+
+  payment: methods$2(request, options),
+
+  locale: methods$1(request, options),
+
+  currency: methods(request, options),
+
+  utils,
+};
+
+async function request(
+  method,
+  url,
+  id = undefined,
+  data = undefined,
+  opt = undefined,
+) {
+  const allOptions = {
+    ...options,
+    ...opt,
+  };
+
+  const session = allOptions.session || getCookie('swell-session');
+  const locale = allOptions.locale || getCookie('swell-locale');
+  const currency = allOptions.currency || getCookie('swell-currency');
+
+  const baseUrl = `${allOptions.url}${allOptions.base || ''}/api`;
+  const reqMethod = String(method).toLowerCase();
+
+  let reqUrl = url;
+  let reqData = id;
+
+  if (data !== undefined || typeof id === 'string') {
+    reqUrl = [trimEnd(url), trimStart(id)].join('/');
+    reqData = data;
+  }
+
+  reqUrl = allOptions.fullUrl || `${baseUrl}/${trimBoth(reqUrl)}`;
+  reqData = allOptions.useCamelCase ? toSnake(reqData) : reqData;
+
+  let reqBody;
+  if (reqMethod === 'get') {
+    let exQuery;
+    [reqUrl, exQuery] = reqUrl.split('?');
+    const fullQuery = [exQuery, stringifyQuery(reqData)]
+      .join('&')
+      .replace(/^&/, '');
+    reqUrl = `${reqUrl}${fullQuery ? `?${fullQuery}` : ''}`;
+  } else {
+    reqBody = JSON.stringify(reqData);
+  }
+
+  const reqHeaders = {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+    Authorization: `Basic ${base64Encode(String(allOptions.key))}`,
+  };
+
+  if (session) {
+    reqHeaders['X-Session'] = session;
+  }
+
+  if (locale) {
+    reqHeaders['X-Locale'] = locale;
+  }
+
+  if (currency) {
+    reqHeaders['X-Currency'] = currency;
+  }
+
+  const response = await fetch(reqUrl, {
+    method: reqMethod,
+    headers: reqHeaders,
+    body: reqBody,
+    credentials: 'include',
+    mode: 'cors',
+  });
+
+  const responseSession = response.headers.get('X-Session');
+
+  if (typeof responseSession === 'string' && session !== responseSession) {
+    setCookie('swell-session', responseSession);
+  }
+
+  const result = await response.json();
+
+  if (result && result.error) {
+    const err = new Error(result.error.message);
+    err.status = response.status;
+    err.code = result.error.code;
+    err.param = result.error.param;
+    throw err;
+  } else if (!response.ok) {
+    const err = new Error(
+      'A connection error occurred while making the request',
+    );
+    err.code = 'connection_error';
+    throw err;
+  }
+
+  return options.useCamelCase ? toCamel(result) : result;
+}
+
+module.exports = api;
+//# sourceMappingURL=swell.cjs.js.map

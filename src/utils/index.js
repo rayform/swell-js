@@ -1,16 +1,14 @@
-const qs = require('qs');
-const set = require('lodash/set');
-const get = require('lodash/get');
-const uniq = require('lodash/uniq');
-const find = require('lodash/find');
-const round = require('lodash/round');
-const findIndex = require('lodash/findIndex');
-const camelCase = require('lodash/camelCase');
-const snakeCase = require('lodash/snakeCase');
-const cloneDeep = require('lodash/cloneDeep');
-const isEqual = require('lodash/isEqual');
-const deepmerge = require('deepmerge');
-const { normalizeKeys } = require('object-keys-normalizer');
+import { stringify } from 'qs';
+import set from 'lodash-es/set';
+import get from 'lodash-es/get';
+import uniq from 'lodash-es/uniq';
+import find from 'lodash-es/find';
+import round from 'lodash-es/round';
+import findIndex from 'lodash-es/findIndex';
+import cloneDeep from 'lodash-es/cloneDeep';
+import isEqual from 'lodash-es/isEqual';
+import deepmerge from 'deepmerge';
+import { camelize, decamelize, camelizeKeys, decamelizeKeys } from 'fast-case';
 
 let options = {};
 
@@ -25,7 +23,10 @@ function merge(x, y, opt = {}) {
     const destination = target.slice();
     source.forEach((item, index) => {
       if (typeof destination[index] === 'undefined') {
-        destination[index] = options.cloneUnlessOtherwiseSpecified(item, options);
+        destination[index] = options.cloneUnlessOtherwiseSpecified(
+          item,
+          options,
+        );
       } else if (options.isMergeableObject(item)) {
         destination[index] = merge(target[index], item, options);
       } else if (target.indexOf(item) === -1) {
@@ -51,15 +52,23 @@ function isObject(val) {
   return val && typeof val === 'object' && !(val instanceof Array);
 }
 
+function camelCase(str) {
+  return camelize(str);
+}
+
+function snakeCase(str) {
+  return decamelize(str, '_');
+}
+
 function toCamel(obj) {
   if (!obj) return obj;
   const objCopy = JSON.parse(JSON.stringify(obj));
-  return normalizeKeys(objCopy, keyToCamel);
+  return camelizeKeys(objCopy);
 }
 
 function toCamelPath(str) {
   if (typeof str === 'string') {
-    return str.split('.').map(camelCase).join('.');
+    return str.split('.').map(camelize).join('.');
   }
   return str;
 }
@@ -67,17 +76,7 @@ function toCamelPath(str) {
 function toSnake(obj) {
   if (!obj) return obj;
   const objCopy = JSON.parse(JSON.stringify(obj));
-  return normalizeKeys(objCopy, keyToSnake);
-}
-
-function keyToSnake(key) {
-  // Handle keys prefixed with $ or _
-  return (key[0] === '$' ? '$' : '') + snakeCase(key).replace(/\_([0-9])/g, '$1');
-}
-
-function keyToCamel(key) {
-  // Handle keys prefixed with $ or _
-  return (key[0] === '$' ? '$' : '') + camelCase(key).replace(/\_([0-9])/g, '$1');
+  return decamelizeKeys(objCopy, '_');
 }
 
 function trimBoth(str) {
@@ -93,10 +92,7 @@ function trimEnd(str) {
 }
 
 function stringifyQuery(str) {
-  return qs.stringify(str, {
-    depth: 10,
-    encode: false,
-  });
+  return stringify(str);
 }
 
 function map(arr, cb) {
@@ -151,7 +147,9 @@ async function vaultRequest(method, url, data, opt = undefined) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    script.src = `${trimEnd(vaultUrl)}/${trimStart(url)}?${serializeData(data)}`;
+    script.src = `${trimEnd(vaultUrl)}/${trimStart(url)}?${serializeData(
+      data,
+    )}`;
 
     const errorTimeout = setTimeout(() => {
       window[callback]({
@@ -168,7 +166,9 @@ async function vaultRequest(method, url, data, opt = undefined) {
         err.status = result.$status;
         reject(err);
       } else if (!result || result.$status >= 300) {
-        const err = new Error('A connection error occurred while making the request');
+        const err = new Error(
+          'A connection error occurred while making the request',
+        );
         err.code = 'connection_error';
         err.status = result.$status;
         reject(err);
@@ -216,7 +216,11 @@ function buildParams(key, obj, add) {
         add(key, v);
       } else {
         // Item is non-scalar (array or object), encode its numeric index.
-        buildParams(key + '[' + (typeof v === 'object' && v != null ? i : '') + ']', v, add);
+        buildParams(
+          key + '[' + (typeof v === 'object' && v != null ? i : '') + ']',
+          v,
+          add,
+        );
       }
     }
   } else if (obj && typeof obj === 'object') {
@@ -253,7 +257,8 @@ function removeUrlParams() {
   window.history.pushState({ path: url }, '', url);
 }
 
-module.exports = {
+export {
+  defaultMethods,
   set,
   get,
   uniq,
@@ -280,7 +285,6 @@ module.exports = {
   map,
   reduce,
   base64Encode,
-  defaultMethods,
   vaultRequest,
   getLocationParams,
   removeUrlParams,

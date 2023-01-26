@@ -1,29 +1,18 @@
-const card = require('./card');
-const { getCookie, setCookie } = require('./cookie');
-const {
-  setOptions,
-  toCamel,
-  toSnake,
-  trimBoth,
-  trimStart,
-  trimEnd,
-  stringifyQuery,
-  base64Encode,
-} = require('./utils');
-const cache = require('./cache');
-const cart = require('./cart');
-const account = require('./account');
-const products = require('./products');
-const categories = require('./categories');
-const attributes = require('./attributes');
-const subscriptions = require('./subscriptions');
-const content = require('./content');
-const settings = require('./settings');
-const payment = require('./payment');
-const locale = require('./locale');
-const currency = require('./currency');
-
-require('isomorphic-fetch');
+import card from './card';
+import { getCookie, setCookie } from './cookie';
+import cache from './cache';
+import cart from './cart';
+import account from './account';
+import products from './products';
+import categories from './categories';
+import attributes from './attributes';
+import subscriptions from './subscriptions';
+import content from './content';
+import settings from './settings';
+import payment from './payment';
+import locale from './locale';
+import currency from './currency';
+import * as utils from './utils';
 
 const options = {
   store: null,
@@ -34,14 +23,19 @@ const options = {
 };
 
 const api = {
+  version: '__VERSION__',
   options,
   request,
 
   init(store, key, opt = {}) {
     options.key = key;
     options.store = store;
-    options.url = opt.url ? trimEnd(opt.url) : `https://${store}.swell.store`;
-    options.vaultUrl = opt.vaultUrl ? trimEnd(opt.vaultUrl) : `https://vault.schema.io`;
+    options.url = opt.url
+      ? utils.trimEnd(opt.url)
+      : `https://${store}.swell.store`;
+    options.vaultUrl = opt.vaultUrl
+      ? utils.trimEnd(opt.vaultUrl)
+      : `https://vault.schema.io`;
     options.timeout = (opt.timeout && parseInt(opt.timeout, 10)) || 20000;
     options.useCamelCase = opt.useCamelCase || false;
     options.previewContent = opt.previewContent || false;
@@ -49,7 +43,7 @@ const api = {
     options.locale = opt.locale;
     options.currency = opt.currency;
     options.api = api;
-    setOptions(options);
+    utils.setOptions(options);
   },
 
   // Backward compatibility
@@ -77,30 +71,38 @@ const api = {
 
   card,
 
-  cart: cart.methods(request, options),
+  cart: cart(request, options),
 
-  account: account.methods(request, options),
+  account: account(request, options),
 
-  products: products.methods(request, options),
+  products: products(request, options),
 
-  categories: categories.methods(request, options),
+  categories: categories(request, options),
 
-  attributes: attributes.methods(request, options),
+  attributes: attributes(request, options),
 
-  subscriptions: subscriptions.methods(request, options),
+  subscriptions: subscriptions(request, options),
 
-  content: content.methods(request, options),
+  content: content(request, options),
 
-  settings: settings.methods(request, options),
+  settings: settings(request, options),
 
-  payment: payment.methods(request, options),
+  payment: payment(request, options),
 
-  locale: locale.methods(request, options),
+  locale: locale(request, options),
 
-  currency: currency.methods(request, options),
+  currency: currency(request, options),
+
+  utils,
 };
 
-async function request(method, url, id = undefined, data = undefined, opt = undefined) {
+async function request(
+  method,
+  url,
+  id = undefined,
+  data = undefined,
+  opt = undefined,
+) {
   const allOptions = {
     ...options,
     ...opt,
@@ -117,18 +119,20 @@ async function request(method, url, id = undefined, data = undefined, opt = unde
   let reqData = id;
 
   if (data !== undefined || typeof id === 'string') {
-    reqUrl = [trimEnd(url), trimStart(id)].join('/');
+    reqUrl = [utils.trimEnd(url), utils.trimStart(id)].join('/');
     reqData = data;
   }
 
-  reqUrl = allOptions.fullUrl || `${baseUrl}/${trimBoth(reqUrl)}`;
-  reqData = allOptions.useCamelCase ? toSnake(reqData) : reqData;
+  reqUrl = allOptions.fullUrl || `${baseUrl}/${utils.trimBoth(reqUrl)}`;
+  reqData = allOptions.useCamelCase ? utils.toSnake(reqData) : reqData;
 
   let reqBody;
   if (reqMethod === 'get') {
     let exQuery;
     [reqUrl, exQuery] = reqUrl.split('?');
-    const fullQuery = [exQuery, stringifyQuery(reqData)].join('&').replace(/^&/, '');
+    const fullQuery = [exQuery, utils.stringifyQuery(reqData)]
+      .join('&')
+      .replace(/^&/, '');
     reqUrl = `${reqUrl}${fullQuery ? `?${fullQuery}` : ''}`;
   } else {
     reqBody = JSON.stringify(reqData);
@@ -137,7 +141,7 @@ async function request(method, url, id = undefined, data = undefined, opt = unde
   const reqHeaders = {
     Accept: 'application/json',
     'Content-Type': 'application/json',
-    Authorization: `Basic ${base64Encode(String(allOptions.key))}`,
+    Authorization: `Basic ${utils.base64Encode(String(allOptions.key))}`,
   };
 
   if (session) {
@@ -175,18 +179,14 @@ async function request(method, url, id = undefined, data = undefined, opt = unde
     err.param = result.error.param;
     throw err;
   } else if (!response.ok) {
-    const err = new Error('A connection error occurred while making the request');
+    const err = new Error(
+      'A connection error occurred while making the request',
+    );
     err.code = 'connection_error';
     throw err;
   }
 
-  return options.useCamelCase ? toCamel(result) : result;
+  return options.useCamelCase ? utils.toCamel(result) : result;
 }
 
-if (typeof window !== 'undefined') {
-  window.swell = {
-    version: '@VERSION@',
-  };
-}
-
-module.exports = api;
+export default api;

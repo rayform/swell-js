@@ -1,4 +1,6 @@
-const { isServer } = require('./utils');
+import { isServer } from './utils';
+
+const COOKIE_MAX_AGE = 604800; // 1 week
 
 function getCookie(name) {
   if (isServer()) {
@@ -6,7 +8,9 @@ function getCookie(name) {
   }
 
   const matches = document.cookie.match(
-    new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()[]\\\/\+^])/g, '\\$1') + '=([^;]*)'),
+    new RegExp(
+      '(?:^|; )' + name.replace(/([.$?*|{}()[]\\\/\+^])/g, '\\$1') + '=([^;]*)',
+    ),
   );
   return matches ? decodeURIComponent(matches[1]) : undefined;
 }
@@ -16,12 +20,11 @@ function setCookie(name, value, options = {}) {
     return;
   }
 
-  const date = new Date();
-
-  date.setDate(date.getDate() + 7); // 1 week
+  // default cookie options, which can be overridden
   options = {
     path: '/',
-    expires: date.toUTCString(),
+    'max-age': COOKIE_MAX_AGE,
+    samesite: 'lax',
     ...options,
   };
 
@@ -29,7 +32,8 @@ function setCookie(name, value, options = {}) {
     options.expires = options.expires.toUTCString();
   }
 
-  let updatedCookie = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+  let updatedCookie =
+    encodeURIComponent(name) + '=' + encodeURIComponent(value);
 
   for (const optionKey in options) {
     updatedCookie += '; ' + optionKey;
@@ -43,7 +47,4 @@ function setCookie(name, value, options = {}) {
   document.cookie = updatedCookie;
 }
 
-module.exports = {
-  getCookie,
-  setCookie,
-};
+export { getCookie, setCookie };
